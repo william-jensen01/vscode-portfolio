@@ -1,0 +1,52 @@
+.about {
+  color: var(--file-text);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.about * {
+  padding: 1rem;
+}
+.ab-pic {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+}
+.about h1 {
+  font-size: 2.5rem;
+}
+.about h3 {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  color: #39a2db;
+}
+.ab-underline {
+  padding: 0;
+  width: 200px;
+}
+.about p {
+  line-height: 2;
+  font-size: 1.5rem;
+  text-align: center;
+}
+.about .resume {
+  color: var(--file-text);
+  font-size: 1.5rem;
+  color: #39a2db;
+}
+
+@media (max-width: 750px) {
+  .about h2 {
+    font-size: 2rem;
+  }
+  .about h3 {
+    font-size: 1rem;
+  }
+  .about p {
+    font-size: 1.15rem;
+  }
+}

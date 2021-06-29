@@ -1,0 +1,29 @@
+/* my VSCODE colors */
+:root {
+  --sidebar-bg: #333842;
+  --sidebar-icon: #757982;
+  --sidebar-icon-hover: #d7dae0;
+  --header-bg: #21252b;
+  --header-tc: #9da5b4;
+  --header-tc-hover: #383b41;
+  --header-icon: #9da5b4;
+  --header-icon-close: white;
+  --header-icon-close-hover: #d41324;
+  --explorer-bg: #21252b;
+  --explorer-title: #cccccc;
+  --explorer-item-bg: #333842;
+  --explorer-file-hover: #262a31;
+  --explorer-file-active: #2c313a;
+  --taskbar-bg: #21252b;
+  --taskbar-file-bg: #21252b;
+  --taskbar-file-text: #9da5b4;
+  --taskbar-file-active: #282c34;
+  --file-bg: #282c34;
+  --file-text: #abb2bf;
+  --css-name: #d18d4c;
+  --css-bracket: #e06c75;
+  --css-value: #46b6c2;
+  --css-type: #abb2bf;
+  --css-quote: #98c379;
+  --cb-num: #636d83;
+}

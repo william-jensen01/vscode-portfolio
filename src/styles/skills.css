@@ -1,0 +1,50 @@
+.skills-container {
+  display: flex;
+  cursor: text;
+}
+.skills {
+  font-family: "Fira Mono", monospace;
+  padding: 1.25rem 0.5rem;
+  font-size: 1.25rem;
+  color: var(--file-text);
+}
+.sk-purp {
+  color: #bd78d2;
+}
+.sk-red {
+  color: #e06a71;
+}
+.sk-file {
+  color: #98be63;
+}
+.sk-semicolon {
+  color: var(--file-text);
+}
+.sk-blue {
+  color: #44a3ef;
+}
+.sk-lightblue {
+  color: #56b6c2;
+}
+.sk-orange {
+  color: #f1d700;
+}
+.sk-function {
+  padding-left: 1.5rem;
+}
+
+.sk-codebar {
+  padding: 1.15rem 0.5rem;
+  color: var(--cb-num);
+}
+.sk-cb-num {
+  margin: 2.5px;
+  font-size: 1rem;
+}
+
+@media (max-width: 750px) {
+  .skills {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+}

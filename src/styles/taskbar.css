@@ -1,0 +1,39 @@
+.taskbar {
+  display: flex;
+  flex-direction: row;
+  background: var(--taskbar-bg);
+  box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 5px;
+  width: 100%;
+  overflow: auto;
+}
+
+.tb-icon {
+  width: 15px;
+  height: 15px;
+}
+.tb-file {
+  display: flex;
+  align-items: center;
+  background: var(--taskbar-file-bg);
+  color: var(--taskbar-file-text);
+  cursor: pointer;
+  padding: 5px;
+}
+.tb-file * {
+  padding: 5px;
+}
+.tb-close {
+  width: 10px;
+  height: 10px;
+}
+.tb-file-active {
+  display: flex;
+  align-items: center;
+  background: var(--taskbar-file-active);
+  color: var(--taskbar-file-text);
+  cursor: pointer;
+  padding: 5px;
+}
+.tb-file-active * {
+  padding: 5px;
+}

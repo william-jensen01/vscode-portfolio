@@ -1,0 +1,49 @@
+.contact-container {
+  display: flex;
+}
+.contact {
+  font-size: 1.25rem;
+  padding: 1rem;
+}
+.ct-css-line {
+  padding: 0.15rem 1.25rem;
+  color: var(--css-type);
+}
+.ct-css-line:hover {
+  background: var(--file-bg);
+}
+.ct-css-name {
+  color: var(--css-name);
+}
+
+.ct-css-bracket {
+  color: var(--css-bracket);
+}
+.ct-css-value {
+  padding-left: 0.5rem;
+  color: var(--css-value);
+}
+.ct-css-quote {
+  color: var(--css-quote);
+}
+
+.ct-codebar {
+  padding: 1rem 0.5rem;
+  color: var(--cb-num);
+}
+.ct-cb-num {
+  padding: 4.75px;
+  font-size: 1rem;
+}
+
+@media (max-width: 750px) {
+  .contact {
+    padding: 1rem 0.5rem;
+  }
+  .ct-css-line {
+    padding-left: 1.25rem;
+  }
+  .ct-codebar {
+    padding: 1rem 0.5rem;
+  }
+}
