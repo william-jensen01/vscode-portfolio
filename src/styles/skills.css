@@ -9,25 +9,25 @@
   color: var(--file-text);
 }
 .sk-purp {
-  color: #bd78d2;
+  color: var(--sk-purp);
 }
 .sk-red {
-  color: #e06a71;
+  color: var(--sk-red);
 }
 .sk-file {
-  color: #98be63;
+  color: var(--sk-file);
 }
 .sk-semicolon {
   color: var(--file-text);
 }
 .sk-blue {
-  color: #44a3ef;
+  color: var(--sk-blue);
 }
 .sk-lightblue {
-  color: #56b6c2;
+  color: var(--sk-lightblue);
 }
 .sk-orange {
-  color: #f1d700;
+  color: var(--sk-orange);
 }
 .sk-function {
   padding-left: 1.5rem;
