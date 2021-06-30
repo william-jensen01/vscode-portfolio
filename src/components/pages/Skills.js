@@ -43,7 +43,7 @@ function Skills() {
           />
           <br />
           <SkillsList
-            name="FRONTED TECHNOLOGIES"
+            name="FRONTEND TECHNOLOGIES"
             list={[
               "React",
               "Redux",
