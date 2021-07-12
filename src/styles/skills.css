@@ -8,31 +8,45 @@
   font-size: 1.25rem;
   color: var(--file-text);
 }
-.sk-purp {
-  color: var(--sk-purp);
+.sk-keyword {
+  color: var(--sk-keyword);
 }
-.sk-red {
-  color: var(--sk-red);
+.sk-import-name {
+  color: var(--sk-import-name);
 }
-.sk-file {
-  color: var(--sk-file);
+.sk-location {
+  color: var(--sk-location);
 }
 .sk-semicolon {
   color: var(--file-text);
 }
-.sk-blue {
-  color: var(--sk-blue);
-}
-.sk-lightblue {
-  color: var(--sk-lightblue);
-}
-.sk-orange {
-  color: var(--sk-orange);
+.sk-variable {
+  color: var(--sk-variable);
 }
 .sk-function {
-  padding-left: 1.5rem;
+  color: var(--sk-function);
 }
-
+.sk-equals {
+  color: var(--sk-equals);
+}
+.sk-bracket {
+  color: var(--sk-bracket);
+}
+.sk-arrow {
+  color: var(--sk-arrow);
+}
+.sk-create {
+  color: var(--sk-create);
+}
+.sk-return {
+  color: var(--sk-return);
+}
+.sk-element {
+  color: var(--sk-element);
+}
+.sk-element-bracket {
+  color: var(--sk-element-bracket);
+}
 .sk-codebar {
   padding: 1.15rem 0.5rem;
   color: var(--cb-num);
