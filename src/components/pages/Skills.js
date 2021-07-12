@@ -6,7 +6,7 @@ import "../../styles/skills.css";
 function Skills() {
   return (
     <div className="skills-container">
-      <Codebar amount={41} type="sk" />
+      <Codebar amount={43} type="sk" />
       <div className="skills">
         <p>
           <span className="sk-keyword">import</span>{" "}
@@ -72,6 +72,7 @@ function Skills() {
             <span className="sk-return">)</span>
           </p>
         </div>
+        <span className="sk-bracket">{`}`}</span>
       </div>
     </div>
   );
