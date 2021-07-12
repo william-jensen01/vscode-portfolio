@@ -26,4 +26,59 @@
   --css-type: #abb2bf;
   --css-quote: #98c379;
   --cb-num: #636d83;
+
+  --sk-keyword: #bd78d2;
+  --sk-import-name: #e06a71;
+  --sk-location: #98be63;
+  --sk-variable: #bd78d2;
+  --sk-function: #44a3ef;
+  --sk-equals: #56b6c2;
+  --sk-arrow: #bd78d2;
+  --sk-create: #f1d700;
+  --sk-bracket: #f1d700;
+  --sk-return: #bd78d2;
+  --sk-element: #e06a71;
+  --sk-element-bracket: #abb2bf;
+}
+
+/* Dark+ */
+[data-theme="darkplus"] {
+  --sidebar-bg: #333333;
+  --sidebar-icon: #858585;
+  --sidebar-icon-hover: #ffffff;
+  --header-bg: #3c3c3c;
+  --header-tc: #bfbfbf;
+  --header-tc-hover: #474748;
+  --header-icon: #cccccc;
+  --header-icon-close: #fefcfc;
+  --header-icon-close-hover: #d61425;
+  --explorer-bg: #252526;
+  --explorer-title: #cccccc;
+  --explorer-item-bg: #252526;
+  --explorer-file-hover: #2a2d2e;
+  --explorer-file-active: #37373d;
+  --taskbar-bg: #252526;
+  --taskbar-file-bg: #2d2d2d;
+  --taskbar-file-text: #969690;
+  --taskbar-file-active: #1e1e1e;
+  --file-bg: #1e1e1e;
+  --file-text: #d4d4d4;
+  --css-name: #d7ba7d;
+  --css-value: #ce723b;
+  --css-type: #9cdcda;
+  --css-quote: #94cea8;
+  --cb-num: #858585;
+
+  --sk-keyword: #bb86c0;
+  --sk-import-name: #9cdcfe;
+  --sk-location: #ce9178;
+  --sk-variable: #569cd6;
+  --sk-function: #dcdc9d;
+  --sk-equals: #d4d4d4;
+  --sk-bracket: #ffd700;
+  --sk-arrow: #569cd6;
+  --sk-create: #ffd700;
+  --sk-return: #bb86b6;
+  --sk-element: #358cd6;
+  --sk-element-bracket: #7a7e80;
 }
