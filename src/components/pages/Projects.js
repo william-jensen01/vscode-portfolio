@@ -1,5 +1,6 @@
-import sfr from "../assets/secret-family-recipes.png";
-import sam from "../assets/sauti-african-marketplace.png";
+import keytonomy from "../../assets/keytonomy.png";
+import portfolio from "../../assets/portfolio.png";
+import sfr from "../../assets/secret-family-recipes.png";
 
 import "../../styles/projects.css";
 
@@ -8,6 +9,57 @@ function Projects() {
     <div className="projects-container">
       <h1>Projects</h1>
       <div className="pjs-project">
+        <h2>Keytonomy</h2>
+        <h4>Role: Full Stack Developer</h4>
+        <img src={keytonomy} alt="Keytonomy" />
+        <h3>Overview</h3>
+        <hr />
+        <p>
+          Keytonomy is the cleanest way for keyboard enthusiasts to browse
+          interest check and group buy posts on Geekhack. Featuring a fast and
+          autonomous web-scrapping backend, Keytonomy is constantly up to date.
+        </p>
+        <h3>Technologies</h3>
+        <hr />
+        <p>React, Flask, SQLAlchemy, BeautifulSoup, Postgres</p>
+        <div className="pj-links">
+          <a
+            href="https://github.com/users/william-jensen01/projects/1"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Github
+          </a>
+          <a href="https://keytonomy.vercel.app">Check it out</a>
+        </div>
+      </div>
+      <div className="pjs-project">
+        <h2>VSCode Portfolio</h2>
+        <h4>Role: Frontend Developer</h4>
+        <img src={portfolio} alt="VSCode Portfolio" />
+        <h3>Overview</h3>
+        <hr />
+        <p>
+          The website you're currently on! This is a place where I can show my
+          projects and skillset. The design is meant to mimic the popular code
+          editor VSCode but with a few additional twists. Icons are contained in
+          an svg-sprite
+        </p>
+        <h3>Technologies</h3>
+        <hr />
+        <p>React, Context</p>
+        <div className="pj-links">
+          <a
+            href="https://github.com/william-jensen01/vscode-portfolio"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Github
+          </a>
+          <a href="https://williambjensen.com">Check it out</a>
+        </div>
+      </div>
+      <div className="pjs-project">
         <h2>Secret Family Recipes</h2>
         <h4>Role: Full Stack Developer</h4>
         <img src={sfr} alt="Secret Family Recipes" />
@@ -15,7 +67,9 @@ function Projects() {
         <hr />
         <p>
           Secret Family Recipes is a safe place to store treasured, beloved
-          recipes that have been passed down by generations.
+          recipes that have been passed down by generations. This was my first
+          attempt at a full stack project. Although it is very buggy and
+          ultimately unfinished, this project taught me a great deal.
         </p>
         <h3>Technologies</h3>
         <hr />
@@ -30,36 +84,6 @@ function Projects() {
           </a>
           <a
             href="https://sfr-frontend.vercel.app/"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Check it out
-          </a>
-        </div>
-      </div>
-      <div className="pjs-project">
-        <h2>Sauti African Marketplace</h2>
-        <h4>Role: Backend Developer</h4>
-        <img src={sam} alt="Sauti African Marketplace" />
-        <h3>Overview</h3>
-        <hr />
-        <p>
-          Sauti African Marketplace is a application that empowers small local
-          business leaders.
-        </p>
-        <h3>Technologies</h3>
-        <hr />
-        <p>Node, Express, Knex, Postgres</p>
-        <div className="pj-links">
-          <a
-            href="https://github.com/Build-Week-African-Marketplace-tt174/back-end"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            GitHub
-          </a>
-          <a
-            href="https://front-end-git-main-alan-and-mark.vercel.app/"
             target="_blank"
             rel="noopener noreferrer"
           >

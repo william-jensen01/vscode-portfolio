@@ -1,4 +1,4 @@
-import sprite from "./assets/svgs-sprite.svg";
+import sprite from "../assets/svgs-sprite.svg";
 import { ActiveFileContext } from "../Context/ActiveFileContext";
 import { useContext } from "react";
 
@@ -10,23 +10,27 @@ function Header() {
   return (
     <div className="header">
       <div className="hdr-left">
-        <svg className="hdr-logo">
-          <use href={sprite + "#icon-vscode"} />
-        </svg>
-        <p>File</p>
-        <p>Edit</p>
-        <p>Selection</p>
-        <p>View</p>
-        <p>Go</p>
-        <p>Run</p>
-        <p>Terminal</p>
-        <p>Help</p>
+        <button>
+          <svg className="hdr-logo">
+            <use href={sprite + "#icon-vscode"} />
+          </svg>
+        </button>
+        <button>File</button>
+        <button>Edit</button>
+        <button>Selection</button>
+        <button>View</button>
+        <button>Go</button>
+        <button>Run</button>
+        <button>Terminal</button>
+        <button>Help</button>
       </div>
       <div className="hdr-middle">
-        <p>{activeFile.fileName} - William Jensen - Visual Studio Code</p>
+        <p>
+          {activeFile.fileName} - William Jensen
+          <span className="vscode"> - Visual Studio Code</span>
+        </p>
       </div>
       <div className="hdr-right">
-        <p></p>
         <svg className="hdr-icon">
           <use href={sprite + "#icon-minimize"} />
         </svg>

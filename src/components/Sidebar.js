@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
+import { useOutsideToggle } from "../util/useOutsideToggle";
 import Explorer from "./Explorer";
-import sprite from "./assets/svgs-sprite.svg";
+import sprite from "../assets/svgs-sprite.svg";
+import Settings from "./Settings";
 
 import "../styles/sidebar.css";
 
 function Sidebar() {
   const [explorerOpen, setExplorerOpen] = useState(true);
+
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const settingsRef = useRef();
+  const closeSettings = () => {
+    setSettingsOpen(false);
+  };
+  useOutsideToggle(settingsRef, closeSettings);
+
   return (
     <div className="sidebar-container">
       <div className="sidebar">
@@ -52,9 +62,15 @@ function Sidebar() {
           <svg className="sb-icon">
             <use xlinkHref={sprite + "#icon-account"} />
           </svg>
-          <svg className="sb-icon">
-            <use xlinkHref={sprite + "#icon-settings"} />
-          </svg>
+          <div ref={settingsRef}>
+            <svg
+              className="sb-icon"
+              onClick={() => setSettingsOpen(!settingsOpen)}
+            >
+              <use xlinkHref={sprite + "#icon-settings"} />
+            </svg>
+            {settingsOpen && <Settings close={closeSettings} />}
+          </div>
         </div>
       </div>
       {explorerOpen && <Explorer />}

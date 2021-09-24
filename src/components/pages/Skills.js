@@ -49,7 +49,7 @@ function Skills() {
               "Redux",
               "Context",
               "MaterialUI",
-              "Bookstrap & Reactstrap",
+              "Bootstrap & Reactstrap",
               "Styled-Components",
             ]}
           />
@@ -60,9 +60,11 @@ function Skills() {
               "Node.js",
               "Express",
               "Knex",
+              "Flask",
+              "SQLAlchemy",
+              "Beautiful Soup",
               "PostgreSQL",
               "SQLite",
-              "MySQL",
               "Postman",
             ]}
           />

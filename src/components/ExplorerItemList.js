@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import sprite from "./assets/svgs-sprite.svg";
+import sprite from "../assets/svgs-sprite.svg";
 import { TaskbarContext } from "../Context/TaskbarContext";
 import { ActiveFileContext } from "../Context/ActiveFileContext";
 

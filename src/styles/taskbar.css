@@ -30,7 +30,7 @@
   display: flex;
   align-items: center;
   background: var(--taskbar-file-active);
-  color: var(--taskbar-file-text);
+  color: var(--taskbar-file-active-text);
   cursor: pointer;
   padding: 5px;
 }

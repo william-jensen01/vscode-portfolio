@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { TaskbarContext } from "../Context/TaskbarContext";
-import sprite from "./assets/svgs-sprite.svg";
+import sprite from "../assets/svgs-sprite.svg";
 import { ActiveFileContext } from "../Context/ActiveFileContext";
 
 import "../styles/taskbar.css";

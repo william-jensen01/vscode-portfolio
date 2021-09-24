@@ -1,0 +1,42 @@
+.settings-container {
+  width: 200px;
+  height: 300px;
+  position: absolute;
+  color: white;
+  background-color: var(--sidebar-bg);
+  left: 55px;
+  bottom: 0;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.settings-container p {
+  margin: 0.25rem 0;
+}
+.settings-container hr {
+  width: 90%;
+  margin: 0.5rem 0;
+}
+.settings-theme-option {
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  color: white;
+  width: 100%;
+  padding: 0.3rem 1rem;
+  text-align: left;
+  font-size: 0.9rem;
+  font-family: "Open Sans", sans-serif;
+}
+.settings-theme-option:hover {
+  background-color: var(--explorer-file-active);
+}
+
+@media screen and (max-width: 750px) {
+  .settings-container {
+    left: 100%;
+    top: 90px;
+    transform: translateX(-100%);
+  }
+}

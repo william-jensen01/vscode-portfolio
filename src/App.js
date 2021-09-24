@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { HotKeys } from "react-hotkeys";
 
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
@@ -36,24 +37,33 @@ function App() {
     [activeFile]
   );
 
+  const keyMap = {
+    change_theme: "w",
+  };
+  const handlers = {
+    change_theme: () => console.log("change theme hotkey"),
+  };
+
   return (
     <div className="layout">
-      <ActiveFileContext.Provider value={providerActiveFile}>
-        <div className="top-container">
-          <Header />
-        </div>
-        <TaskbarContext.Provider value={providerTaskbar}>
-          <div className="main">
-            <div className="left-container">
-              <Sidebar />
-            </div>
-            <div className="main-container">
-              <Taskbar />
-              <File />
-            </div>
+      <HotKeys keyMap={keyMap} handlers={handlers}>
+        <ActiveFileContext.Provider value={providerActiveFile}>
+          <div className="top-container">
+            <Header />
           </div>
-        </TaskbarContext.Provider>
-      </ActiveFileContext.Provider>
+          <TaskbarContext.Provider value={providerTaskbar}>
+            <div className="main">
+              <div className="left-container">
+                <Sidebar />
+              </div>
+              <div className="main-container">
+                <Taskbar />
+                <File />
+              </div>
+            </div>
+          </TaskbarContext.Provider>
+        </ActiveFileContext.Provider>
+      </HotKeys>
     </div>
   );
 }

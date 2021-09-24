@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ExplorerItemList from "./ExplorerItemList";
-import sprite from "./assets/svgs-sprite.svg";
+import sprite from "../assets/svgs-sprite.svg";
 
 import "../styles/explorer.css";
 
