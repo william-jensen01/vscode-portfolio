@@ -60,7 +60,7 @@ function Contact() {
         <p className="ct-css-line">
           location:{" "}
           <span className="ct-css-value">
-            <span className="ct-css-quote">"</span>Salt Lake City, UT
+            <span className="ct-css-quote">"</span>Provo, UT
             <span className="ct-css-quote">"</span>
           </span>
           ;
