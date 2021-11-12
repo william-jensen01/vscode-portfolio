@@ -19,12 +19,12 @@ function About() {
       <p>
         Hello there! I'm William, an aspiring Full Stack Software Developer that
         recently graduated from Lambda School. My passion for code didn't start
-        until high school where I took a web design class; and, multiple
-        computer science classes at Utah Valley University. Shortly after
-        graduating with my Associate in Science, I was admited into Lambda
-        School, a 6+ month computer science & software engineering academy that
-        gave me hands on experience. Now, I am looking for opportunities that
-        will challenge me to grow and learn.
+        until high school where I took a web design class and had the
+        opportunity to take multiple computer science classes at Utah Valley
+        University. Shortly after graduating with my Associate in Science, I was
+        admited into Lambda School, a 6+ month computer science & software
+        engineering academy that gave me hands on experience. Now, I am looking
+        for opportunities that will challenge me to learn and grow.
       </p>
       <a
         href={resume}
