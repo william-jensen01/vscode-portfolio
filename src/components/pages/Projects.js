@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import pottyTraining from "../../assets/3-day-potty-training.png";
 import keytonomy from "../../assets/keytonomy.png";
 import portfolio from "../../assets/portfolio.png";
@@ -6,6 +7,8 @@ import sfr from "../../assets/secret-family-recipes.png";
 import "../../styles/projects.css";
 
 function Projects() {
+	const [loadPretendo, setLoadPretendo] = useState(false);
+
 	return (
 		<div className="projects-container">
 			<h1>Projects</h1>
@@ -52,6 +55,64 @@ function Projects() {
 						Github
 					</a>
 					<a href="https://keytonomy.vercel.app">Check it out</a>
+				</div>
+			</div>
+			<div className="pjs-project" id="pretendo">
+				<h2>Pretendo Game Boy</h2>
+				<h4>Role: Frontend Developer</h4>
+				<div
+					style={{
+						// height: "654px",
+						"--window-height": "calc(100vh - 40px - 50px - 55px - 64px)",
+						height: "var(--window-height)",
+						display: "grid",
+						placeItems: "center",
+						backgroundColor: "var(--taskbar-bg)",
+						overflow: "hidden",
+					}}
+				>
+					{!loadPretendo ? (
+						<button
+							onClick={() => {
+								setLoadPretendo((prev) => !prev);
+							}}
+						>
+							{loadPretendo ? "Hide" : "Load"}&nbsp;Pretendo
+						</button>
+					) : (
+						<iframe
+							src="https://pretendo.williambjensen.com/"
+							title="Pretendo GameBoy"
+							// width="400"
+							// height="654"
+							width="100%"
+							height="100%"
+							scrolling="auto"
+						/>
+					)}
+				</div>
+				<h3>Overview</h3>
+				<hr />
+				<p>
+					A browser-based recreation of the classic Game Boy, featuring Conway's
+					Game of Life and another game unlocked with a sssecret button
+					combination.
+				</p>
+				<h3>Technologies</h3>
+				<hr />
+				<p>
+					Next.js (HTMl, CSS, JavaScript), Zustand, Dnd-Kit, Embla Carousel,
+					Howler
+				</p>
+				<div className="pj-links">
+					<a
+						href="https://github.com/william-jensen01/pretendo"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						Github
+					</a>
+					<a href="https://pretendo.williambjensen.com/">Check it out</a>
 				</div>
 			</div>
 			<div className="pjs-project">
