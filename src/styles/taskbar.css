@@ -33,6 +33,10 @@
 .tb-close {
 	width: 10px;
 	height: 10px;
+	border-radius: 5px;
+}
+.tb-close:hover {
+	background-color: rgba(255, 255, 255, 0.08);
 }
 .tb-file-active {
 	display: flex;
