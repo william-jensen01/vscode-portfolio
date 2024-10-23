@@ -16,6 +16,8 @@
 	--explorer-file-active: #2c313a;
 	--taskbar-bg: #21252b;
 	--taskbar-file-bg: #21252b;
+	--taskbar-file-border: #292c34;
+	--taskbar-file-gap: #181a1f;
 	--taskbar-file-text: #7a838a;
 	--taskbar-file-active: #282c34;
 	--taskbar-file-active-text: #d7dae0;
@@ -69,6 +71,8 @@
 	--explorer-file-active: #37373d;
 	--taskbar-bg: #252526;
 	--taskbar-file-bg: #2d2d2d;
+	--taskbar-file-border: #1e1e1e;
+	--taskbar-file-gap: #252526;
 	--taskbar-file-text: #969690;
 	--taskbar-file-active: #1e1e1e;
 	--taskbar-file-active-text: #ffffff;
@@ -118,6 +122,8 @@
 	--explorer-file-active: #44475a;
 	--taskbar-bg: #191a21;
 	--taskbar-file-bg: #21222c;
+	--taskbar-file-border: #8f527f;
+	--taskbar-file-gap: #191a21;
 	--taskbar-file-text: #6272a4;
 	--taskbar-file-active: #282a36;
 	--taskbar-file-active-text: #f8f8f2;

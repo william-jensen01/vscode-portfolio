@@ -1,39 +1,48 @@
 .taskbar {
-  display: flex;
-  flex-direction: row;
-  background: var(--taskbar-bg);
-  box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 5px;
-  width: 100%;
-  overflow: auto;
+	display: flex;
+	flex-direction: row;
+	gap: 1px;
+	background: var(--taskbar-bg);
+	box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 5px;
+	width: 100%;
+	overflow: auto;
+}
+.taskbar > * {
+	border-left: 1px solid #181a1f;
+}
+.taskbar > *:nth-child(1) {
+	border-left: none;
 }
 
 .tb-icon {
-  width: 15px;
-  height: 15px;
+	width: 15px;
+	height: 15px;
 }
 .tb-file {
-  display: flex;
-  align-items: center;
-  background: var(--taskbar-file-bg);
-  color: var(--taskbar-file-text);
-  cursor: pointer;
-  padding: 5px;
+	display: flex;
+	align-items: center;
+	background: var(--taskbar-file-bg);
+	color: var(--taskbar-file-text);
+	cursor: pointer;
+	padding: 5px;
+	border-top: 1px solid var(--transparent);
 }
 .tb-file * {
-  padding: 5px;
+	padding: 5px;
 }
 .tb-close {
-  width: 10px;
-  height: 10px;
+	width: 10px;
+	height: 10px;
 }
 .tb-file-active {
-  display: flex;
-  align-items: center;
-  background: var(--taskbar-file-active);
-  color: var(--taskbar-file-active-text);
-  cursor: pointer;
-  padding: 5px;
+	display: flex;
+	align-items: center;
+	background: var(--taskbar-file-active);
+	color: var(--taskbar-file-active-text);
+	cursor: pointer;
+	padding: 5px;
+	border-top: 1px solid var(--taskbar-file-border);
 }
 .tb-file-active * {
-  padding: 5px;
+	padding: 5px;
 }
