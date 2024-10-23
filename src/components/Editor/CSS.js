@@ -67,6 +67,13 @@ CSS.Selector = ({ children }) => (
 	</NewLine>
 );
 
+const typeMapPattern = {
+	str: Quotation,
+	url: Url,
+	color: ColorPreview,
+	numerical: Numerical,
+};
+
 CSS.Declaration = ({
 	children,
 	property,
@@ -114,23 +121,14 @@ CSS.Declaration = ({
 					if (idx > 0) {
 						acc.push(separator);
 					}
-					switch (type) {
-						case "str":
-							acc.push(<Quotation>{value}</Quotation>);
-							break;
-						case "url":
-							acc.push(<Url>{value}</Url>);
-							break;
-						case "color":
-							acc.push(<ColorPreview>{value}</ColorPreview>);
-							break;
-						case "numerical":
-							acc.push(<Numerical>{value}</Numerical>);
-							break;
-						default:
-							acc.push(value);
-							break;
+
+					const Component = typeMapPattern[type];
+					if (typeMapPattern.hasOwnProperty(type)) {
+						acc.push(<Component>{value}</Component>);
+					} else {
+						acc.push(value);
 					}
+
 					return acc;
 				}, [])}
 				<SemiColon />
