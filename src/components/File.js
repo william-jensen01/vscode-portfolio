@@ -7,16 +7,21 @@ import { ActiveFileContext } from "../Context/ActiveFileContext";
 
 import "../styles/file.css";
 
+const COMPONENTS = {
+	about: About,
+	skills: Skills,
+	projects: Projects,
+	contact: Contact,
+};
+
 function File() {
-  const { activeFile } = useContext(ActiveFileContext);
-  return (
-    <div className="file-container">
-      {activeFile.page === "about" && <About />}
-      {activeFile.page === "skills" && <Skills />}
-      {activeFile.page === "projects" && <Projects />}
-      {activeFile.page === "contact" && <Contact />}
-    </div>
-  );
+	const { activeFile } = useContext(ActiveFileContext);
+	const Component = COMPONENTS[activeFile.page];
+	return (
+		<div className="file-container">
+			<Component />
+		</div>
+	);
 }
 
 export default File;
