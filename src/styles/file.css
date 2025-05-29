@@ -307,6 +307,16 @@ a {
 .bracket {
 	color: var(--default-color);
 }
+.bracket.angle {
+	color: var(--default-color) !important;
+}
+.line:hover .bracket:not(.angle) {
+	-webkit-text-stroke: 1px var(--dynamic-color, var(--default-color));
+}
+.dynamic-color,
+.test-color {
+	color: var(--dynamic-color, var(--default-color));
+}
 
 .js-import-word {
 	/* color: var(--sk-keyword); */

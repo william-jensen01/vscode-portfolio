@@ -9,6 +9,8 @@ import Taskbar from "./components/Taskbar";
 import { TaskbarContext } from "./Context/TaskbarContext";
 import { ActiveFileContext } from "./Context/ActiveFileContext";
 
+import { useThemeColors } from "./store/colorStore";
+
 import "./styles/layout.css";
 import "./styles/themes.css";
 
@@ -56,6 +58,8 @@ function App() {
 	const handlers = {
 		change_theme: () => console.log("change theme hotkey"),
 	};
+
+	useThemeColors();
 
 	return (
 		<div className="layout">

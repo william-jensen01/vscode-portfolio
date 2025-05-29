@@ -1,4 +1,8 @@
-import React from "react";
+import React, { useRef, useEffect } from "react";
+
+import { useGeneratedId } from "../../hooks/useGeneratedId";
+import { useBracketStore } from "../../Features/BracketPairColorization/store";
+import { useDynamicColor } from "../../hooks/useDynamicColor";
 
 const bracketMap = {
 	"(": (
@@ -49,13 +53,46 @@ export default function Bracket({
 	editorClass,
 	...props
 }) {
-	const tag = bracketMap[character];
-	if (!tag) {
-		throw new Error("Bracket component must have a valid character prop");
+	const bracketId = useGeneratedId("bracket");
+
+	const registerBracket = useBracketStore((state) => state.registerBracket);
+	const unregisterBracket = useBracketStore((state) => state.unregisterBracket);
+
+	const registeredRef = useRef(false);
+	const bracketInfoRef = useRef();
+
+	if (!registeredRef.current && !bracketInfoRef.current) {
+		const bracketInfo = registerBracket(bracketId, character);
+		bracketInfoRef.current = bracketInfo;
+
+		registeredRef.current = true;
 	}
+
+	useEffect(() => {
+		return () => {
+			unregisterBracket(bracketId);
+		};
+	}, [bracketId, unregisterBracket]);
+
+	const colorIdx = bracketInfoRef.current?.color;
+
+	const color = useDynamicColor(colorIdx);
+
+	const isDynamicColored = typeof colorIdx === "number" && colorIdx >= 0;
+
+	const dynamicClass = isDynamicColored ? "dynamic-color" : "";
+	// const dynamicClass = "test-color";
+
+	const tag = bracketMap[character];
 
 	return React.cloneElement(tag, {
 		...props,
-		className: `${tag.props.className}`,
+		className: `${tag.props.className} ${dynamicClass}`,
+		style: {
+			"--dynamic-color": color,
+		},
+		"data-color": color,
+		"data-color-idx": colorIdx,
+		"data-id": bracketId,
 	});
 }

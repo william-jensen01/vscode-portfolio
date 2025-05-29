@@ -9,6 +9,10 @@ import {
 	createScopeStore,
 	ScopeStoreContext,
 } from "./Features/Scope/scopeStore";
+import {
+	createBracketPairColorizerStore,
+	BracketPairColorizerContext,
+} from "./Features/BracketPairColorization/store";
 import { useGeneratedId } from "./hooks/useGeneratedId";
 import { throttle } from "./hooks/useThrottle";
 
@@ -21,6 +25,10 @@ export function EditorInstance({ children }) {
 	const lineStore = useMemo(() => createLineStore(), []);
 	// const scopeStore = useRef(createScopeStore()).current;
 	const scopeStore = useMemo(() => createScopeStore(), []);
+	const bracketPairColorizerStore = useMemo(
+		() => createBracketPairColorizerStore(),
+		[]
+	);
 
 	useUpdateLineWidth(lineStore);
 
@@ -48,6 +56,8 @@ export function EditorInstance({ children }) {
 					commonAncestor = commonAncestor.parentElement;
 				}
 
+				if (!commonAncestor) return;
+
 				const container =
 					commonAncestor.closest(".line") ||
 					commonAncestor.closest(".view-lines") ||
@@ -65,9 +75,7 @@ export function EditorInstance({ children }) {
 		}, 50);
 
 		function handleDeselect() {
-			const spacers = document.querySelectorAll(
-				".spacer-tab .gap.selected"
-			);
+			const spacers = document.querySelectorAll(".spacer-tab .gap.selected");
 			spacers.forEach((spacer) => {
 				spacer.classList.remove("selected");
 			});
@@ -90,20 +98,22 @@ export function EditorInstance({ children }) {
 	}, []);
 
 	return (
-		<LineCountContext.Provider value={lineStore}>
-			<ScopeStoreContext.Provider value={scopeStore}>
-				<div className="editor-container" data-id={editorId}>
-					<div className="editor-instance">
-						<div ref={viewLinesRef} className="view-lines">
-							{children}
-							<NewLine />
-							<NewLine>
-								<div id="caret" />
-							</NewLine>
+		<BracketPairColorizerContext.Provider value={bracketPairColorizerStore}>
+			<LineCountContext.Provider value={lineStore}>
+				<ScopeStoreContext.Provider value={scopeStore}>
+					<div className="editor-container" data-id={editorId}>
+						<div className="editor-instance">
+							<div ref={viewLinesRef} className="view-lines">
+								{children}
+								<NewLine />
+								<NewLine>
+									<div id="caret" />
+								</NewLine>
+							</div>
 						</div>
 					</div>
-				</div>
-			</ScopeStoreContext.Provider>
-		</LineCountContext.Provider>
+				</ScopeStoreContext.Provider>
+			</LineCountContext.Provider>
+		</BracketPairColorizerContext.Provider>
 	);
 }
