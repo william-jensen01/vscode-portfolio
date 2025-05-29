@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useRef, useEffect } from "react";
 import About from "./pages/About";
 import Skills from "./pages/Skills";
 import Projects from "./pages/Projects";
@@ -16,10 +16,17 @@ const COMPONENTS = {
 
 function File() {
 	const { activeFile } = useContext(ActiveFileContext);
-	const Component = COMPONENTS[activeFile.page];
+	const Component = COMPONENTS[activeFile?.page];
+	const fileContainerRef = useRef(null);
+
+	// reset scroll position whenever active file changes
+	useEffect(() => {
+		fileContainerRef.current.scrollTop = 0;
+	}, [activeFile]);
+
 	return (
-		<div className="file-container">
-			<Component />
+		<div ref={fileContainerRef} className="file-container">
+			{Component && <Component />}
 		</div>
 	);
 }

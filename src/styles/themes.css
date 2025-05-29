@@ -1,8 +1,12 @@
 /* my VSCODE colors */
-:root {
+:root,
+[data-theme="atom one dark"] {
+	/* --line-number-digit-count: 1ch; */
+
 	--sidebar-bg: #333842;
 	--sidebar-icon: #757982;
 	--sidebar-icon-hover: #d7dae0;
+	--sidebar-icon-active-border: #d7dae0;
 	--header-bg: #21252b;
 	--header-tc: #9da5b4;
 	--header-tc-hover: #383b41;
@@ -22,35 +26,56 @@
 	--taskbar-file-active: #282c34;
 	--taskbar-file-active-text: #d7dae0;
 	--file-bg: #282c34;
-	--file-bg-hover: #2c313a;
+	--file-bg-hover: #2e323d;
 	--file-bg-hover-border: #2c313a;
+	--file-line-border-width: 0px;
 	--file-text: #abb2bf;
 	--caret-color: #618cff;
+	--semicolon-color: #abb2bf;
+	--menu-bg: #353b45;
+	--foldPlaceholderForeground: #808080;
+	--editorGutter-foldingControlForeground: #c5c5c5;
+	--widget-shadow: rgba(0, 0, 0, 0.36);
+
+	--dynamic-colors: #ffd700, #da70d6, #179fff;
+	--dynamic-colors-n: 3;
+	--default-color: #abb2bf;
+
 	--css-name: #d18d4c;
-	--css-bracket: #f1d700;
+	--css-bracket: hsl(54, 100%, 47%);
 	/* --css-bracket: #e06c75; */
 	--css-value: #46b6c2;
+	--css-fn: #56b6c2;
 	--css-numerical: #cb9a67;
 	--css-type: #abb2bf;
+	--css-unit: #d19a66;
 	--css-quote: #98c379;
+	--css-animation-name: #abb2bf;
+	--css-animation-iteration-count: #abb2bf;
+	--css-separator: #abb2bf;
+
 	--cb-num: #636d83;
 	--cb-num-hover: #acb2bf;
 
-	--sk-keyword: #bd78d2;
-	--sk-import-name: #e06a71;
-	--sk-location: #98be63;
-	--sk-variable: #bd78d2;
-	--sk-function: #44a3ef;
-	--sk-equals: #56b6c2;
-	--sk-arrow: #bd78d2;
-	--sk-create: #f1d700;
-	/* --sk-bracket: #e06c75; */
-	--sk-bracket: #f1d700;
-	--sk-return: #bd78d2;
-	--sk-element: #e06a71;
-	--sk-element-bracket: #abb2bf;
+	--js-import-word: #c678dd;
+	--js-import-named: #e06c75;
+	--js-import-word-from: #c678dd;
+	--js-import-source: #98c379;
+	--js-variable-declaration: #c678dd;
+	--js-variable-name: #61afef;
+	--js-equals: #56b6c2;
+	--js-function-arrow: #c678dd;
+	--js-class: #abb2bf;
+	--js-class-method: #61afef;
+	--js-period: #abb2bf;
+	--js-function-return: #c678dd;
+
+	--html-tag-name: #e06c75;
+	--html-text: #abb2bf;
 
 	--comment-color: #5d6370;
+	/* --user-select-color: #ffffff57; */
+	--user-select-color: #3f4451;
 }
 
 /* Dark+ */
@@ -58,6 +83,7 @@
 	--sidebar-bg: #333333;
 	--sidebar-icon: #858585;
 	--sidebar-icon-hover: #ffffff;
+	--sidebar-icon-active-border: #ffffff;
 	--header-bg: #3c3c3c;
 	--header-tc: #bfbfbf;
 	--header-tc-hover: #474748;
@@ -79,28 +105,48 @@
 	--file-bg: #1e1e1e;
 	--file-bg-hover: #1e1e1e;
 	--file-bg-hover-border: #282828;
+	--file-line-border-width: 2px;
 	--file-text: #d4d4d4;
 	--caret-color: #aeafad;
+	--semicolon-color: #d4d4d4;
+	--menu-bg: #252526;
+	--foldPlaceholderForeground: #808080;
+	--editorGutter-foldingControlForeground: #c5c5c5;
+	--widget-shadow: rgba(0, 0, 0, 0.36);
+
+	--dynamic-colors: #ffd700, #da70d6, #179fff;
+	--dynamic-colors-n: 3;
+	--default-color: #808080;
+
 	--css-name: #d7ba7d;
 	--css-value: #ce723b;
+	--css-fn: #dcdcaa;
 	--css-numerical: #aace9c;
 	--css-type: #9cdcda;
+	--css-unit: #b5cea8;
 	--css-quote: #94cea8;
+	--css-animation-name: #d4d4d4;
+	--css-animation-iteration-count: #ce9178;
+	--css-separator: #d4d4d4;
+
 	--cb-num: #858585;
 	--cb-num-hover: #c6c6c6;
 
-	--sk-keyword: #bb86c0;
-	--sk-import-name: #9cdcfe;
-	--sk-location: #ce9178;
-	--sk-variable: #569cd6;
-	--sk-function: #dcdc9d;
-	--sk-equals: #d4d4d4;
-	--sk-bracket: #ffd700;
-	--sk-arrow: #569cd6;
-	--sk-create: #ffd700;
-	--sk-return: #bb86b6;
-	--sk-element: #358cd6;
-	--sk-element-bracket: #7a7e80;
+	--js-import-word: #c586c0;
+	--js-import-named: #9cdcfe;
+	--js-import-word-from: #c586c0;
+	--js-import-source: #ce9178;
+	--js-variable-declaration: #569cd6;
+	--js-variable-name: #dcdcaa;
+	--js-equals: #d4d4d4;
+	--js-function-arrow: #569cd6;
+	--js-class: #9cdcfe;
+	--js-class-method: #dcdcaa;
+	--js-period: #d4d4d4;
+	--js-function-return: #c586c0;
+
+	--html-tag-name: #569cd6;
+	--html-text: #d4d4d4;
 
 	--comment-color: #709954;
 }
@@ -109,6 +155,7 @@
 	--sidebar-bg: #343746;
 	--sidebar-icon: #6272a4;
 	--sidebar-icon-hover: #f8f8f2;
+	--sidebar-icon-active-border: rgba(255, 122, 198, 0.5);
 	--header-bg: #21222c;
 	--header-tc: #f8f8f2;
 	--header-tc-hover: #383942;
@@ -130,29 +177,48 @@
 	--file-bg: #282a36;
 	--file-bg-hover: #282a36;
 	--file-bg-hover-border: #45475a;
+	--file-line-border-width: 2px;
 	--file-text: #f8f8ec;
 	--caret-color: #aeafad;
+	--semicolon-color: #f8f8f2;
+	--menu-bg: #343746;
+	--foldPlaceholderForeground: #808080;
+	--editorGutter-foldingControlForeground: #c5c5c5;
+	--widget-shadow: rgba(0, 0, 0, 0.36);
+
+	--dynamic-colors: #f8f8f2, #ff79c6, #8be9fd, #50fa7b, #bd93f9, #ffb86c;
+	--dynamic-colors-n: 6;
+	--default-color: #f8f8f2;
+
 	--css-name: #50fa7b;
-	--css-bracket: #ffca1f;
 	--css-value: #af93f9;
+	--css-fn: #8be9fd;
+	--css-numerical: #bd93f9;
 	--css-type: #8be9f0;
+	--css-unit: #ff79c6;
 	--css-quote: #ddf284;
+	--css-animation-name: #f8f8f2;
+	--css-animation-iteration-count: #bd93f9;
+	--css-separator: #f8f8f2;
+
 	--cb-num: #6072a4;
 	--cb-num-hover: #c6c6c6;
 
-	--sk-keyword: #ff79aa;
-	--sk-import-name: #f8f8f2;
-	--sk-location: #f1f081;
-	--sk-semicolon: #f8f8f2;
-	--sk-variable: #ff79aa;
-	--sk-function: #39ed7b;
-	--sk-equals: #ff79c6;
-	--sk-arrow: #ff79c6;
-	--sk-create: #8be9fd;
-	--sk-bracket: #ffca1f;
-	--sk-return: #ff79aa;
-	--sk-element: #ff79aa;
-	--sk-element-bracket: #ebf8f2;
+	--js-import-word: #ff79c6;
+	--js-import-named: #f8f8f2;
+	--js-import-word-from: #ff79c6;
+	--js-import-source: #f1fa8c;
+	--js-variable-declaration: #ff79c6;
+	--js-variable-name: #50fa7b;
+	--js-equals: #ff79c6;
+	--js-function-arrow: #ff79c6;
+	--js-class: #f8f8f2;
+	--js-class-method: #50fa7b;
+	--js-period: #f8f8f2;
+	--js-function-return: #ff79c6;
+
+	--html-tag-name: #ff79c6;
+	--html-text: #f8f8f2;
 
 	--comment-color: #6572a4;
 }

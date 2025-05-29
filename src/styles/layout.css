@@ -1,31 +1,38 @@
 .layout {
-  font-family: "Open Sans", sans-serif;
-  display: flex;
-  flex-direction: column;
-  width: 100vw;
+	font-family: "Open Sans", sans-serif;
+	display: flex;
+	flex-direction: column;
+	width: 100dvw;
+	height: 100dvh;
 }
 .top-container {
-  height: 40px;
-  width: 100%;
+	height: 40px;
+	width: 100%;
 }
 .main {
-  display: flex;
-  height: calc(100vh - 40px);
+	display: flex;
+	flex-direction: row;
+	height: calc(100dvh - 40px);
 }
 .left-container {
-  display: flex;
-  flex-direction: row;
+	display: flex;
+	flex-direction: row;
 }
 .main-container {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  width: 100%;
-  height: 100%;
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+	min-height: 0;
+	width: 100%;
+	height: 100%;
 }
 
 @media (max-width: 750px) {
-  .main {
-    flex-direction: column;
-  }
+	.main {
+		flex-direction: column;
+		height: 100% - 40px;
+	}
+	.left-container {
+		order: 5;
+	}
 }

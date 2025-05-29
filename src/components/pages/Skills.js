@@ -1,83 +1,130 @@
-import Codebar from "../Codebar";
-import SkillsList from "./SkillsList";
+import React from "react";
+import { EditorInstance } from "../Editor";
+import Scope from "../Editor/Features/Scope";
+import NewLine from "../Editor/Elements/Line";
+import Bracket from "../Editor/Elements/Bracket";
+import { Space } from "../Editor/Elements";
+import { JS, Require } from "../Editor/JS";
+import { List, Tag } from "../Editor/HTML";
 
-import "../../styles/skills.css";
+// import "../../styles/skills.css";
+const map = {
+	"CORE SKILLS": ["JavaScript", "HTML", "CSS", "Python", "Git"],
+	"FRONTEND TECHNOLOGIES": [
+		"React",
+		"Redux",
+		"Context",
+		"MaterialUI",
+		"Bootstrap & Reactstrap",
+		"Styled-Components",
+	],
+	"BACKEND TECHNOLOGIES": [
+		"Node.js",
+		"Express",
+		"Knex",
+		"Flask",
+		"SQLAlchemy",
+		"Beautiful Soup",
+		"PostgreSQL",
+		"SQLite",
+		"Postman",
+	],
+	TESTING: ["Cypress.io", "Jest"],
+};
 
 function Skills() {
-  return (
-    <div className="skills-container">
-      <Codebar amount={43} type="sk" />
-      <div className="skills">
-        <p>
-          <span className="sk-keyword">import</span>{" "}
-          <span className="sk-import-name">React </span>{" "}
-          <span className="sk-keyword">from</span>{" "}
-          <span className="sk-location">"react"</span>
-          <span className="sk-semicolon">;</span>
-        </p>
-        <p>
-          <span className="sk-keyword">import</span>{" "}
-          <span className="sk-import-name">SoftwareEngineer</span>{" "}
-          <span className="sk-keyword">from</span>{" "}
-          <span className="sk-location">"william-jensen"</span>
-          <span className="sk-semicolon">;</span>
-        </p>
-        <br />
-        <p>
-          <span className="sk-variable">const</span>{" "}
-          <span className="sk-function">Skills</span>{" "}
-          <span className="sk-equals">=</span>{" "}
-          <span className="sk-bracket">()</span>{" "}
-          <span className="sk-arrow">{"=>"}</span>{" "}
-          <span className="sk-create">SoftwareEngineer.Create()</span>{" "}
-          <span className="sk-bracket">{"{"}</span>
-        </p>
-        <div style={{ paddingLeft: "5%" }}>
-          <p>
-            <span className="sk-return">return (</span>
-          </p>
+	return (
+		<EditorInstance>
+			<JS>
+				<Require>
+					<Require.Item>React</Require.Item>
+					<Require.Package>react</Require.Package>
+				</Require>
+				<Require>
+					<Require.Item>SoftwareEngineer</Require.Item>
+					<Require.Package>william-jensen</Require.Package>
+				</Require>
+				<NewLine />
 
-          <SkillsList
-            name="CORE SKILLS"
-            list={["JavaScript", "HTML", "CSS", "Python", "Git"]}
-          />
-          <br />
-          <SkillsList
-            name="FRONTEND TECHNOLOGIES"
-            list={[
-              "React",
-              "Redux",
-              "Context",
-              "MaterialUI",
-              "Bootstrap & Reactstrap",
-              "Styled-Components",
-            ]}
-          />
-          <br />
-          <SkillsList
-            name="BACKEND TECHNOLOGIES"
-            list={[
-              "Node.js",
-              "Express",
-              "Knex",
-              "Flask",
-              "SQLAlchemy",
-              "Beautiful Soup",
-              "PostgreSQL",
-              "SQLite",
-              "Postman",
-            ]}
-          />
-          <br />
-          <SkillsList name="Testing" list={["Cypress.io", "Jest"]} />
-          <p>
-            <span className="sk-return">)</span>
-          </p>
-        </div>
-        <span className="sk-bracket">{`}`}</span>
-      </div>
-    </div>
-  );
+				<Scope>
+					<NewLine>
+						<span className="js-variable-declaration">const</span>
+						&nbsp;
+						<span className="js-variable-name">Skills</span>
+						&nbsp;
+						<span className="js-equals">=</span>
+						&nbsp;
+						<Bracket character="(" />
+						<Bracket character=")" />
+						&nbsp;
+						<span className="js-function-arrow">{"=>"}</span>
+						&nbsp;
+						<span className="js-class-name">SoftwareEngineer</span>
+						<span className="js-period">{"."}</span>
+						<span className="js-class-method">Create</span>
+						<Bracket character="(" />
+						<Bracket character="(" />
+						<Bracket character=")" />
+						&nbsp;
+						<span className="js-function-arrow">{"=>"}</span>
+						&nbsp;
+						<Bracket character="{" />
+					</NewLine>
+
+					<Scope>
+						<NewLine>
+							<span className="js-function-return">return</span>
+							&nbsp;
+							<Bracket character="(" />
+						</NewLine>
+						<Scope>
+							<NewLine>
+								<Tag>main</Tag>
+							</NewLine>
+							{Object.keys(map).map((key, idx) => {
+								return (
+									<React.Fragment key={`map-h2:${idx}`}>
+										<NewLine>
+											<Tag>h2</Tag>
+											<Space />
+											<span className="html-text">
+												{key}
+											</span>
+											<Space />
+											<Tag closing>h2</Tag>
+										</NewLine>
+										<List unordered key={key}>
+											{map[key].map((item, itemIdx) => (
+												<List.Item
+													key={`map-list-item: ${key}.${itemIdx}`}
+												>
+													{item}
+												</List.Item>
+											))}
+										</List>
+										<NewLine />
+									</React.Fragment>
+								);
+							})}
+
+							<NewLine>
+								<Tag closing>main</Tag>
+							</NewLine>
+						</Scope>
+
+						<NewLine>
+							<Bracket character=")" />
+						</NewLine>
+					</Scope>
+
+					<NewLine>
+						<Bracket character="}" />
+						<Bracket character=")" />
+					</NewLine>
+				</Scope>
+			</JS>
+		</EditorInstance>
+	);
 }
 
 export default Skills;

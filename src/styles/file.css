@@ -2,19 +2,50 @@
 	background: var(--file-bg);
 	width: 100%;
 	height: 100%;
-	/* overflow: auto; */
-	overflow-y: auto;
+	overflow: auto;
+	min-height: 0;
+	position: relative;
+	display: grid;
+	grid-template-areas: "scroll-decoration" "file";
+	margin-top: -1px;
+	overscroll-behavior-y: none;
 }
+
+.file-container > *:last-child {
+	grid-area: scroll-decoration / file;
+}
+/* .editor-container {
+    position: relative;
+} */
+
+/* .editor-container { */
+/* padding-bottom: 100dvh; */
+/* position: relative; */
+/* height: fit-content; */
+/* width: 100%; */
+/* background: var(--editor-bg); */
+/* } */
+
 .editor-instance {
+	position: relative;
+
+	display: grid;
+	grid-template-areas: "sticky" "editor";
 	font-family: "Fira Mono", monospace;
 	--editor-line-height: 1.33;
 	--editor-font-size: 1rem;
 	--editor-view-height: calc(
 		var(--editor-line-height) * var(--editor-font-size)
 	);
+
 	counter-reset: line-numbers;
 	color: var(--css-type);
-	padding: calc((var(--editor-line-height) * var(--editor-font-size)) / 4) 0;
+
+	--spacer-tab-content: "\00a0\00a0\00a0\00a0";
+	margin-bottom: calc(100% - var(--editor-view-height));
+}
+.view-lines {
+	grid-area: sticky / editor;
 }
 
 ::-webkit-scrollbar {
@@ -52,49 +83,180 @@
 	animation: blink 1s infinite; /* IE 10+, Fx 29+ */
 }
 
-.line,
-.view-line,
-.view-number {
-	display: flex;
-	box-sizing: border-box;
-	word-break: break-all;
+.line {
+	position: relative;
+	background: var(--file-bg);
+	cursor: text;
+}
+.line.highlight {
+	background: var(--file-bg-hover);
+	outline: var(--file-line-border-width) solid var(--file-bg-hover-border);
+	outline-offset: calc(var(--file-line-border-width) * -1);
+}
+
+.view-line > span:last-of-type {
 	position: relative;
 }
-.line:hover .view-number::before {
+
+/* underline scope opening line */
+.scope > *:first-child.line .view-line > span:last-of-type::after {
+	content: "";
+	position: absolute;
+	width: 100%;
+	height: 1px;
+	bottom: 0;
+	left: 0;
+	background: var(--default-color);
+	opacity: 0.15;
+}
+
+.scope[data-is-greyed="true"]
+	> *:first-child.line
+	.view-line
+	> span:last-of-type::after {
+	opacity: 0.15;
+	/* display: none; */
+}
+
+.line,
+.line > .view-number .view-line {
+	display: flex;
+	box-sizing: border-box;
+	/* word-break: break-all; */
+	position: relative;
+}
+.line:hover .view-number {
 	color: var(--cb-num-hover);
+}
+.line:hover .view-line {
+	background: var(--file-bg-hover);
+	outline: var(--file-line-border-width) solid var(--file-bg-hover-border);
+	outline-offset: calc(var(--file-line-border-width) * -1);
 }
 .view-line {
 	width: 100%;
-}
-.view-line:hover {
-	background: var(--file-bg-hover);
-}
-.view-line:hover::after {
-	content: "";
-	position: absolute;
-	inset: 0;
-	left: 1px;
-	border: 2px solid var(--file-bg-hover-border);
-	border-right: none;
-}
-.view-number::before {
-	content: counter(line-numbers);
-	counter-increment: line-numbers;
-	font-size: var(--editor-font-size);
 	line-height: var(--editor-line-height);
-	/* height: calc(16 * var(--editor-line-height)); */
-	/* height: var(--editor-view-height); */
-	text-align: right;
-	vertical-align: middle !important;
-	color: var(--cb-num);
-	margin-right: 1rem;
-	width: 2em;
+	display: inline-flex;
 }
 
-.indent {
-	padding-left: 1rem;
-	border-left: 1px solid var(--css-bracket);
-	line-height: inherit;
+::selection {
+	background-color: var(--user-select-color);
+}
+.view-line > span {
+	font-size: var(--editor-font-size);
+}
+.view-line > span:last-child {
+	/* allows for even splitting for wrap instead of break-all*/
+	display: inline-flex;
+	flex-wrap: wrap;
+	user-select: var(--user-select-color);
+}
+.view-line > span:last-child > * {
+	flex-shrink: 0;
+}
+.view-line .inline-folded {
+	-webkit-user-select: none;
+	user-select: none;
+	white-space: nowrap;
+	cursor: text;
+}
+.view-line .inline-folded::after {
+	color: var(--foldPlaceholderForeground);
+	content: "\22ef";
+	cursor: pointer;
+	display: inline;
+	line-height: 1em;
+	margin: 0.1em 0.2em 0;
+}
+.view-lines:has(.view-number:hover) .line .view-number button {
+	opacity: 1;
+}
+.line .view-number {
+	counter-increment: line-numbers;
+	--_view-number-content: counter(line-numbers);
+
+	display: grid;
+	grid-template-columns: 1fr 3ch;
+	/* padding-left: 3ch; */
+
+	height: var(--editor-view-height);
+
+	font-family: "Fira Mono", monospace;
+	font-size: var(--editor-font-size);
+	line-height: var(--editor-line-height);
+	color: var(--cb-num);
+	position: relative;
+	user-select: none;
+	-webkit-user-select: none;
+
+	/* width: calc(var(--line-number-digit-count, 2ch) + (3ch * 2)); */
+	--_gutter-width: 3ch;
+	grid-template-columns:
+		var(--_gutter-left-width, var(--_gutter-width)) var(
+			--line-number-digit-count,
+			2ch
+		)
+		var(--_gutter-right-width, var(--_gutter-width));
+	/* overflow: hidden; */
+	box-sizing: border-box;
+}
+.line .view-number .line-numbers {
+	/* width: var(--line-number-digit-count, 2ch); */
+	text-align: right !important;
+	box-sizing: border-box;
+	grid-column: 2;
+}
+.line .view-number .line-numbers.relative {
+	margin-right: 1ch;
+}
+/* .line .view-number .line-numbers:empty::before {
+	content: var(--_view-number-content);
+} */
+.line .view-number button {
+	grid-column: 3;
+	/* width: 100%; */
+	padding: 0;
+	margin: 0;
+	background: none;
+	border: none;
+	color: var(--editorGutter-foldingControlForeground);
+	opacity: 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	transition: opacity 0.2s linear;
+	font-size: 8px;
+	box-sizing: border-box;
+}
+.line .view-number button::before {
+	content: "╲╱";
+}
+.line .view-number:hover button {
+	opacity: 1;
+}
+.line .view-number button.collapse::before {
+	rotate: -90deg;
+}
+
+.scope {
+	display: contents;
+}
+
+/* 
+    Line number is a CSS counter unless overridden.
+    We don't want to "display: none" as that would reduce counter value resulting in incorrect line numbering.
+    Instead, we'll "position: absolute" to take element out of DOM flow and "visibility: hidden" to hide it.
+*/
+.scope.collapsed .line:not(.visible),
+.line:not(.visible),
+.line.invisible {
+	position: absolute;
+	visibility: hidden;
+}
+
+.css-selector {
+	color: var(--css-name);
 }
 .comment {
 	color: var(--comment-color);
@@ -102,50 +264,153 @@
 .quotation {
 	color: var(--css-quote);
 }
-.parenthesis {
-	color: var(--sk-arrow);
-}
-.url {
-	color: var(--css-value);
-}
-.url a {
+a {
 	text-decoration-thickness: 1px;
 	text-underline-offset: 4px;
 }
-.brace.css {
-	color: var(--css-bracket);
+.fn {
+	color: var(--css-fn);
 }
-.brace.js {
-	color: var(--css-bracket);
+.animation-name {
+	color: var(--css-animation-name);
+}
+.animation-iteration-count {
+	color: var(--css-animation-iteration-count);
 }
 .numerical {
 	color: var(--css-numerical);
 }
-.color-preview input {
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	background-color: transparent;
-	padding: 0;
-	margin: 0;
-	border: none;
-	cursor: pointer;
-	inline-size: var(--editor-view-height);
-	block-size: var(--editor-view-height);
+.unit {
+	color: var(--css-unit);
 }
-.color-preview {
-	display: inline-flex;
-	align-items: center;
-	mix-blend-mode: hard-light;
+.css-separator {
+	color: var(--css-separator);
+}
+.punctuation {
+	color: var(--semicolon-color);
+}
+
+.bracket {
+	color: var(--default-color);
+}
+
+.js-import-word {
+	/* color: var(--sk-keyword); */
+	color: var(--js-import-word);
+}
+.js-import-named {
+	color: var(--js-import-named);
+}
+.js-import-word-from {
+	/* color: var(--sk-keyword); */
+	color: var(--js-import-word-from);
+}
+.js-import-source {
+	color: var(--js-import-source);
+}
+.js-variable-declaration {
+	color: var(--js-variable-declaration);
+}
+.js-variable-name {
+	color: var(--js-variable-name);
+}
+.js-equals {
+	color: var(--js-equals);
+}
+.js-function-arrow {
+	color: var(--js-function-arrow);
+}
+.js-class-name {
+	color: var(--js-class);
+}
+.js-class-method {
+	color: var(--js-class-method);
+}
+.js-period {
+	color: var(--js-period);
+}
+.js-function-return {
+	color: var(--js-function-return);
+}
+.semicolon {
+	color: var(--semicolon-color);
+}
+
+.html-tag-name {
+	color: var(--html-tag-name);
+}
+.html-text {
+	color: var(--html-text);
+}
+
+.spacer-tab {
+	position: relative;
+	font-size: var(--editor-font-size);
+	display: inline-block;
+	height: 100%;
+	color: var(--comment-color);
+	text-wrap: none;
+	white-space: nowrap;
+}
+/* the left line guide */
+.spacer-tab::after {
+	--default-opacity: 0.15;
+	--max-opacity: 0.8;
+
+	--default-active-opacity: 0.15;
+	--max-active-opacity: 0.6;
+
+	--default-highlighted-opacity: 0.3;
+	--max-highlighted-opacity: 1;
+	content: "";
+	display: inline-block;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: 1px;
+	height: 100%;
+	opacity: var(--default-opacity);
+	background: var(--default-color);
+}
+.spacer-tab .gap {
+	/* user-select: all !important; */
+	/* user-select: none; */
+	position: relative;
+	height: 100%;
+	white-space: pre;
+	display: inline-block;
+	z-index: 0;
+}
+.gap.tab {
+	user-select: all !important;
+}
+/* render whitespace text */
+.gap::after {
+	position: absolute;
+	left: 0;
+	z-index: 0;
+	color: var(--default-color);
+	opacity: 0.16;
+	content: var(--spacer-tab-content);
+}
+
+.spacer-tab.selected {
+	background-color: var(--user-select-color);
+}
+
+@media only screen and (hover: none) {
+	.line .view-number button {
+		opacity: 1;
+	}
 }
 
 @media screen and (max-width: 750px) {
 	.editor-instance {
-		--editor-font-size: 0.75rem;
+		--editor-font-size: 14px;
 	}
-	.view-number::before {
-		width: 3ch;
-		margin-right: 1ch;
-		/* background-color: rgba(255, 255, 255, 0.03); */
+	.line .view-number {
+		--_gutter-left-width: 1px;
+		--_gutter-right-width: 2ch;
 	}
 }

@@ -3,22 +3,24 @@
 	flex-direction: row;
 	gap: 1px;
 	background: var(--taskbar-bg);
-	box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 5px;
+	/* box-shadow: rgba(0, 0, 0, 0.7) 0px 0px 5px; */
 	width: 100%;
 	overflow: auto;
-}
-.taskbar > * {
-	border-left: 1px solid #181a1f;
+	z-index: 1;
 }
 .taskbar > *:nth-child(1) {
 	border-left: none;
+}
+.taskbar > * {
+	border-right: 1px solid #181a1f;
 }
 
 .tb-icon {
 	width: 15px;
 	height: 15px;
 }
-.tb-file {
+.tb-file,
+.tb-file-active {
 	display: flex;
 	align-items: center;
 	background: var(--taskbar-file-bg);
@@ -26,8 +28,11 @@
 	cursor: pointer;
 	padding: 5px;
 	border-top: 1px solid var(--transparent);
+	font-size: 0.8125rem;
+	user-select: none;
 }
-.tb-file * {
+.tb-file *,
+.tb-file-active * {
 	padding: 5px;
 }
 .tb-close {
@@ -38,15 +43,9 @@
 .tb-close:hover {
 	background-color: rgba(255, 255, 255, 0.08);
 }
+.tb-file.active,
 .tb-file-active {
-	display: flex;
-	align-items: center;
 	background: var(--taskbar-file-active);
 	color: var(--taskbar-file-active-text);
-	cursor: pointer;
-	padding: 5px;
 	border-top: 1px solid var(--taskbar-file-border);
-}
-.tb-file-active * {
-	padding: 5px;
 }

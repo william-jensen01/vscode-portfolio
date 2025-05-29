@@ -1,16 +1,10 @@
 import React from "react";
-import {
-	NewLine,
-	Quotation,
-	Comment,
-	Url,
-	ColorPreview,
-	Numerical,
-	Colon,
-	SemiColon,
-	OpenCurlyBrace,
-	CloseCurlyBrace,
-} from "./index";
+import { Comment, Fn, Numerical, Url } from "./Elements/CSS";
+import Scope from "./Features/Scope";
+import NewLine from "./Elements/Line";
+import ColorPreview from "./Elements/Color";
+import { Colon, SemiColon, Space, Quotation } from "./Elements";
+import Bracket from "./Elements/Bracket";
 
 export function CSS({ children }) {
 	const childrenArray = React.Children.toArray(children);
@@ -31,7 +25,9 @@ export function CSS({ children }) {
 					}
 					acc.push(React.cloneElement(child, { key: `rule-${idx}` }));
 				} else {
-					console.warn("CSS component should only contain CSS.Rule components");
+					console.warn(
+						"CSS component should only contain CSS.Rule components"
+					);
 				}
 				return acc;
 			}, [])}
@@ -40,30 +36,41 @@ export function CSS({ children }) {
 }
 
 CSS.Rule = ({ children }) => {
-	const childrenArray = React.Children.toArray(children);
-	const selector = childrenArray.filter((child) => child.type === CSS.Selector);
-	if (selector.length > 1) {
+	const declarations = [];
+	const selectors = [];
+
+	children.forEach((child) => {
+		if (child.type === CSS.Selector) {
+			return selectors.push(child);
+		}
+		if (child.type === CSS.Declaration) {
+			return declarations.push(child);
+		}
+	});
+
+	if (selectors.length > 1) {
 		throw new Error("CSS.Rule component can only have one CSS.Selector");
 	}
+
 	return (
-		<>
-			{children}
+		<Scope>
+			{selectors}
+			{declarations}
+			{/* {children} */}
 			<NewLine>
-				<CloseCurlyBrace css />
+				<Bracket character="}" />
 			</NewLine>
-		</>
+		</Scope>
 	);
 };
 
 CSS.Selector = ({ children }) => (
 	<NewLine>
-		<p>
-			<span className="css-selector" data-symbol=".">
-				&#46;{children}
-			</span>
-			&nbsp;
-			<OpenCurlyBrace css />
-		</p>
+		<span className="css-selector" data-symbol=".">
+			&#46;{children}
+		</span>
+		&nbsp;
+		<Bracket character="{" />
 	</NewLine>
 );
 
@@ -72,6 +79,7 @@ const typeMapPattern = {
 	url: Url,
 	color: ColorPreview,
 	numerical: Numerical,
+	function: Fn,
 };
 
 CSS.Declaration = ({
@@ -86,6 +94,8 @@ CSS.Declaration = ({
 			"CSS.Declaration component must have a non-empty array value"
 		);
 	}
+	const formattedProperty = property ? property.replace(/\s+/g, "-") : "";
+
 	const childrenArray = React.Children.toArray(children);
 
 	let commentComponent;
@@ -98,42 +108,56 @@ CSS.Declaration = ({
 		childrenArray.splice(commentIdx, 1);
 	}
 
-	const formattedProperty = property ? property.replace(/\s+/g, "-") : "";
 	if (commented) {
 		return (
-			<NewLine indent>
+			<NewLine>
 				<Comment>{commented}</Comment>
 			</NewLine>
 		);
 	}
 	return (
-		<NewLine indent>
-			<p>
-				{formattedProperty}
-				<Colon />
-				&nbsp;
-				{values.reduce((acc, valueArr, idx) => {
-					let type;
-					let value = valueArr[0];
-					if (valueArr.length >= 2) {
-						type = valueArr[1];
+		<NewLine>
+			{formattedProperty}
+			<Colon />
+			&nbsp;
+			{values.reduce((acc, valueArr, idx) => {
+				let type;
+				let value = valueArr[0];
+				if (valueArr.length >= 2) {
+					type = valueArr[1];
+				}
+				if (idx > 0) {
+					let elementSeparator = separator;
+					if (separator !== " ") {
+						elementSeparator = (
+							<span className="punctuation">{separator}</span>
+						);
 					}
-					if (idx > 0) {
-						acc.push(separator);
-					}
+					acc.push(elementSeparator);
+				}
 
-					const Component = typeMapPattern[type];
-					if (typeMapPattern.hasOwnProperty(type)) {
-						acc.push(<Component>{value}</Component>);
-					} else {
-						acc.push(value);
-					}
+				const Component = typeMapPattern[type];
+				if (typeMapPattern.hasOwnProperty(type)) {
+					acc.push(<Component>{value}</Component>);
+				} else {
+					acc.push(
+						<span
+							className={valueArr.length >= 3 ? valueArr[2] : ""}
+						>
+							{value}
+						</span>
+					);
+				}
 
-					return acc;
-				}, [])}
-				<SemiColon />
-				{commentComponent}
-			</p>
+				return acc;
+			}, [])}
+			<SemiColon />
+			{commentComponent && (
+				<>
+					<Space />
+					{commentComponent}
+				</>
+			)}
 		</NewLine>
 	);
 };
