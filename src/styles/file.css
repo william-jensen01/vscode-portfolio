@@ -14,6 +14,20 @@
 .file-container > *:last-child {
 	grid-area: scroll-decoration / file;
 }
+
+.scroll-decoration {
+	grid-area: scroll-decoration;
+	position: sticky;
+	width: 100%;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	height: 6px;
+}
+.scroll-decoration.shadow {
+	box-shadow: inset black 0 6px 6px -6px;
+}
+
 /* .editor-container {
     position: relative;
 } */
