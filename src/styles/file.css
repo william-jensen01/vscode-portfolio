@@ -413,4 +413,7 @@ a {
 		--_gutter-left-width: 1px;
 		--_gutter-right-width: 2ch;
 	}
+	.line .view-number button {
+		font-size: 6px;
+	}
 }
