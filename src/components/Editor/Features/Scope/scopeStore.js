@@ -11,6 +11,8 @@ const DEFAULT_PROPS = {
 	collapsedScopes: new Set(),
 };
 
+const DEFAULT_COLOR = -1;
+
 export const ScopeStoreContext = createContext(null);
 export const useScopeStore = (selector) => {
 	const store = useContext(ScopeStoreContext);
@@ -34,7 +36,11 @@ export const createScopeStore = (initProps) => {
 					set(DEFAULT_PROPS);
 				},
 
-				registerScope: (scopeId, parentScopeId = null) => {
+				registerScope: (
+					scopeId,
+					parentScopeId = null,
+					bracketDepth = 0
+				) => {
 					logger.suffix("registerScope");
 					const { scopes } = get();
 
@@ -57,11 +63,19 @@ export const createScopeStore = (initProps) => {
 						);
 					}
 
+					const parentScopeColors = parentScope
+						? [
+								...(parentScope.parentScope.colors || []),
+								parentScope.color,
+						  ]
+						: [];
+
 					const parentIndentations = parentScope
 						? [
 								...(parentScope.parentScope.indentations || []),
 								{
 									scopeId: parentScopeId,
+									colorId: parentScope.color,
 								},
 						  ]
 						: [];
@@ -72,10 +86,18 @@ export const createScopeStore = (initProps) => {
 						parentScope: {
 							id: parentScopeId,
 							indentations: parentIndentations,
+							colors: parentScopeColors,
+							bracketInfo: parentScope?.bracketInfo,
 						},
 						lines: [],
 						firstLineId: null,
 						lastLineId: null,
+						isWithinReturn:
+							parentScope?.bracketInfo?.character === "(" ||
+							parentScope?.isWithinReturn,
+						bracketDepth,
+						color: DEFAULT_COLOR, // Will be overwritten by first line
+						isGreyed: true,
 					});
 
 					logger.debug(
@@ -157,6 +179,147 @@ export const createScopeStore = (initProps) => {
 					set({ scopes: newScopes, lines: newLinesMap });
 
 					return isFirstLine;
+				},
+
+				/**
+				 * Conditional return on four conditions:
+				 * 1. Scope doesn't exist
+				 * 2. The argument "bracketInfo" doesn't exist
+				 * 3. BracketInfo does not contain "color" property
+				 * 4. BracketInfo is not an opening bracket
+				 */
+				setScopeColor: (scopeId, lineId, bracketInfo = null) => {
+					logger.suffix("setScopeColor");
+					const { scopes } = get();
+
+					logger.debug(
+						`Setting color for scope ${scopeId}, line ${lineId}`
+					);
+					logger.trace("bracketInfo:", bracketInfo);
+
+					if (
+						!scopes.has(scopeId) ||
+						!bracketInfo ||
+						!bracketInfo.hasOwnProperty("color") ||
+						!bracketInfo.isOpening
+					) {
+						logger.warn(
+							"Attempted to set color on non-existent scope or invalid bracketInfo"
+						);
+						return;
+					}
+
+					const scope = scopes.get(scopeId);
+					const isFirstLineOfScope = scope.firstLineId === lineId;
+
+					logger.trace(
+						`Scope ${scopeId} current color: ${scope.color}, new color: ${bracketInfo.color}`
+					);
+					logger.trace(
+						`Is first line of scope: ${isFirstLineOfScope}`
+					);
+
+					/**  Only update color if any of the following conditions are met:
+					 * 1. This is the first line of the scope,
+					 * 2. The scope has no color yet,
+					 * 3. The scope has the default color and this bracket has a real color
+					 */
+					if (
+						isFirstLineOfScope ||
+						!scope.hasOwnProperty("color") ||
+						(scope.color === DEFAULT_COLOR &&
+							bracketInfo.color !== DEFAULT_COLOR)
+					) {
+						const newScopes = new Map(scopes);
+						const existingScope = newScopes.get(scopeId);
+						newScopes.set(scopeId, {
+							...existingScope,
+							bracketInfo,
+							color: bracketInfo.color,
+							depth: bracketInfo.depth,
+							isGreyed: bracketInfo.color === DEFAULT_COLOR,
+						});
+
+						set({ scopes: newScopes });
+						logger.trace(
+							`Successfully updated scope ${scopeId} with new color properties`
+						);
+					} else {
+						logger.trace(
+							`Skipping color update for scope ${scopeId} - conditions not met`
+						);
+					}
+				},
+
+				findNearestColoredScope: (id) => {
+					logger.suffix("findNearestColoredScope");
+					const { scopes, lines } = get();
+
+					logger.debug(`Finding nearest colored scope for ID: ${id}`);
+
+					let scopeId;
+
+					if (lines.has(id)) {
+						// It's a line ID;
+						const lineInfo = lines.get(id);
+						if (!lineInfo) {
+							logger.warn(
+								`Line info not found for line ID ${id}`
+							);
+							return null;
+						}
+						scopeId = lineInfo.scopeId;
+						logger.trace(
+							`ID ${id} is a line ID, resolved to scope ${scopeId}`
+						);
+					} else {
+						// Assume it's a scope ID
+						scopeId = id;
+						logger.trace(`ID ${id} assumed to be a scope ID`);
+					}
+
+					const scope = scopes.get(scopeId);
+					if (!scope) {
+						logger.warn(`Scope ${scopeId} not found`);
+						return null;
+					}
+
+					logger.trace(
+						`Starting scope ${scopeId} - color: ${scope.color}, isGreyed: ${scope.isGreyed}`
+					);
+
+					if (!scope.isGreyed) {
+						const result = {
+							scopeId,
+							color: scope.color,
+							depth: scope.depth,
+						};
+						logger.debug(
+							`Found colored scope at current level: ${scopeId} (color: ${scope.color})`
+						);
+						return result;
+					}
+
+					// Traverse up the scope tree
+					let currentScopeId = scope?.parentScope?.id;
+					while (currentScopeId) {
+						const parentScope = scopes.get(currentScopeId);
+						if (!parentScope) {
+							logger.warn();
+							return null;
+						}
+
+						if (!parentScope.isGreyed) {
+							return {
+								scopeId: currentScopeId,
+								color: parentScope.color,
+								depth: parentScope.depth,
+							};
+						}
+
+						// Move up to the next parent
+						currentScopeId = parentScope.parentScope.id;
+					}
 				},
 
 				// Check if a line is first in its scope
