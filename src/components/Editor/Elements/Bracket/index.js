@@ -3,6 +3,9 @@ import React, { useRef, useEffect } from "react";
 import { useGeneratedId } from "../../hooks/useGeneratedId";
 import { useBracketStore } from "../../Features/BracketPairColorization/store";
 import { useDynamicColor } from "../../hooks/useDynamicColor";
+import { useParentScope } from "../../Features/Scope";
+import { useScopeStore } from "../../Features/Scope/scopeStore";
+import { useLine } from "../Line";
 
 const bracketMap = {
 	"(": (
@@ -54,9 +57,14 @@ export default function Bracket({
 	...props
 }) {
 	const bracketId = useGeneratedId("bracket");
+	const { scopeId } = useParentScope();
+	const { lineId } = useLine();
 
 	const registerBracket = useBracketStore((state) => state.registerBracket);
-	const unregisterBracket = useBracketStore((state) => state.unregisterBracket);
+	const unregisterBracket = useBracketStore(
+		(state) => state.unregisterBracket
+	);
+	const setScopeColor = useScopeStore((state) => state.setScopeColor);
 
 	const registeredRef = useRef(false);
 	const bracketInfoRef = useRef();
@@ -64,6 +72,8 @@ export default function Bracket({
 	if (!registeredRef.current && !bracketInfoRef.current) {
 		const bracketInfo = registerBracket(bracketId, character);
 		bracketInfoRef.current = bracketInfo;
+
+		setScopeColor(scopeId, lineId, bracketInfo);
 
 		registeredRef.current = true;
 	}

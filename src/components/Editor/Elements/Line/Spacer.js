@@ -2,6 +2,7 @@ import { memo, useMemo, useState, useEffect } from "react";
 import { useParentScope } from "../../Features/Scope";
 import { useLine } from "../Line";
 import { useScopeStore } from "../../Features/Scope/scopeStore";
+import { useDynamicColor } from "../../hooks/useDynamicColor";
 
 const Spacers = memo(() => {
 	const { scopeId } = useParentScope();
@@ -14,7 +15,7 @@ const Spacers = memo(() => {
 		scopeId ? state.getScopeInfo(scopeId) : null
 	);
 
-	let { parentScope = {} } = scopeInfo || {};
+	let { color, parentScope = {} } = scopeInfo || {};
 
 	const indentations = useMemo(() => {
 		if (!scopeId) return [];
@@ -25,20 +26,31 @@ const Spacers = memo(() => {
 		if (parentIndentations.length > 0) {
 			if (!isFirstLineScope && !isLastLineScope) {
 				// Add parent indentations
-				result = [...parentIndentations, { scopeId: scopeId }];
+				result = [...parentIndentations];
+
+				if (color !== null && color !== undefined) {
+					result.push({ scopeId, colorId: color });
+				}
+
+				// result = [...parentIndentations, { scopeId: scopeId }];
 			} else {
 				// Only parent indentations for first/last lines
 				result = [...parentIndentations];
 			}
-		} else if (parentIndentations.length === 0) {
+		} else if (
+			parentIndentations.length === 0 &&
+			color !== null &&
+			color !== undefined
+		) {
 			if (!isFirstLineScope && !isLastLineScope) {
 				result.push({
-					scopeId: scopeId,
+					scopeId,
+					colorId: color,
 				});
 			}
 		}
 		return result;
-	}, [parentScope, isFirstLineScope, isLastLineScope, scopeId]);
+	}, [parentScope, color, isFirstLineScope, isLastLineScope, scopeId]);
 
 	const spacerElements = useMemo(() => {
 		return indentations.map((indent, idx) => {
@@ -46,6 +58,7 @@ const Spacers = memo(() => {
 				<SpacerTab
 					key={`${lineId}.spacer-tab.${idx}`}
 					scopeId={indent.scopeId}
+					colorId={indent.colorId}
 					index={idx}
 				/>
 			);
@@ -60,12 +73,20 @@ export default Spacers;
 const TAB_SIZE = 4;
 const MOBILE_TAB_SIZE = 2;
 
-export function SpacerTab({ scopeId, ...props }) {
+export function SpacerTab({ scopeId, colorId, style, ...props }) {
 	const [isMobile, setIsMobile] = useState(false);
 
 	const adjustedTabSize = isMobile ? MOBILE_TAB_SIZE : TAB_SIZE;
 
 	const strTab = " ".repeat(adjustedTabSize);
+
+	const color = useDynamicColor(colorId);
+	const isDynamic = typeof colorId === "number" && colorId >= 0;
+
+	const styles = { ...style };
+	if (isDynamic) {
+		styles["--_tab-color"] = color;
+	}
 
 	useEffect(() => {
 		// 768 is recommended by gpt and claude
@@ -75,7 +96,13 @@ export function SpacerTab({ scopeId, ...props }) {
 	}, []);
 
 	return (
-		<span className={`spacer-tab`} {...props}>
+		<span
+			className={`spacer-tab ${isDynamic ? "dynamic" : ""}`}
+			style={styles}
+			data-color={color}
+			data-color-id={colorId}
+			{...props}
+		>
 			<span
 				className="gap tab"
 				style={{

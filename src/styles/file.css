@@ -120,11 +120,15 @@
 	height: 1px;
 	bottom: 0;
 	left: 0;
-	background: var(--default-color);
-	opacity: 0.15;
+	background: var(--scope-color, var(--default-color));
+	opacity: 0.3;
 }
 
 .scope[data-is-greyed="true"]
+	> *:first-child.line
+	.view-line
+	> span:last-of-type::after,
+.scope[data-is-within-return="true"]
 	> *:first-child.line
 	.view-line
 	> span:last-of-type::after {
@@ -395,7 +399,7 @@ a {
 	width: 1px;
 	height: 100%;
 	opacity: var(--default-opacity);
-	background: var(--default-color);
+	background: var(--_tab-color, var(--default-color));
 }
 .spacer-tab .gap {
 	/* user-select: all !important; */
@@ -405,6 +409,10 @@ a {
 	white-space: pre;
 	display: inline-block;
 	z-index: 0;
+}
+
+.spacer-tab.dynamic::after {
+	opacity: var(--default-highlighted-opacity);
 }
 .gap.tab {
 	user-select: all !important;
