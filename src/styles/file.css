@@ -395,7 +395,7 @@ a {
 	width: 1px;
 	height: 100%;
 	opacity: var(--default-opacity);
-	background: var(--default-color);
+	background: var(--_tab-color, var(--default-color));
 }
 .spacer-tab .gap {
 	/* user-select: all !important; */
@@ -405,6 +405,10 @@ a {
 	white-space: pre;
 	display: inline-block;
 	z-index: 0;
+}
+
+.spacer-tab.dynamic::after {
+	opacity: var(--default-highlighted-opacity);
 }
 .gap.tab {
 	user-select: all !important;
