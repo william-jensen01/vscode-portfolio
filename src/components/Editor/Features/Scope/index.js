@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, createContext, useContext } from "react";
 import { useGeneratedId } from "../../hooks/useGeneratedId";
 import { useScopeStore } from "./scopeStore";
+import { useBracketStore } from "../BracketPairColorization/store";
 
 const ScopeContext = createContext({
 	scopeId: null,
@@ -21,9 +22,10 @@ const Scope = ({ children, ...restProps }) => {
 		state.isScopeCollapsed(scopeId)
 	);
 	const registerScope = useScopeStore((state) => state.registerScope);
+	const getCurrentDepth = useBracketStore((state) => state.getCurrentDepth);
 
 	if (!registeredRef.current) {
-		registerScope(scopeId, parentScopeId);
+		registerScope(scopeId, parentScopeId, getCurrentDepth());
 		registeredRef.current = true;
 	}
 

@@ -192,9 +192,7 @@ export const createScopeStore = (initProps) => {
 					logger.suffix("setScopeColor");
 					const { scopes } = get();
 
-					logger.debug(
-						`Setting color for scope ${scopeId}, line ${lineId}`
-					);
+					logger.debug(`Setting color for ${scopeId}, on ${lineId}`);
 					logger.trace("bracketInfo:", bracketInfo);
 
 					if (
@@ -204,7 +202,7 @@ export const createScopeStore = (initProps) => {
 						!bracketInfo.isOpening
 					) {
 						logger.warn(
-							"Attempted to set color on non-existent scope or invalid bracketInfo"
+							`Attempted to set color for ${scopeId} on ${lineId} but failed. Either non-existent scope or invalid bracketInfo`
 						);
 						return;
 					}
