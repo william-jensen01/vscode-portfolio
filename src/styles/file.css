@@ -418,6 +418,13 @@ a {
 .spacer-tab.dynamic::after {
 	opacity: var(--default-highlighted-opacity);
 }
+.spacer-tab.active::after {
+	opacity: var(--max-active-opacity);
+}
+.spacer-tab.highlighted::after {
+	opacity: var(--max-highlighted-opacity);
+}
+
 .gap.tab {
 	user-select: all !important;
 }
