@@ -1,4 +1,4 @@
-import { useMemo, useRef, createContext, useContext } from "react";
+import { useMemo, useRef, createContext, useContext, useCallback } from "react";
 import { useGeneratedId } from "../../hooks/useGeneratedId";
 import { useParentScope } from "../../Features/Scope";
 import { useScopeStore } from "../../Features/Scope/scopeStore";
@@ -17,7 +17,7 @@ export const useLine = () => {
 export default function NewLine({ children, className = "", style, ...props }) {
 	const lineId = useGeneratedId("line");
 
-	const { scopeId } = useParentScope();
+	const { scopeId, nearestColoredScope } = useParentScope();
 
 	const lineRef = useRef(null);
 
@@ -38,6 +38,22 @@ export default function NewLine({ children, className = "", style, ...props }) {
 		state.isFirstLine(lineId)
 	);
 	const isLastLineScope = useScopeStore((state) => state.isLastLine(lineId));
+	const setHighlightedScope = useScopeStore(
+		(state) => state.setHighlightedScope
+	);
+	const setActiveScope = useScopeStore((state) => state.setActiveScope);
+
+	// Handle mouse enter/leave events for highlighting scope
+
+	const handleMouseEnter = useCallback(() => {
+		setHighlightedScope(nearestColoredScope);
+		setActiveScope(scopeId);
+	}, [scopeId, nearestColoredScope, setHighlightedScope, setActiveScope]);
+
+	const handleMouseLeave = useCallback(() => {
+		setHighlightedScope(null);
+		setActiveScope(null);
+	}, [setHighlightedScope, setActiveScope]);
 
 	// Create line context value to pass down to children
 	const lineContextValue = useMemo(
@@ -60,6 +76,8 @@ export default function NewLine({ children, className = "", style, ...props }) {
 				className={`line ${
 					isFirstLineScope ? "first" : isLastLineScope ? "last" : ""
 				} ${isVisible ? "visible" : "invisible"}`}
+				onMouseEnter={handleMouseEnter}
+				onMouseLeave={handleMouseLeave}
 				data-scope-id={scopeId}
 				data-scope-delimiter={isFirstLineScope || isLastLineScope}
 				data-is-first-line-scope={isFirstLineScope}
