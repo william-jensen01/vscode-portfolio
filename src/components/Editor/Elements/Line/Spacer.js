@@ -14,6 +14,8 @@ const Spacers = memo(() => {
 	const scopeInfo = useScopeStore((state) =>
 		scopeId ? state.getScopeInfo(scopeId) : null
 	);
+	const highlightedScope = useScopeStore((state) => state.highlightedScope);
+	const activeScope = useScopeStore((state) => state.activeScope);
 
 	let { color, parentScope = {} } = scopeInfo || {};
 
@@ -59,11 +61,13 @@ const Spacers = memo(() => {
 					key={`${lineId}.spacer-tab.${idx}`}
 					scopeId={indent.scopeId}
 					colorId={indent.colorId}
+					isHighlighted={highlightedScope?.scopeId === indent.scopeId}
+					isActive={activeScope?.scopeId === indent.scopeId}
 					index={idx}
 				/>
 			);
 		});
-	}, [indentations, lineId]);
+	}, [indentations, lineId, highlightedScope, activeScope]);
 
 	return spacerElements;
 });
@@ -73,7 +77,14 @@ export default Spacers;
 const TAB_SIZE = 4;
 const MOBILE_TAB_SIZE = 2;
 
-export function SpacerTab({ scopeId, colorId, style, ...props }) {
+export function SpacerTab({
+	scopeId,
+	colorId,
+	isHighlighted,
+	isActive,
+	style,
+	...props
+}) {
 	const [isMobile, setIsMobile] = useState(false);
 
 	const adjustedTabSize = isMobile ? MOBILE_TAB_SIZE : TAB_SIZE;
@@ -97,7 +108,9 @@ export function SpacerTab({ scopeId, colorId, style, ...props }) {
 
 	return (
 		<span
-			className={`spacer-tab ${isDynamic ? "dynamic" : ""}`}
+			className={`spacer-tab ${isDynamic ? "dynamic" : ""} ${
+				isHighlighted ? "highlighted" : ""
+			} ${isActive ? "active" : ""}`}
 			style={styles}
 			data-color={color}
 			data-color-id={colorId}
