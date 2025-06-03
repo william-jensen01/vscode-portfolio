@@ -9,6 +9,8 @@ const DEFAULT_PROPS = {
 	scopes: new Map(),
 	lines: new Map(),
 	collapsedScopes: new Set(),
+	highlightedScope: null, // { scopeId, depth }
+	activeScope: null, // { scopeId, depth }
 };
 
 const DEFAULT_COLOR = -1;
@@ -414,12 +416,20 @@ export const createScopeStore = (initProps) => {
 
 				unregisterScope: (scopeId) => {
 					logger.suffix("unregisterScope");
-					const { scopes } = get();
+					const { scopes, highlightedScope, activeScope } = get();
 					if (!scopes.has(scopeId)) {
 						logger.warn(
 							`Attempted to unregister non-existent scope ${scopeId}`
 						);
 						return;
+					}
+
+					if (highlightedScope?.scopeId === scopeId) {
+						set({ highlightedScope: null });
+					}
+
+					if (activeScope?.scopeId === scopeId) {
+						set({ activeScope: null });
 					}
 
 					const scopesWithParent = [...scopes].filter(
@@ -492,6 +502,61 @@ export const createScopeStore = (initProps) => {
 
 					set({ lines: newLines, scopes: newScopes });
 					return true;
+				},
+
+				setHighlightedScope: (targetScope) => {
+					logger.suffix("setHighlightedScope");
+					if (!targetScope) {
+						logger.trace("No target scope provided, resetting");
+						return set({
+							highlightedScope: null,
+						});
+					}
+
+					if (
+						get().highlightedScope?.scopeId === targetScope.scopeId
+					) {
+						logger.trace("Scope already highlighted");
+						return;
+					}
+
+					set({
+						highlightedScope: {
+							scopeId: targetScope.scopeId || null,
+							depth: targetScope.depth,
+						},
+					});
+
+					logger.trace("Successfully highlighted", targetScope);
+				},
+
+				setActiveScope: (scopeId) => {
+					logger.suffix("setActiveScope");
+					if (!scopeId) {
+						logger.trace("No target scope provided, resetting");
+						return set({
+							activeScope: null,
+						});
+					}
+
+					const { activeScope, scopes } = get();
+					const scope = scopes.get(scopeId);
+
+					if (!scope || activeScope?.scopeId === scopeId) {
+						logger.trace(
+							"Scope already active or non-existent, skipping"
+						);
+						return;
+					}
+
+					set({
+						activeScope: {
+							scopeId,
+							depth: scope.bracketDepth,
+						},
+					});
+
+					logger.trace("Successfully active", scope);
 				},
 
 				isScopeContained: (childScopeId, parentScopeId) => {
