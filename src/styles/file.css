@@ -136,6 +136,10 @@
 	/* display: none; */
 }
 
+.scope.highlighted > *:first-child.line .view-line > span:last-of-type::after {
+	opacity: 1;
+}
+
 .line,
 .line > .view-number .view-line {
 	display: flex;
