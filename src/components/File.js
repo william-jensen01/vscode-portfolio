@@ -1,9 +1,14 @@
-import { useContext, useRef, useEffect } from "react";
+import { useContext, useRef, useEffect, useMemo } from "react";
 import About from "./pages/About";
 import Skills from "./pages/Skills";
 import Projects from "./pages/Projects";
 import Contact from "./pages/Contact";
 import { ActiveFileContext } from "../Context/ActiveFileContext";
+import {
+	FileBoundingRectContext,
+	useFileBoundingRectFromStore,
+	createFileBoundingRectStore,
+} from "../store/fileBoundingRectStore";
 
 import "../styles/file.css";
 
@@ -21,6 +26,43 @@ function File() {
 	const scrollDecorationRef = useRef(null);
 	const raId = useRef(null);
 
+	const fileBoundingRectStore = useMemo(
+		() => createFileBoundingRectStore(),
+		[]
+	);
+
+	const setRef = useFileBoundingRectFromStore(
+		fileBoundingRectStore,
+		(state) => state.setRef
+	);
+	const updateRect = useFileBoundingRectFromStore(
+		fileBoundingRectStore,
+		(state) => state.updateRect
+	);
+
+	useEffect(() => {
+		if (!fileContainerRef.current) return;
+
+		setRef(fileContainerRef.current);
+	}, [setRef]);
+
+	useEffect(() => {
+		const fileContainer = fileContainerRef.current;
+		if (!fileContainer) return;
+
+		const updateBoundingClientRect = () => {
+			const rect = fileContainer.getBoundingClientRect();
+			updateRect(rect);
+		};
+
+		const resizeObserver = new ResizeObserver(updateBoundingClientRect);
+		resizeObserver.observe(fileContainer);
+
+		return () => {
+			resizeObserver.disconnect();
+		};
+	}, [updateRect]);
+
 	useEffect(() => {
 		const fileContainer = fileContainerRef.current;
 
@@ -35,7 +77,10 @@ function File() {
 				const scrollTop = e.target.scrollTop;
 				const scrolled = scrollTop > 0;
 
-				scrollDecorationRef.current.classList.toggle("shadow", scrolled);
+				scrollDecorationRef.current.classList.toggle(
+					"shadow",
+					scrolled
+				);
 			});
 		};
 
@@ -56,10 +101,12 @@ function File() {
 	}, [activeFile]);
 
 	return (
-		<div ref={fileContainerRef} className="file-container">
-			<div ref={scrollDecorationRef} className="scroll-decoration" />
-			{Component && <Component />}
-		</div>
+		<FileBoundingRectContext.Provider value={fileBoundingRectStore}>
+			<div ref={fileContainerRef} className="file-container">
+				<div ref={scrollDecorationRef} className="scroll-decoration" />
+				{Component && <Component />}
+			</div>
+		</FileBoundingRectContext.Provider>
 	);
 }
 
