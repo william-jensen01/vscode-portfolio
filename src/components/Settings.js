@@ -7,34 +7,28 @@ function Settings({ close }) {
 	const changeSpecificSetting = useSettingsStore(
 		(state) => state.changeSpecificSetting
 	);
+	const theme = useSettingsStore((state) => state.theme);
+
 	const setTheme = (theme) => {
 		close();
 		changeSpecificSetting("theme", theme);
-		document.documentElement.setAttribute("data-theme", theme);
+		document.documentElement.setAttribute("data-theme", theme.value);
 	};
 	return (
 		<div className="settings-container">
 			<p>Themes</p>
-			<button
-				className="settings-theme-option"
-				onClick={() => setTheme("atom one dark")}
-			>
-				Default
-			</button>
-			<hr />
-			<button
-				className="settings-theme-option"
-				onClick={() => setTheme("darkplus")}
-			>
-				Dark+
-			</button>
-			<hr />
-			<button
-				className="settings-theme-option"
-				onClick={() => setTheme("dracula")}
-			>
-				Dracula
-			</button>
+			{theme?.options.map((option, idx) => (
+				<>
+					<button
+						className="settings-theme-option"
+						onClick={() => setTheme(option)}
+					>
+						{option.value}
+					</button>
+
+					{idx < theme.options.length - 1 && <hr />}
+				</>
+			))}
 		</div>
 	);
 }
