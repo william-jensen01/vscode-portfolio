@@ -13,6 +13,12 @@ import {
 	createBracketPairColorizerStore,
 	BracketPairColorizerContext,
 } from "./Features/BracketPairColorization/store";
+import StickyManager from "./Features/StickyLines/Manager";
+import {
+	createStickyLineStore,
+	StickyLineContext,
+} from "./Features/StickyLines/stickyStore";
+import { useFileBoundingRectStoreInstance } from "../../store/fileBoundingRectStore";
 import { useGeneratedId } from "./hooks/useGeneratedId";
 import { throttle } from "./hooks/useThrottle";
 
@@ -28,6 +34,11 @@ export function EditorInstance({ children }) {
 	const bracketPairColorizerStore = useMemo(
 		() => createBracketPairColorizerStore(),
 		[]
+	);
+	const fileBoundingRectStore = useFileBoundingRectStoreInstance();
+	const stickyLineStore = useMemo(
+		() => createStickyLineStore(null, fileBoundingRectStore),
+		[fileBoundingRectStore]
 	);
 
 	useUpdateLineWidth(lineStore);
@@ -75,7 +86,9 @@ export function EditorInstance({ children }) {
 		}, 50);
 
 		function handleDeselect() {
-			const spacers = document.querySelectorAll(".spacer-tab .gap.selected");
+			const spacers = document.querySelectorAll(
+				".spacer-tab .gap.selected"
+			);
 			spacers.forEach((spacer) => {
 				spacer.classList.remove("selected");
 			});
@@ -98,22 +111,27 @@ export function EditorInstance({ children }) {
 	}, []);
 
 	return (
-		<BracketPairColorizerContext.Provider value={bracketPairColorizerStore}>
-			<LineCountContext.Provider value={lineStore}>
-				<ScopeStoreContext.Provider value={scopeStore}>
-					<div className="editor-container" data-id={editorId}>
-						<div className="editor-instance">
-							<div ref={viewLinesRef} className="view-lines">
-								{children}
-								<NewLine />
-								<NewLine>
-									<div id="caret" />
-								</NewLine>
+		<StickyLineContext.Provider value={stickyLineStore}>
+			<BracketPairColorizerContext.Provider
+				value={bracketPairColorizerStore}
+			>
+				<LineCountContext.Provider value={lineStore}>
+					<ScopeStoreContext.Provider value={scopeStore}>
+						<div className="editor-container" data-id={editorId}>
+							<div className="editor-instance">
+								<StickyManager />
+								<div ref={viewLinesRef} className="view-lines">
+									{children}
+									<NewLine />
+									<NewLine>
+										<div id="caret" />
+									</NewLine>
+								</div>
 							</div>
 						</div>
-					</div>
-				</ScopeStoreContext.Provider>
-			</LineCountContext.Provider>
-		</BracketPairColorizerContext.Provider>
+					</ScopeStoreContext.Provider>
+				</LineCountContext.Provider>
+			</BracketPairColorizerContext.Provider>
+		</StickyLineContext.Provider>
 	);
 }
