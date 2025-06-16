@@ -6,6 +6,7 @@ import Bracket from "../Editor/Elements/Bracket";
 import { Space } from "../Editor/Elements";
 import { JS, Require } from "../Editor/JS";
 import { List, Tag } from "../Editor/HTML";
+import StickySection from "../Editor/Features/StickyLines/Section";
 
 // import "../../styles/skills.css";
 const map = {
@@ -46,82 +47,95 @@ function Skills() {
 				</Require>
 				<NewLine />
 
-				<Scope>
-					<NewLine>
-						<span className="js-variable-declaration">const</span>
-						&nbsp;
-						<span className="js-variable-name">Skills</span>
-						&nbsp;
-						<span className="js-equals">=</span>
-						&nbsp;
-						<Bracket character="(" />
-						<Bracket character=")" />
-						&nbsp;
-						<span className="js-function-arrow">{"=>"}</span>
-						&nbsp;
-						<span className="js-class-name">SoftwareEngineer</span>
-						<span className="js-period">{"."}</span>
-						<span className="js-class-method">Create</span>
-						<Bracket character="(" />
-						<Bracket character="(" />
-						<Bracket character=")" />
-						&nbsp;
-						<span className="js-function-arrow">{"=>"}</span>
-						&nbsp;
-						<Bracket character="{" />
-					</NewLine>
-
+				<StickySection>
 					<Scope>
 						<NewLine>
-							<span className="js-function-return">return</span>
+							<span className="js-variable-declaration">
+								const
+							</span>
+							&nbsp;
+							<span className="js-variable-name">Skills</span>
+							&nbsp;
+							<span className="js-equals">=</span>
 							&nbsp;
 							<Bracket character="(" />
+							<Bracket character=")" />
+							&nbsp;
+							<span className="js-function-arrow">{"=>"}</span>
+							&nbsp;
+							<span className="js-class-name">
+								SoftwareEngineer
+							</span>
+							<span className="js-period">{"."}</span>
+							<span className="js-class-method">Create</span>
+							<Bracket character="(" />
+							<Bracket character="(" />
+							<Bracket character=")" />
+							&nbsp;
+							<span className="js-function-arrow">{"=>"}</span>
+							&nbsp;
+							<Bracket character="{" />
 						</NewLine>
+
 						<Scope>
 							<NewLine>
-								<Tag>main</Tag>
+								<span className="js-function-return">
+									return
+								</span>
+								&nbsp;
+								<Bracket character="(" />
 							</NewLine>
-							{Object.keys(map).map((key, idx) => {
-								return (
-									<React.Fragment key={`map-h2:${idx}`}>
-										<NewLine>
-											<Tag>h2</Tag>
-											<Space />
-											<span className="html-text">
-												{key}
-											</span>
-											<Space />
-											<Tag closing>h2</Tag>
-										</NewLine>
-										<List unordered key={key}>
-											{map[key].map((item, itemIdx) => (
-												<List.Item
-													key={`map-list-item: ${key}.${itemIdx}`}
-												>
-													{item}
-												</List.Item>
-											))}
-										</List>
-										<NewLine />
-									</React.Fragment>
-								);
-							})}
+							<Scope>
+								<NewLine>
+									<Tag>main</Tag>
+								</NewLine>
+								{Object.keys(map).map((key, idx) => {
+									return (
+										<React.Fragment key={`map-h2:${idx}`}>
+											<StickySection>
+												<NewLine>
+													<Tag>h2</Tag>
+													<Space />
+													<span className="html-text">
+														{key}
+													</span>
+													<Space />
+													<Tag closing>h2</Tag>
+												</NewLine>
+												<List unordered key={key}>
+													{map[key].map(
+														(item, itemIdx) => (
+															<List.Item
+																key={`map-list-item: ${key}.${itemIdx}`}
+															>
+																{item}
+															</List.Item>
+														)
+													)}
+												</List>
+											</StickySection>
+
+											<NewLine />
+										</React.Fragment>
+									);
+								})}
+
+								<NewLine>
+									<Tag closing>main</Tag>
+								</NewLine>
+							</Scope>
 
 							<NewLine>
-								<Tag closing>main</Tag>
+								<Bracket character=")" />
 							</NewLine>
 						</Scope>
 
 						<NewLine>
+							<Bracket character="}" />
 							<Bracket character=")" />
 						</NewLine>
 					</Scope>
-
-					<NewLine>
-						<Bracket character="}" />
-						<Bracket character=")" />
-					</NewLine>
-				</Scope>
+				</StickySection>
 			</JS>
 		</EditorInstance>
 	);

@@ -4,6 +4,7 @@ import { useParentScope } from "../../Features/Scope";
 import { useScopeStore } from "../../Features/Scope/scopeStore";
 import { useRegisterScopeLine } from "../../Features/Scope/useRegisterScopeLine";
 import { useLineNumberTracking } from "../../Features/LineCount/useLineNumberTracking";
+import { useRegisterStickyLine } from "../../Features/StickyLines/useRegisterStickyLine";
 import Spacers from "./Spacer";
 
 const LineContext = createContext({
@@ -24,6 +25,8 @@ export default function NewLine({ children, className = "", style, ...props }) {
 	const { lineNumber } = useLineNumberTracking(scopeId, lineId, lineRef);
 
 	useRegisterScopeLine(scopeId, lineId, lineNumber, null);
+
+	useRegisterStickyLine(lineId, lineRef, lineNumber);
 
 	// Placing these here after registration for accuracy and
 	const isVisible = useScopeStore((state) => state.isLineVisible(lineId));
