@@ -1,0 +1,62 @@
+.sticky-widget {
+	position: sticky;
+	grid-area: sticky;
+	height: fit-content;
+
+	z-index: 1;
+
+	/* position: fixed; */
+	/* position: absolute; */
+	/* display: none; */
+	top: 0;
+	left: 0;
+	right: 0;
+	/* width: 100%; */
+	z-index: 1;
+	min-height: 2px;
+	/* margin-bottom: 2px; */
+	box-shadow: rgb(0, 0, 0) 0px 4px 2px -2px;
+
+	font-family: "Fira Mono", monospace;
+	--editor-line-height: 1.33;
+	--editor-font-size: 1rem;
+	--editor-view-height: calc(
+		var(--editor-line-height) * var(--editor-font-size)
+	);
+	--spacer-tab-content: "\00a0\00a0\00a0\00a0";
+}
+.sticky-widget-lines {
+	display: contents;
+}
+
+.sticky-widget-lines .line:last-of-type,
+.sticky-widget-lines:has(.line.phase) .line:nth-last-of-type(2) {
+	box-shadow: rgb(0, 0, 0) 0px 4px 2px -2px;
+}
+.sticky-widget-lines .line.phase:not(.sticky-first) {
+	box-shadow: none;
+}
+.sticky-widget .line {
+	position: absolute;
+	/* top: unset !important; */
+	left: 0;
+	right: 0;
+}
+.sticky-widget .line .view-number button {
+	visibility: hidden !important;
+}
+.sticky-widget .line .spacer-tab::after {
+	background: transparent !important;
+}
+.sticky-widget .line .gap::after {
+	content: "";
+}
+.sticky-widget .line .view-number {
+	counter-increment: unset !important;
+}
+
+@media screen and (max-width: 750px) {
+	.sticky-widget {
+		--editor-font-size: 14px;
+	}
+}
