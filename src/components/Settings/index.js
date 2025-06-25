@@ -1,7 +1,7 @@
 import React from "react";
-import useSettingsStore from "../store/settingsStore";
+import useSettingsStore from "../../store/settingsStore";
 
-import "../styles/settings.css";
+import "../../styles/settings.css";
 
 function Settings({ close }) {
 	const changeSpecificSetting = useSettingsStore(
@@ -12,13 +12,13 @@ function Settings({ close }) {
 	const setTheme = (theme) => {
 		close();
 		changeSpecificSetting("theme", theme);
-		document.documentElement.setAttribute("data-theme", theme.value);
+		// document.documentElement.setAttribute("data-theme", theme.value);
 	};
 	return (
 		<div className="settings-container">
 			<p>Themes</p>
 			{theme?.options.map((option, idx) => (
-				<>
+				<React.Fragment key={`theme-option.${idx}`}>
 					<button
 						className="settings-theme-option"
 						onClick={() => setTheme(option)}
@@ -27,7 +27,7 @@ function Settings({ close }) {
 					</button>
 
 					{idx < theme.options.length - 1 && <hr />}
-				</>
+				</React.Fragment>
 			))}
 		</div>
 	);
