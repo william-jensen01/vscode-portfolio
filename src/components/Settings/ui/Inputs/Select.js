@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import Focusable from "../../Focus/Focusable";
 
 export default function Select({ item, itemKey, handleChange }) {
 	const [selectedOption, setSelectedOption] = useState(item.default);
@@ -124,26 +125,28 @@ export default function Select({ item, itemKey, handleChange }) {
 			aria-expanded={open}
 			aria-controls="select-dropdown"
 		>
-			<button
-				ref={buttonRef}
-				id={`${itemKey}.select-button`}
-				className={`select-button ${open ? "focused" : ""}`}
-				style={{
-					textTransform: item?.capitalize ? "capitalize" : "",
-				}}
-				onClick={handleSelectClick}
-				disabled={item["input_disabled"]}
-				role="combobox"
-				aria-label="select button"
-				aria-haspopup="options"
-				aria-controls={`${itemKey}.dropdown`}
-				tabIndex={0}
-			>
-				<span className="selected-value">
-					{item.options[selectedOption]?.value}
-				</span>
-				<span className="arrow" />
-			</button>
+			<Focusable itemKey={selectKey}>
+				<button
+					ref={buttonRef}
+					id={`${itemKey}.select-button`}
+					className={`select-button ${open ? "focused" : ""}`}
+					style={{
+						textTransform: item?.capitalize ? "capitalize" : "",
+					}}
+					onClick={handleSelectClick}
+					disabled={item["input_disabled"]}
+					role="combobox"
+					aria-label="select button"
+					aria-haspopup="options"
+					aria-controls={`${itemKey}.dropdown`}
+					tabIndex={0}
+				>
+					<span className="selected-value">
+						{item.options[selectedOption]?.value}
+					</span>
+					<span className="arrow" />
+				</button>
+			</Focusable>
 
 			{open && (
 				<div
@@ -196,16 +199,9 @@ function SelectItem({
 	const optionRef = useRef(null);
 
 	const handleClick = (e) => {
-		// Prevent focus from being moved
-		// e.preventDefault();
-
 		// Only register actual clicks (not keyboard events)
 		if (e.detail > 0) {
-			// Prevent focus from being moved
-			// e.preventDefault();
 			onSelect(idx);
-		} else {
-			console.log("option handleClick :: for keyboard events", e);
 		}
 	};
 
@@ -223,10 +219,9 @@ function SelectItem({
 
 	return (
 		<li
-			key={`${itemKey}.option.${idx}`}
 			ref={optionRef}
 			className={additionalClasses}
-			// using mouseDown instead of click to prevent focus from firing before click and preventing invokation
+			// using mouseDown instead of click to prevent focus from firing before click and preventing invokation due closed dropdown
 			onMouseDown={handleClick}
 			onFocus={() => setFocusedOption(idx)}
 			onMouseEnter={(e) => {
@@ -243,7 +238,6 @@ function SelectItem({
 				id={`${selectKey}-option.${idx}`}
 				type="radio"
 				name={`${selectKey}.dropdown`}
-				// name={itemKey}
 				value={option.value}
 				defaultChecked={isSelected}
 				// role="option"

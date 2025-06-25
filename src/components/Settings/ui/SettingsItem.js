@@ -1,6 +1,7 @@
 import { useState, useRef, useMemo } from "react";
 import useSettingsStore from "../../../store/settingsStore";
 import Select from "./Inputs/Select";
+import Focusable from "../Focus/Focusable";
 import sprite from "../../../assets/svgs-sprite.svg";
 
 export default function SettingsItem({
@@ -12,6 +13,7 @@ export default function SettingsItem({
 	const [modified, setModified] = useState(
 		item.value !== item.options[item.default]
 	);
+
 	const changeSpecificSetting = useSettingsStore(
 		(state) => state.changeSpecificSetting
 	);
@@ -69,30 +71,41 @@ export default function SettingsItem({
 			data-item-key={itemKey}
 			data-item-idx={itemIdx}
 		>
-			<div ref={contentRef} className={`sp-item-contents`}>
-				<div className="sp-row-inner-container">
-					<p className="sp-item-label-container">{formattedPath}</p>
-					<p className="sp-item-description">{item.description}</p>
-					<div className="sp-item-value">
-						{item.input === "select" && (
-							<div className="sp-item-control sp-item-select-container">
-								<Select
-									item={item}
-									itemKey={itemKey}
-									itemIdx={itemIdx}
-									handleChange={handleChange}
-								/>
-							</div>
+			<Focusable itemKey={itemKey} itemIdx={itemIdx}>
+				<div ref={contentRef} className="sp-item-contents">
+					<div className="sp-row-inner-container">
+						<p className="sp-item-label-container">
+							{formattedPath}
+						</p>
+						<p className="sp-item-description">
+							{item.description}
+						</p>
+						<div className="sp-item-value">
+							{item.input === "select" && (
+								<div className="sp-item-control sp-item-select-container">
+									<Select
+										item={item}
+										itemKey={itemKey}
+										itemIdx={itemIdx}
+										handleChange={handleChange}
+									/>
+								</div>
+							)}
+						</div>
+						{modified && (
+							<div className="sp-item-modified-indicator" />
 						)}
 					</div>
-					{modified && <div className="sp-item-modified-indicator" />}
 				</div>
-			</div>
-			<a className="sp-more-action" tabIndex={0}>
-				<svg>
-					<use href={`${sprite}#icon-settings`} />
-				</svg>
-			</a>
+			</Focusable>
+
+			<Focusable itemKey={itemKey} itemIdx={itemIdx}>
+				<a className="sp-more-action" tabIndex={0}>
+					<svg>
+						<use href={`${sprite}#icon-settings`} />
+					</svg>
+				</a>
+			</Focusable>
 		</div>
 	);
 }

@@ -1,4 +1,5 @@
 import { useRef, useEffect } from "react";
+import Focusable from "../Focus/Focusable";
 
 export default function StickyTitle({ children, itemIdx }) {
 	const ref = useRef(null);
@@ -30,7 +31,9 @@ export default function StickyTitle({ children, itemIdx }) {
 			className="sp-row sp-group-title"
 			data-item-idx={itemIdx}
 		>
-			<h2 className="group-title-label">{children}</h2>
+			<Focusable itemKey={`title.${children}`} itemIdx={itemIdx}>
+				<h2 className="group-title-label">{children}</h2>
+			</Focusable>
 		</div>
 	);
 }
