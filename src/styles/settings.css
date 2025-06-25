@@ -442,3 +442,22 @@ select:focus {
 	border-top: 1px solid var(--vscode-settings-dropdownBorder);
 	padding: 5px;
 }
+
+/*
+* MARK: Focus
+*/
+
+/* When item is focused, add visual "focus" effect to contents */
+.sp-item:focus-within .sp-item-contents {
+	outline: 1px solid var(--vscode-settings-focusedRowBorder);
+	outline-offset: -1px;
+	background-color: var(--vscode-settings-focusedRowBackground);
+}
+.sp-item:focus-within .sp-more-action {
+	opacity: 1;
+}
+
+.sp .focusable:focus {
+	outline: 1px solid var(--vscode-settings-focusedRowBorder);
+	outline-offset: -1px;
+}
