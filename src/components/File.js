@@ -3,6 +3,7 @@ import About from "./pages/About";
 import Skills from "./pages/Skills";
 import Projects from "./pages/Projects";
 import Contact from "./pages/Contact";
+import Settings from "./Settings/page";
 import { ActiveFileContext } from "../Context/ActiveFileContext";
 import {
 	FileBoundingRectContext,
@@ -17,6 +18,7 @@ const COMPONENTS = {
 	skills: Skills,
 	projects: Projects,
 	contact: Contact,
+	settings: Settings,
 };
 
 function File() {

@@ -35,6 +35,11 @@ export const portfolioContent = [
 		fileName: "contact.css",
 		page: "contact",
 	},
+	{
+		svg: "icon-settings",
+		fileName: "Settings",
+		page: "settings",
+	},
 ];
 
 function App() {
