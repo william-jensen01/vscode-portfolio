@@ -10,9 +10,7 @@ export default function SettingsItem({
 	itemIdx,
 	fullNavigation,
 }) {
-	const [modified, setModified] = useState(
-		item.value !== item.options[item.default]
-	);
+	const [modified, setModified] = useState(item.value !== item.default);
 
 	const changeSpecificSetting = useSettingsStore(
 		(state) => state.changeSpecificSetting
@@ -61,7 +59,7 @@ export default function SettingsItem({
 
 	const handleChange = (key, value) => {
 		changeSpecificSetting(key, value);
-		setModified(value !== item.options[item.default]);
+		setModified(value !== item.default);
 	};
 
 	return (

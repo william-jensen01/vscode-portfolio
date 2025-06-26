@@ -34,20 +34,22 @@ const settingsStore = create(
 	devtools((set, get) => {
 		Object.values(INIT_VALUE).forEach((setting) => {
 			if (setting?.options && setting.value === null) {
-				setting.value = setting.options[setting.default];
+				setting.value = setting.default;
 			}
 		});
 
 		return {
 			...INIT_VALUE,
-			changeSpecificSetting: (key, value) => {
-				logger.suffix("changeSpecificSetting").log(key, value);
+			changeSpecificSetting: (key, valueIndex) => {
+				logger.suffix("changeSpecificSetting").log(key, valueIndex);
 
 				// Special case for theme: set attribute on document
 				if (key === "theme") {
+					const state = get();
+					const actualOption = state[key].options[valueIndex];
 					document?.documentElement?.setAttribute(
 						"data-theme",
-						value.value
+						actualOption.value
 					);
 				}
 
@@ -58,7 +60,7 @@ const settingsStore = create(
 					...state,
 					[key]: {
 						...state[key],
-						value: value,
+						value: valueIndex,
 					},
 				}));
 			},

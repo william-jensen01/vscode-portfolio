@@ -2,10 +2,12 @@ import { useState, useRef, useEffect } from "react";
 import Focusable from "../../Focus/Focusable";
 
 export default function Select({ item, itemKey, handleChange }) {
-	const [selectedOption, setSelectedOption] = useState(item.default);
-	const [focusedOption, setFocusedOption] = useState(
-		selectedOption === -1 ? item.default : selectedOption
+	const [selectedOption, setSelectedOption] = useState(
+		item.value !== null && item.value !== undefined
+			? item.value
+			: item.default
 	);
+	const [focusedOption, setFocusedOption] = useState(selectedOption);
 	const containerRef = useRef(null);
 	const listRef = useRef(null);
 	const dropdownRef = useRef(null);
@@ -29,10 +31,9 @@ export default function Select({ item, itemKey, handleChange }) {
 	};
 
 	const handleOptionSelect = (optionIdx) => {
-		const option = item.options[optionIdx];
 		setSelectedOption(optionIdx);
 		setFocusedOption(optionIdx);
-		handleChange(itemKey, option);
+		handleChange(itemKey, optionIdx);
 		setOpen(false);
 		buttonRef.current.focus();
 	};
