@@ -9,10 +9,9 @@ function Settings({ close }) {
 	);
 	const theme = useSettingsStore((state) => state.theme);
 
-	const setTheme = (theme) => {
+	const setTheme = (themeIdx) => {
 		close();
-		changeSpecificSetting("theme", theme);
-		// document.documentElement.setAttribute("data-theme", theme.value);
+		changeSpecificSetting("theme", themeIdx);
 	};
 	return (
 		<div className="settings-container">
@@ -21,7 +20,7 @@ function Settings({ close }) {
 				<React.Fragment key={`theme-option.${idx}`}>
 					<button
 						className="settings-theme-option"
-						onClick={() => setTheme(option)}
+						onClick={() => setTheme(idx)}
 					>
 						{option.value}
 					</button>
