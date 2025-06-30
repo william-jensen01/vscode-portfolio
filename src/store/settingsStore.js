@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
+import { allEditorSettings } from "../components/Editor/settings";
 import Logger from "../util/logger";
 const logger = new Logger("settingsStore");
 
@@ -28,6 +29,7 @@ const INIT_VALUE = {
 		sub_category: "appearance",
 		capitalize: true,
 	},
+	...allEditorSettings,
 };
 
 // Helper function to initialize settings with defaults
