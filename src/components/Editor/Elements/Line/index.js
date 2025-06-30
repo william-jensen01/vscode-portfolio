@@ -22,7 +22,12 @@ export default function NewLine({ children, className = "", style, ...props }) {
 
 	const lineRef = useRef(null);
 
-	const { lineNumber } = useLineNumberTracking(scopeId, lineId, lineRef);
+	const {
+		lineNumber,
+		isRelative,
+		updateRelativeLineNumber,
+		configuredLineNumber,
+	} = useLineNumberTracking(scopeId, lineId, lineRef);
 
 	useRegisterScopeLine(scopeId, lineId, lineNumber, null);
 
@@ -79,6 +84,9 @@ export default function NewLine({ children, className = "", style, ...props }) {
 				className={`line ${
 					isFirstLineScope ? "first" : isLastLineScope ? "last" : ""
 				} ${isVisible ? "visible" : "invisible"}`}
+				onClick={(e) => {
+					updateRelativeLineNumber(lineId, lineNumber);
+				}}
 				onMouseEnter={handleMouseEnter}
 				onMouseLeave={handleMouseLeave}
 				data-scope-id={scopeId}
@@ -90,7 +98,15 @@ export default function NewLine({ children, className = "", style, ...props }) {
 				{...props}
 			>
 				<div className="view-number">
-					<div className="line-numbers">{lineNumber}</div>
+					{configuredLineNumber && (
+						<div
+							className={`line-numbers ${
+								isRelative ? "relative" : ""
+							}`}
+						>
+							{configuredLineNumber}
+						</div>
+					)}
 
 					{showCollapseIndicator && (
 						<button
