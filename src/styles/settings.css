@@ -238,7 +238,7 @@ MARK: PAGE
 	left: 5px;
 	bottom: 18px;
 	width: 6px;
-	border-left-color: #0c7d9d;
+	border-left-color: var(--vscode-settings-modifiedItemIndicator);
 	border-left-width: 2px;
 	border-left-style: solid;
 }

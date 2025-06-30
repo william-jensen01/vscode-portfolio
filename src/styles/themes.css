@@ -101,6 +101,7 @@
 	--vscode-settings-numberInputBackground: #1b1d23;
 	--vscode-settings-numberInputBorder: #181a1f;
 	--vscode-settings-numberInputForeground: #cccccc;
+	--vscode-settings-modifiedItemIndicator: #0c7d9d;
 	--vscode-toolbar-hoverBackground: rgba(90, 93, 94, 0.31);
 	--vscode-menu-border: transparent;
 	--vscode-menu-foreground: #f0f0f0;
@@ -208,6 +209,7 @@
 	--vscode-settings-numberInputBackground: #3c3c3c;
 	--vscode-settings-numberInputBorder: transparent;
 	--vscode-settings-numberInputForeground: #cccccc;
+	--vscode-settings-modifiedItemIndicator: #0c7d9d;
 	--vscode-toolbar-hoverBackground: rgba(90, 93, 94, 0.31);
 	--vscode-menu-border: transparent;
 	--vscode-menu-foreground: #cccccc;
@@ -314,6 +316,7 @@
 	--vscode-settings-numberInputBackground: #21222c;
 	--vscode-settings-numberInputBorder: transparent;
 	--vscode-settings-numberInputForeground: #f8f8f2;
+	--vscode-settings-modifiedItemIndicator: #ffb86c;
 	--vscode-toolbar-hoverBackground: rgba(90, 93, 94, 0.31);
 	--vscode-menu-border: transparent;
 	--vscode-menu-foreground: #f8f8f2;
