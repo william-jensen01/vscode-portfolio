@@ -141,9 +141,18 @@ const settingsStore = create(
 							// Skip the theme as it's applied to the document root
 							if (key === "theme") return;
 
-							attributes[`data-${state[key]["data_attribute"]}`] =
-								typeof state[key].value === "object"
-									? state[key].value.value
+							const item = state[key];
+
+							/*
+							 * Setting the data attribute value
+
+							 * 1. Value is an index: get the actual value from options
+							 * 2. Value is an integer or boolean: use the value directly 
+							 */
+							attributes[`data-${item["data_attribute"]}`] =
+								item.hasOwnProperty("options") &&
+								item.options.length > 0
+									? item.options[item.value].value
 									: state[key].value;
 						});
 
