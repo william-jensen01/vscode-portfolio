@@ -7,12 +7,13 @@
 	position: relative;
 	display: grid;
 	grid-template-areas: "scroll-decoration" "file";
+	grid-template-rows: auto 1fr;
 	margin-top: -1px;
 	overscroll-behavior-y: none;
 }
 
 .file-container > *:last-child {
-	grid-area: scroll-decoration / file;
+	grid-area: 1 / 1 / -1 / -1; /* span all rows and columns */
 }
 
 .scroll-decoration {
