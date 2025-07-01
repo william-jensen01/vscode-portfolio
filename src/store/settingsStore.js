@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
+import { useState, useEffect } from "react";
 import { allEditorSettings } from "../components/Editor/settings";
 import Logger from "../util/logger";
 const logger = new Logger("settingsStore");
@@ -127,6 +128,27 @@ const settingsStore = create(
 
 						return result;
 					},
+
+					// Create an object containing all valid settings as data-attributes
+					createAttributes: () => {
+						console.log("creat attributes");
+						const state = get();
+
+						const attributes = {};
+						const settings = get().getAllSettings();
+
+						Object.keys(settings).forEach((key) => {
+							// Skip the theme as it's applied to the document root
+							if (key === "theme") return;
+
+							attributes[`data-${state[key]["data_attribute"]}`] =
+								typeof state[key].value === "object"
+									? state[key].value.value
+									: state[key].value;
+						});
+
+						return attributes;
+					},
 				};
 			},
 			{
@@ -164,3 +186,14 @@ const settingsStore = create(
 );
 
 export default settingsStore;
+
+export const useSettingsAttributes = () => {
+	const [attributes, setAttributes] = useState({});
+	const settings = settingsStore();
+
+	useEffect(() => {
+		setAttributes(settings.createAttributes());
+	}, [settings]);
+
+	return attributes;
+};
