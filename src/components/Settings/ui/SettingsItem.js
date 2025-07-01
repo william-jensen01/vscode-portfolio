@@ -29,9 +29,8 @@ export default function SettingsItem({
 			// Capitalize first letter
 			part = part.charAt(0).toUpperCase() + part.slice(1);
 
-			// Convert camelCase to Space Separated Words (only for the last part)
-			if (index === parts.length - 1) {
-				part = part.replace(/([A-Z])/g, " $1").trim();
+			// Convert camelCase to Space Separated Words
+			part = part.replace(/([A-Z])/g, " $1").trim();
 			}
 
 			return part;
