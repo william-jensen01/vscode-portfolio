@@ -457,6 +457,7 @@ select:focus {
 	border: 1px solid var(--vscode-settings-checkboxBorder);
 	width: 18px;
 	height: 18px;
+	flex-shrink: 0;
 }
 .sp-value-checkbox input[type="checkbox"] {
 	display: block;
