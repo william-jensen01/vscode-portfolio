@@ -219,6 +219,7 @@ MARK: PAGE
 
 .sp-item-value-description {
 	display: flex;
+	align-items: center;
 	/* width: 100%; */
 	gap: 9px;
 }
@@ -441,6 +442,65 @@ select:focus {
 	display: block;
 	border-top: 1px solid var(--vscode-settings-dropdownBorder);
 	padding: 5px;
+}
+
+/* ---------------------- 
+ * Custom Checkbox
+ * MARK: Checkbox
+ * ---------------------- */
+.sp-value-checkbox ~ label,
+.sp-value-checkbox input[type="checkbox"] ~ span {
+	cursor: pointer;
+}
+.sp-value-checkbox {
+	border-radius: 2px;
+	border: 1px solid var(--vscode-settings-checkboxBorder);
+	width: 18px;
+	height: 18px;
+}
+.sp-value-checkbox input[type="checkbox"] {
+	display: block;
+	height: 0;
+	width: 0;
+	position: absolute;
+	overflow: hidden;
+	border: none;
+	outline: none;
+}
+.sp-value-checkbox input[type="checkbox"] ~ span {
+	width: 100%;
+	height: 100%;
+	background-color: var(--vscode-settings-checkboxBackground);
+	display: inline-block;
+	position: relative;
+	box-sizing: border-box;
+	border-radius: 2px;
+}
+.sp-value-checkbox input[type="checkbox"]:checked ~ span::before,
+.sp-value-checkbox.checked input[type="checkbox"] ~ span::before {
+	box-sizing: border-box;
+	content: "";
+	width: calc(100% - 2px);
+	aspect-ratio: 1/1;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: var(--vscode-settings-checkboxForeground);
+	clip-path: polygon(
+		21% 40%,
+		21% 40%,
+		8% 54%,
+		25% 68%,
+		36% 77%,
+		47% 65%,
+		48% 64%,
+		64% 47%,
+		75% 35%,
+		93% 13%,
+		81% 4%,
+		36% 54%
+	);
 }
 
 /*
