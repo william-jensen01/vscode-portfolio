@@ -1,6 +1,7 @@
 import { useState, useRef, useMemo } from "react";
 import useSettingsStore from "../../../store/settingsStore";
 import Select from "./Inputs/Select";
+import Checkbox from "./Inputs/Checkbox";
 import Focusable from "../Focus/Focusable";
 import sprite from "../../../assets/svgs-sprite.svg";
 
@@ -31,7 +32,6 @@ export default function SettingsItem({
 
 			// Convert camelCase to Space Separated Words
 			part = part.replace(/([A-Z])/g, " $1").trim();
-			}
 
 			return part;
 		});
@@ -74,9 +74,24 @@ export default function SettingsItem({
 						<p className="sp-item-label-container">
 							{formattedPath}
 						</p>
-						<p className="sp-item-description">
-							{item.description}
-						</p>
+						{item.input === "checkbox" ? (
+							<div className="sp-item-value-description">
+								<Checkbox
+									item={item}
+									itemKey={itemKey}
+									handleChange={handleChange}
+								/>
+								<label htmlFor={`checkbox.${itemKey}`}>
+									<p className="sp-item-description">
+										{item.description}
+									</p>
+								</label>
+							</div>
+						) : (
+							<p className="sp-item-description">
+								{item.description}
+							</p>
+						)}
 						<div className="sp-item-value">
 							{item.input === "select" && (
 								<div className="sp-item-control sp-item-select-container">
