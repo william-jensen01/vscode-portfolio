@@ -312,6 +312,10 @@ a {
 	color: var(--semicolon-color);
 }
 
+/* 
+* MARK: Brackets
+*/
+
 .bracket {
 	color: var(--default-color);
 }
@@ -324,6 +328,25 @@ a {
 .dynamic-color,
 .test-color {
 	color: var(--dynamic-color, var(--default-color));
+}
+
+/* Colorize brackets when enabled */
+[data-bracket-pair-colorization="true"] .bracket {
+	color: var(--dynamic-color) !important;
+}
+
+/* Enhance bracket visibility on hover */
+[data-bracket-pair-colorization="true"] .line:hover .bracket:not(.angle) {
+	-webkit-text-stroke: 1px var(--dynamic-color, var(--default-color)) !important;
+}
+
+/* Use default color when colorization is disabled */
+[data-bracket-pair-colorization="false"] .bracket {
+	color: var(--default-color) !important;
+}
+/* Disable bracket enhancement on hover when colorization is disabled */
+[data-bracket-pair-colorization="false"] .line:hover .bracket:not(.angle) {
+	-webkit-text-stroke: 0px;
 }
 
 .js-import-word {
