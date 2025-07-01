@@ -12,6 +12,30 @@ const editorSettings = [
 		data_attribute: "indentation-guides",
 		category: "editor",
 	},
+	{
+		key: "indentation",
+		default: 1,
+		value: null,
+		options: [
+			{
+				value: "spaces",
+				description:
+					"Indentation will use spaces. The number is configurable in the 'tabSize' setting.",
+			},
+			{
+				value: "tab",
+				description:
+					"Indentation will use tabs. A tab is equal to the width of 'tabSize' spaces.",
+			},
+		],
+		input: "select",
+		description:
+			"Controls whether the editor should render tabs or spaces for indent.",
+		navigation: "editor.indentation",
+		data_attribute: "indentation",
+		category: "editor",
+		capitalize: false,
+	},
 ];
 
 export const allEditorSettings = [

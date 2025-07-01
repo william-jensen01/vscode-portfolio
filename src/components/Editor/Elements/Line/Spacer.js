@@ -1,4 +1,5 @@
 import { memo, useMemo, useState, useEffect } from "react";
+import useSettingsStore from "../../../../store/settingsStore";
 import { useParentScope } from "../../Features/Scope";
 import { useLine } from "../Line";
 import { useScopeStore } from "../../Features/Scope/scopeStore";
@@ -16,6 +17,10 @@ const Spacers = memo(() => {
 	);
 	const highlightedScope = useScopeStore((state) => state.highlightedScope);
 	const activeScope = useScopeStore((state) => state.activeScope);
+
+	const { value: indentationSetting, options: indentationOptions } =
+		useSettingsStore((state) => state.indentation);
+	const indentationValue = indentationOptions[indentationSetting].value;
 
 	let { color, parentScope = {} } = scopeInfo || {};
 
@@ -63,11 +68,12 @@ const Spacers = memo(() => {
 					colorId={indent.colorId}
 					isHighlighted={highlightedScope?.scopeId === indent.scopeId}
 					isActive={activeScope?.scopeId === indent.scopeId}
-					index={idx}
+					isTab={indentationValue === "tab"}
+					isSpace={indentationValue === "spaces"}
 				/>
 			);
 		});
-	}, [indentations, lineId, highlightedScope, activeScope]);
+	}, [indentations, lineId, highlightedScope, activeScope, indentationValue]);
 
 	return spacerElements;
 });
@@ -82,14 +88,14 @@ export function SpacerTab({
 	colorId,
 	isHighlighted,
 	isActive,
+	isTab,
+	isSpace,
 	style,
 	...props
 }) {
 	const [isMobile, setIsMobile] = useState(false);
 
 	const adjustedTabSize = isMobile ? MOBILE_TAB_SIZE : TAB_SIZE;
-
-	const strTab = " ".repeat(adjustedTabSize);
 
 	const color = useDynamicColor(colorId);
 	const isDynamic = typeof colorId === "number" && colorId >= 0;
@@ -116,17 +122,23 @@ export function SpacerTab({
 			data-color-id={colorId}
 			{...props}
 		>
-			<span
-				className="gap tab"
-				style={{
-					// height: "100%",
-					width: `${adjustedTabSize}ch`,
-					// whiteSpace: "pre",
-					"--spacer-tab-content": '"→"',
-				}}
-			>
-				{strTab}
-			</span>
+			{isTab && (
+				<span
+					className="gap tab"
+					style={{
+						width: `${adjustedTabSize}ch`,
+					}}
+				>
+					{" ".repeat(adjustedTabSize)}
+				</span>
+			)}
+
+			{isSpace &&
+				Array.from({ length: adjustedTabSize }).map((_, idx) => (
+					<span key={`space-${idx}`} className="gap space">
+						{" "}
+					</span>
+				))}
 		</span>
 	);
 }

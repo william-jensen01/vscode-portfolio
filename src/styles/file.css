@@ -452,13 +452,24 @@ a {
 .gap.tab {
 	user-select: all !important;
 }
+.gap.space {
+	user-select: text !important;
+}
 /* render whitespace text */
 .gap::after {
 	position: absolute;
 	left: 0;
-	z-index: 0;
+	z-index: 1;
+	user-select: none;
+	pointer-events: none;
 	color: var(--default-color);
 	opacity: 0.16;
+}
+
+.gap.selected {
+	/* background-color: var(--user-select-color); */
+}
+
 /* ------------------------------------------
  * MARK: Indent Settings
  * ------------------------------------------ */
@@ -472,6 +483,14 @@ a {
 [data-indentation-guides="false"] .spacer-tab::after {
 	content: unset;
 }
+
+/* Show arrow for tab indent */
+[data-indentation="tab"] .gap::after {
+	content: "→";
+}
+/* Show bullet for space indent */
+[data-indentation="spaces"] .gap::after {
+	content: "•";
 }
 
 @media only screen and (hover: none) {
