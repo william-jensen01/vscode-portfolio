@@ -459,11 +459,19 @@ a {
 	z-index: 0;
 	color: var(--default-color);
 	opacity: 0.16;
-	content: var(--spacer-tab-content);
+/* ------------------------------------------
+ * MARK: Indent Settings
+ * ------------------------------------------ */
+
+/* Show indentation guides when enabled */
+[data-indentation-guides="true"] .spacer-tab::after {
+	content: "";
 }
 
-.spacer-tab.selected {
-	background-color: var(--user-select-color);
+/* Hide indentation guides when disabled */
+[data-indentation-guides="false"] .spacer-tab::after {
+	content: unset;
+}
 }
 
 @media only screen and (hover: none) {
