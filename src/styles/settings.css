@@ -52,16 +52,13 @@ MARK: PAGE
 
 .sp {
 	position: relative;
-
-	width: 100%;
-	height: 100%;
 	overflow: hidden;
+	overscroll-behavior: none;
 
 	/* display: flex;
 	align-items: stretch;
 	flex-direction: column; */
 	display: grid;
-	grid-template-columns: 1fr;
 	grid-template-rows: auto 1fr;
 	grid-template-areas: "header" "body";
 	row-gap: 10px;
@@ -69,7 +66,7 @@ MARK: PAGE
 
 .settings-header {
 	width: 100%;
-	grid-area: "header";
+	grid-area: header;
 	box-sizing: border-box;
 	margin: 11px auto auto;
 	/* overflow: hidden; */
@@ -144,11 +141,9 @@ MARK: PAGE
 * MARK: Body
 */
 .sp-body {
-	grid-area: "body";
+	grid-area: body;
 	position: relative;
-	width: 100%;
-	height: 100%;
-	overflow: scroll;
+	overflow-y: scroll;
 	box-sizing: border-box;
 }
 
