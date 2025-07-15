@@ -172,7 +172,6 @@
 	/* allows for even splitting for wrap instead of break-all*/
 	display: inline-flex;
 	flex-wrap: wrap;
-	user-select: var(--user-select-color);
 }
 .view-line > span:last-child > * {
 	flex-shrink: 0;
