@@ -428,16 +428,6 @@ a {
 	opacity: var(--default-opacity);
 	background: var(--_tab-color, var(--default-color));
 }
-.spacer-tab .gap {
-	/* user-select: all !important; */
-	/* user-select: none; */
-	position: relative;
-	height: 100%;
-	white-space: pre;
-	display: inline-block;
-	z-index: 0;
-}
-
 .spacer-tab.dynamic::after {
 	opacity: var(--default-highlighted-opacity);
 }
@@ -448,14 +438,23 @@ a {
 	opacity: var(--max-highlighted-opacity);
 }
 
+.gap {
+	position: relative;
+	white-space: pre;
+	display: inline-block;
+	z-index: 0;
+}
 .gap.tab {
 	user-select: all !important;
+	--_content: "→";
 }
 .gap.space {
 	user-select: text !important;
+	--_content: "•";
 }
 /* render whitespace text */
-.gap::after {
+.whitespace-marker::after {
+	content: var(--_content);
 	position: absolute;
 	left: 0;
 	z-index: 1;
@@ -463,10 +462,6 @@ a {
 	pointer-events: none;
 	color: var(--default-color);
 	opacity: 0.16;
-}
-
-.gap.selected {
-	/* background-color: var(--user-select-color); */
 }
 
 /* ------------------------------------------
@@ -481,15 +476,6 @@ a {
 /* Hide indentation guides when disabled */
 [data-indentation-guides="false"] .spacer-tab::after {
 	content: unset;
-}
-
-/* Show arrow for tab indent */
-[data-indentation="tab"] .gap::after {
-	content: "→";
-}
-/* Show bullet for space indent */
-[data-indentation="spaces"] .gap::after {
-	content: "•";
 }
 
 @media only screen and (hover: none) {

@@ -36,6 +36,33 @@ const editorSettings = [
 		category: "editor",
 		capitalize: false,
 	},
+	{
+		key: "renderWhitespace",
+		default: 1,
+		value: null,
+		options: [
+			{
+				value: "none",
+				description: "",
+			},
+			{
+				value: "selection",
+				description:
+					"Render whitespace characters only on selected text.",
+			},
+			{
+				value: "all",
+				description: "",
+			},
+		],
+		input: "select",
+		description:
+			'Controls how the editor should render whitespace characters, "all", "none", or "selection"',
+		navigation: "editor.renderWhitespace",
+		data_attribute: "render-whitespace",
+		category: "editor",
+		capitalize: false,
+	},
 ];
 
 export const allEditorSettings = [

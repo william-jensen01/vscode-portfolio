@@ -20,6 +20,7 @@ import {
 } from "./Features/StickyLines/stickyStore";
 import { useFileBoundingRectStoreInstance } from "../../store/fileBoundingRectStore";
 import { useGeneratedId } from "./hooks/useGeneratedId";
+import { useWhitespaceSelection } from "./Features/Selection/useWhitespaceSelection";
 
 // MARK: Instance
 
@@ -41,6 +42,8 @@ export function EditorInstance({ children }) {
 	);
 
 	useUpdateLineWidth(lineStore);
+
+	useWhitespaceSelection(viewLinesRef);
 
 	return (
 		<StickyLineContext.Provider value={stickyLineStore}>

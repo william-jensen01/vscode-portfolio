@@ -1,9 +1,11 @@
-import { memo, useMemo, useState, useEffect } from "react";
+import { memo, useMemo, useState, useEffect, useRef } from "react";
 import useSettingsStore from "../../../../store/settingsStore";
 import { useParentScope } from "../../Features/Scope";
 import { useLine } from "../Line";
 import { useScopeStore } from "../../Features/Scope/scopeStore";
 import { useDynamicColor } from "../../hooks/useDynamicColor";
+import { useSpacerSelection } from "../../Features/Selection/useSpacerSelection";
+import { useGeneratedId } from "../../hooks/useGeneratedId";
 
 const Spacers = memo(() => {
 	const { scopeId } = useParentScope();
@@ -21,6 +23,10 @@ const Spacers = memo(() => {
 	const { value: indentationSetting, options: indentationOptions } =
 		useSettingsStore((state) => state.indentation);
 	const indentationValue = indentationOptions[indentationSetting].value;
+
+	const whitespaceSetting = useSettingsStore(
+		(state) => state.renderWhitespace
+	);
 
 	let { color, parentScope = {} } = scopeInfo || {};
 
@@ -70,10 +76,18 @@ const Spacers = memo(() => {
 					isActive={activeScope?.scopeId === indent.scopeId}
 					isTab={indentationValue === "tab"}
 					isSpace={indentationValue === "spaces"}
+					whitespaceSetting={whitespaceSetting}
 				/>
 			);
 		});
-	}, [indentations, lineId, highlightedScope, activeScope, indentationValue]);
+	}, [
+		indentations,
+		lineId,
+		highlightedScope,
+		activeScope,
+		indentationValue,
+		whitespaceSetting,
+	]);
 
 	return spacerElements;
 });
@@ -91,6 +105,7 @@ export function SpacerTab({
 	isTab,
 	isSpace,
 	style,
+	whitespaceSetting,
 	...props
 }) {
 	const [isMobile, setIsMobile] = useState(false);
@@ -123,22 +138,62 @@ export function SpacerTab({
 			{...props}
 		>
 			{isTab && (
-				<span
-					className="gap tab"
-					style={{
-						width: `${adjustedTabSize}ch`,
-					}}
-				>
-					{" ".repeat(adjustedTabSize)}
-				</span>
+				<Gap
+					whitespace="tab"
+					whitespaceSetting={whitespaceSetting}
+					content={" ".repeat(adjustedTabSize)}
+					style={{ width: `${adjustedTabSize}ch` }}
+				/>
 			)}
 
 			{isSpace &&
 				Array.from({ length: adjustedTabSize }).map((_, idx) => (
-					<span key={`space-${idx}`} className="gap space">
-						{" "}
-					</span>
+					<Gap
+						key={`space-${idx}`}
+						whitespace="space"
+						whitespaceSetting={whitespaceSetting}
+						content={" "}
+					/>
 				))}
+		</span>
+	);
+}
+
+export function Gap({
+	children,
+	whitespace,
+	whitespaceSetting,
+	content,
+	...props
+}) {
+	const id = useGeneratedId("gap");
+	const gapRef = useRef(null);
+
+	const whitespaceSettingValue =
+		whitespaceSetting?.options[whitespaceSetting?.value]?.value;
+
+	const { showWhitespace } = useSpacerSelection(
+		gapRef,
+		whitespaceSettingValue
+	);
+
+	const isEnabled = whitespaceSettingValue === "all";
+	const isConditional =
+		whitespaceSettingValue === "selection" ||
+		whitespaceSettingValue === "boundary";
+
+	// prettier-ignore
+	const flag = isEnabled || (isConditional && showWhitespace);
+
+	return (
+		<span
+			ref={gapRef}
+			className={`gap ${whitespace}`}
+			data-id={id}
+			{...props}
+		>
+			{children || content}
+			{flag && <span className="whitespace-marker"></span>}
 		</span>
 	);
 }
