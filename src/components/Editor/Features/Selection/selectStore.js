@@ -33,6 +33,10 @@ export const useSelectStore = create((set, get) => ({
 			case "none":
 				flag = false;
 				break;
+			case "boundary":
+				// Only show whitespace for spacer tabs since they are visual hierarchy and boundary
+				flag = !!element.closest(".spacer-tab");
+				break;
 			case "selection":
 				flag = isElementSelected(element, exp);
 				break;

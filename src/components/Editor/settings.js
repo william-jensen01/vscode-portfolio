@@ -38,12 +38,17 @@ const editorSettings = [
 	},
 	{
 		key: "renderWhitespace",
-		default: 1,
+		default: 2,
 		value: null,
 		options: [
 			{
 				value: "none",
 				description: "",
+			},
+			{
+				value: "boundary",
+				description:
+					"Render whitespace characters except for single spaces between words.",
 			},
 			{
 				value: "selection",

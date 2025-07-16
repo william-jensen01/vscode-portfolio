@@ -74,7 +74,7 @@ function Contact() {
 					<CSS.Declaration
 						property="font family"
 						values={[["Comic Sans", "str"], ["monospace"]]}
-						separator=",&nbsp;"
+						separator=","
 					>
 						<Comment>Just kidding!</Comment>
 					</CSS.Declaration>
@@ -85,7 +85,7 @@ function Contact() {
 							["1s", "numerical"],
 							["infinite", null, "animation-iteration-count"],
 						]}
-						separator="&nbsp;"
+						separator=" "
 					/>
 					<CSS.Declaration
 						property="transform"

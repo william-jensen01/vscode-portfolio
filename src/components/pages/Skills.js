@@ -3,7 +3,7 @@ import { EditorInstance } from "../Editor";
 import Scope from "../Editor/Features/Scope";
 import NewLine from "../Editor/Elements/Line";
 import Bracket from "../Editor/Elements/Bracket";
-import { Space } from "../Editor/Elements";
+import { Space, renderWithSpaces } from "../Editor/Elements";
 import { JS, Require } from "../Editor/JS";
 import { List, Tag } from "../Editor/HTML";
 import StickySection from "../Editor/Features/StickyLines/Section";
@@ -53,16 +53,16 @@ function Skills() {
 							<span className="js-variable-declaration">
 								const
 							</span>
-							&nbsp;
+							<Space />
 							<span className="js-variable-name">Skills</span>
-							&nbsp;
+							<Space />
 							<span className="js-equals">=</span>
-							&nbsp;
+							<Space />
 							<Bracket character="(" />
 							<Bracket character=")" />
-							&nbsp;
+							<Space />
 							<span className="js-function-arrow">{"=>"}</span>
-							&nbsp;
+							<Space />
 							<span className="js-class-name">
 								SoftwareEngineer
 							</span>
@@ -71,9 +71,9 @@ function Skills() {
 							<Bracket character="(" />
 							<Bracket character="(" />
 							<Bracket character=")" />
-							&nbsp;
+							<Space />
 							<span className="js-function-arrow">{"=>"}</span>
-							&nbsp;
+							<Space />
 							<Bracket character="{" />
 						</NewLine>
 
@@ -82,7 +82,7 @@ function Skills() {
 								<span className="js-function-return">
 									return
 								</span>
-								&nbsp;
+								<Space />
 								<Bracket character="(" />
 							</NewLine>
 							<Scope>
@@ -97,7 +97,7 @@ function Skills() {
 													<Tag>h2</Tag>
 													<Space />
 													<span className="html-text">
-														{key}
+														{renderWithSpaces(key)}
 													</span>
 													<Space />
 													<Tag closing>h2</Tag>
@@ -108,7 +108,9 @@ function Skills() {
 															<List.Item
 																key={`map-list-item: ${key}.${itemIdx}`}
 															>
-																{item}
+																{renderWithSpaces(
+																	item
+																)}
 															</List.Item>
 														)
 													)}
