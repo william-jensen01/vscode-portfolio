@@ -5,8 +5,10 @@ import { allEditorSettings } from "../components/Editor/settings";
 import Logger from "../util/logger";
 const logger = new Logger("settingsStore");
 
-const INIT_VALUE = {
-	theme: {
+const allSettingsArray = [
+	{
+		key: "theme",
+		version: 1,
 		default: 0,
 		value: null, // will be set to options[default]
 		options: [
@@ -29,9 +31,30 @@ const INIT_VALUE = {
 		category: "workbench",
 		sub_category: "appearance",
 		capitalize: true,
+		migrations: {
+			/* 
+			 Example migration:
+			 
+			 version #: (oldSetting) => {
+				// Make whatever changes are needed to migrate to new version
+				return {
+					...oldSetting,
+					version: #,
+				}
+			 }
+			*/
+		},
 	},
 	...allEditorSettings,
-};
+];
+
+const INIT_VALUE = allSettingsArray.reduce((acc, setting) => {
+	const { migrations, ...settingWithoutMigrations } = setting;
+	return {
+		...acc,
+		[setting.key]: settingWithoutMigrations,
+	};
+}, {});
 
 // Helper function to initialize settings with defaults
 const initializeSettings = (settings) => {
@@ -48,6 +71,106 @@ const initializeSettings = (settings) => {
 	});
 
 	return initialized;
+};
+
+const migrateSetting = (
+	settingKey,
+	oldSetting,
+	targetVersion,
+	allMigrations
+) => {
+	logger.suffix("migrateSetting");
+	const oldVersion = oldSetting.version || 1;
+
+	if (oldVersion >= targetVersion) {
+		return oldSetting; // No migration needed
+	}
+
+	let migratedSetting = oldSetting;
+	const settingMigrations = allMigrations[settingKey] || {};
+
+	// Apply migrations sequentially
+	for (let version = oldVersion + 1; version <= targetVersion; version++) {
+		if (settingMigrations[version]) {
+			logger.log(`Migrating ${settingKey} to v${version}`);
+			migratedSetting = settingMigrations[version](migratedSetting);
+		}
+	}
+
+	// Ensure version is updated
+	migratedSetting.version = targetVersion;
+	return migratedSetting;
+};
+
+/**
+ * Extract migration functions from setting definitions
+ */
+const extractMigrations = (settingsArray) => {
+	const migrations = {};
+
+	settingsArray.forEach((setting) => {
+		if (setting.migrations) {
+			migrations[setting.key] = setting.migrations;
+		}
+	});
+
+	return migrations;
+};
+
+/**
+ * Extract current versions from setting definitions
+ */
+const extractVersions = (settingsArray) => {
+	const versions = {};
+
+	settingsArray.forEach((setting) => {
+		versions[setting.key] = setting.version || 1;
+	});
+
+	return versions;
+};
+
+// Check and migrate all settings on rehydrate
+const checkAndMigrateSettings = (persistedState, allSettings) => {
+	logger.suffix("checkAndMigrateSettings");
+	const allMigrations = extractMigrations(allSettings);
+	const currentVersions = extractVersions(allSettings);
+
+	const migratedState = { ...persistedState };
+	let hadMigrations = false;
+
+	Object.entries(currentVersions).forEach(([settingKey, targetVersion]) => {
+		if (migratedState[settingKey]) {
+			const oldVersion = migratedState[settingKey].version || 1;
+			logger.log(`Checking ${settingKey} v${oldVersion}`);
+
+			if (oldVersion < targetVersion) {
+				logger.log(`${settingKey}: v${oldVersion} → v${targetVersion}`);
+				migratedState[settingKey] = migrateSetting(
+					settingKey,
+					migratedState[settingKey],
+					targetVersion,
+					allMigrations
+				);
+				hadMigrations = true;
+			}
+		} else {
+			// Setting doesn't exist - initialize with current version
+			const settingDef = allSettings.find((s) => s.key === settingKey);
+			if (settingDef) {
+				const { migrations, ...cleanSetting } = settingDef;
+				migratedState[settingKey] = { ...cleanSetting };
+				hadMigrations = true;
+			}
+		}
+	});
+
+	if (hadMigrations) {
+		logger
+			.suffix("checkAndMigrateSettings")
+			.log("Settings migration completed");
+	}
+	return migratedState;
 };
 
 const settingsStore = create(
@@ -177,6 +300,23 @@ const settingsStore = create(
 					return persistedState;
 				},
 				onRehydrateStorage: () => (state) => {
+					logger.suffix("onRehydrateStorage");
+					if (!state) return;
+
+					// Check and migrate individual settings
+					const migratedState = checkAndMigrateSettings(
+						state,
+						allSettingsArray
+					);
+
+					logger.log("migratedState", migratedState);
+
+					// Replace state with migrated version if changes occurred
+					if (migratedState !== state) {
+						Object.keys(state).forEach((key) => delete state[key]);
+						Object.assign(state, migratedState);
+					}
+
 					// if (state?.theme?.value?.value) {
 					if (state?.theme && typeof state.theme.value === "number") {
 						const themeOption =

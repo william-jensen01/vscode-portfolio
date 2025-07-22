@@ -1,6 +1,7 @@
 export default [
 	{
 		key: "bracketPairColorization.enabled",
+		version: 1,
 		default: true,
 		value: true, // true | false
 		input: "checkbox",
@@ -9,9 +10,11 @@ export default [
 		navigation: "editor.bracketPairColorization.enabled",
 		data_attribute: "bracket-pair-colorization",
 		category: "editor",
+		migrations: {},
 	},
 	{
 		key: "bracketPairs",
+		version: 1,
 		default: 0,
 		value: null,
 		options: [
@@ -36,9 +39,11 @@ export default [
 		data_attribute: "bracket-pairs",
 		category: "editor",
 		capitalize: false,
+		migrations: {},
 	},
 	{
 		key: "highlightActiveBracketPair",
+		version: 1,
 		default: true,
 		value: true, // true | false
 		input: "checkbox",
@@ -47,9 +52,11 @@ export default [
 		navigation: "editor.guides.highlightActiveBracketPair",
 		data_attribute: "highlight-active-bracket-pair",
 		category: "editor",
+		migrations: {},
 	},
 	{
 		key: "bracketPairsHorizontal",
+		version: 1,
 		default: 0,
 		value: null,
 		options: [
@@ -75,5 +82,6 @@ export default [
 		data_attribute: "bracket-pairs-horizontal",
 		category: "editor",
 		capitalize: false,
+		migrations: {},
 	},
 ];

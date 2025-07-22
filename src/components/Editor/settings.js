@@ -4,6 +4,7 @@ import bracketPairColorizationSettings from "./Features/BracketPairColorization/
 const editorSettings = [
 	{
 		key: "indentationGuides",
+		version: 1,
 		default: true,
 		value: true, // true | false
 		input: "checkbox",
@@ -11,9 +12,11 @@ const editorSettings = [
 		navigation: "editor.guides.indentation",
 		data_attribute: "indentation-guides",
 		category: "editor",
+		migrations: {},
 	},
 	{
 		key: "indentation",
+		version: 1,
 		default: 1,
 		value: null,
 		options: [
@@ -35,9 +38,11 @@ const editorSettings = [
 		data_attribute: "indentation",
 		category: "editor",
 		capitalize: false,
+		migrations: {},
 	},
 	{
 		key: "highlightActiveIndentation",
+		version: 1,
 		default: 1,
 		value: null,
 		options: [
@@ -62,9 +67,11 @@ const editorSettings = [
 		data_attribute: "highlight-active-indentation",
 		category: "editor",
 		capitalize: false,
+		migrations: {},
 	},
 	{
 		key: "renderWhitespace",
+		version: 1,
 		default: 2,
 		value: null,
 		options: [
@@ -94,6 +101,7 @@ const editorSettings = [
 		data_attribute: "render-whitespace",
 		category: "editor",
 		capitalize: false,
+		migrations: {},
 	},
 ];
 
@@ -101,9 +109,4 @@ export const allEditorSettings = [
 	...editorSettings,
 	...lineCountSettings,
 	...bracketPairColorizationSettings,
-].reduce((acc, setting) => {
-	return {
-		...acc,
-		[setting.key]: setting,
-	};
-}, {});
+];

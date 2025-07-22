@@ -1,6 +1,7 @@
 export default [
 	{
 		key: "lineNumbers",
+		version: 1,
 		default: 1,
 		value: null, // will be set to options[default]
 		options: [
@@ -28,5 +29,6 @@ export default [
 		data_attribute: "line-numbers",
 		category: "editor",
 		capitalize: false,
+		migrations: {},
 	},
 ];
