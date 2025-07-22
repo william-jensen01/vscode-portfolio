@@ -1,0 +1,137 @@
+/* Colorize brackets when enabled */
+[data-bracket-pair-colorization="true"] .bracket {
+	color: var(--dynamic-color);
+}
+
+/* Enhance bracket visibility on hover */
+[data-bracket-pair-colorization="true"] .line:hover .bracket:not(.angle) {
+	-webkit-text-stroke: 1px var(--dynamic-color, var(--default-color));
+}
+
+/* Use default color when colorization is disabled */
+[data-bracket-pair-colorization="false"] .bracket {
+	color: var(--default-color);
+}
+
+/* Disable bracket enhancement on hover when colorization is disabled */
+[data-bracket-pair-colorization="false"] .line:hover .bracket:not(.angle) {
+	-webkit-text-stroke: 0px;
+}
+
+/* when false hide all colored indentation guides */
+[data-bracket-pairs="false"] .spacer-tab.dynamic .guide::after {
+	content: unset;
+}
+
+/* when true show all colored indentation guides */
+[data-bracket-pairs="true"] .spacer-tab.dynamic .guide::after {
+	content: "";
+	opacity: var(--default-highlighted-opacity);
+}
+
+/* when active show just the highlighted colored indentation guides */
+[data-bracket-pairs="active"] .spacer-tab.dynamic.highlighted .guide::after {
+	content: "";
+	opacity: var(--default-highlighted-opacity);
+}
+
+/* does not control visibility, only opacity */
+[data-highlight-active-bracket-pair="true"]
+	.spacer-tab.dynamic.highlighted
+	.guide::after {
+	opacity: 1 !important;
+}
+
+/* hide/show regular indentation guides*/
+[data-indentation-guides="false"] .spacer-tab .guide::before {
+	content: unset !important;
+}
+[data-indentation-guides="true"] .spacer-tab .guide::before {
+	content: "";
+}
+
+/* Hide the regular guide when indentation guides are enabled and bracket pairs are enabled */
+[data-indentation-guides="true"][data-bracket-pairs="true"]
+	.spacer-tab.dynamic
+	.guide::before,
+[data-indentation-guides="true"][data-bracket-pairs="always"]
+	.spacer-tab.dynamic
+	.guide::before {
+	content: unset;
+}
+
+/* when true highlight active regular indentation guides */
+[data-highlight-active-indentation="true"] .spacer-tab.active .guide::before {
+	opacity: var(--max-active-opacity);
+}
+
+/* when always and bracket pair is enabled, highlight active regular indentation guides and show non-dynamic regular guides */
+[data-highlight-active-indentation="always"][data-bracket-pairs="true"]
+	.spacer-tab:not(.dynamic)
+	.guide::before {
+	content: "";
+	opacity: var(--default-active-opacity);
+}
+[data-highlight-active-indentation="always"][data-bracket-pairs="true"]
+	.spacer-tab:not(.dynamic).active
+	.guide::before {
+	opacity: var(--max-active-opacity);
+}
+[data-highlight-active-indentation="always"][data-bracket-pairs="active"]
+	.spacer-tab:not(.dynamic)
+	.guide::before {
+	content: "";
+	opacity: var(--default-active-opacity);
+}
+[data-highlight-active-indentation="always"][data-bracket-pairs="active"]
+	.spacer-tab:not(.dynamic).active
+	.guide::before {
+	opacity: var(--max-active-opacity);
+}
+[data-highlight-active-indentation="always"][data-bracket-pairs="false"]
+	.spacer-tab.active
+	.guide::before {
+	opacity: var(--max-active-opacity);
+}
+
+/* horizontal */
+/* DOES NOT APPEAR WHEN BRACKET PAIRS ARE DISABLED */
+[data-bracket-pairs-horizontal="true"][data-bracket-pairs="true"]
+	.line.first
+	.view-line
+	> span:last-of-type::after {
+	content: "";
+	opacity: 0.3;
+}
+[data-bracket-pairs-horizontal="true"][data-bracket-pairs="active"]
+	.scope.highlighted
+	> *:first-child.line
+	.view-line
+	> span:last-of-type::after {
+	content: "";
+	opacity: 0.3;
+}
+
+[data-bracket-pairs-horizontal="active"][data-bracket-pairs="true"]
+	.scope.highlighted
+	> *:first-child.line
+	.view-line
+	> span:last-of-type::after {
+	content: "";
+	opacity: 0.3;
+}
+[data-bracket-pairs-horizontal="active"][data-bracket-pairs="active"]
+	.scope.highlighted
+	> *:first-child.line
+	.view-line
+	> span:last-of-type::after {
+	content: "";
+	opacity: 0.3;
+}
+[data-highlight-active-bracket-pair="true"]
+	.scope.highlighted
+	> *:first-child.line
+	.view-line
+	> span:last-of-type::after {
+	opacity: 1 !important;
+}

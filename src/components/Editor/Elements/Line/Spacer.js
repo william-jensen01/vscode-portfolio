@@ -137,6 +137,7 @@ export function SpacerTab({
 			data-color-id={colorId}
 			{...props}
 		>
+			<span className="guide" />
 			{isTab && (
 				<Gap
 					whitespace="tab"

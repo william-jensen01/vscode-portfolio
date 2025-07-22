@@ -37,6 +37,33 @@ const editorSettings = [
 		capitalize: false,
 	},
 	{
+		key: "highlightActiveIndentation",
+		default: 1,
+		value: null,
+		options: [
+			{
+				value: "true",
+				description: "Highlights the active indent guide.",
+			},
+			{
+				value: "always",
+				description:
+					"Highlights the active indent guide even if bracket guides are highlighted.",
+			},
+			{
+				value: "false",
+				description: "Do not highlight the active indent guides.",
+			},
+		],
+		input: "select",
+		description:
+			"Controls whether the editor should highlight the active indent guide (the left bar).",
+		navigation: "editor.guides.highlightActiveIndentation",
+		data_attribute: "highlight-active-indentation",
+		category: "editor",
+		capitalize: false,
+	},
+	{
 		key: "renderWhitespace",
 		default: 2,
 		value: null,

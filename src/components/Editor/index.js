@@ -22,6 +22,8 @@ import { useFileBoundingRectStoreInstance } from "../../store/fileBoundingRectSt
 import { useGeneratedId } from "./hooks/useGeneratedId";
 import { useWhitespaceSelection } from "./Features/Selection/useWhitespaceSelection";
 
+import "../../styles/user-settings.css";
+
 // MARK: Instance
 
 export function EditorInstance({ children }) {

@@ -115,30 +115,13 @@
 
 /* underline scope opening line */
 .scope > *:first-child.line .view-line > span:last-of-type::after {
-	content: "";
 	position: absolute;
 	width: 100%;
 	height: 1px;
 	bottom: 0;
 	left: 0;
 	background: var(--scope-color, var(--default-color));
-	opacity: 0.3;
-}
-
-.scope[data-is-greyed="true"]
-	> *:first-child.line
-	.view-line
-	> span:last-of-type::after,
-.scope[data-is-within-return="true"]
-	> *:first-child.line
-	.view-line
-	> span:last-of-type::after {
-	opacity: 0.15;
-	/* display: none; */
-}
-
-.scope.highlighted > *:first-child.line .view-line > span:last-of-type::after {
-	opacity: 1;
+	opacity: 0;
 }
 
 .line,
@@ -330,25 +313,6 @@ a {
 	color: var(--dynamic-color, var(--default-color));
 }
 
-/* Colorize brackets when enabled */
-[data-bracket-pair-colorization="true"] .bracket {
-	color: var(--dynamic-color) !important;
-}
-
-/* Enhance bracket visibility on hover */
-[data-bracket-pair-colorization="true"] .line:hover .bracket:not(.angle) {
-	-webkit-text-stroke: 1px var(--dynamic-color, var(--default-color)) !important;
-}
-
-/* Use default color when colorization is disabled */
-[data-bracket-pair-colorization="false"] .bracket {
-	color: var(--default-color) !important;
-}
-/* Disable bracket enhancement on hover when colorization is disabled */
-[data-bracket-pair-colorization="false"] .line:hover .bracket:not(.angle) {
-	-webkit-text-stroke: 0px;
-}
-
 .js-import-word {
 	/* color: var(--sk-keyword); */
 	color: var(--js-import-word);
@@ -407,8 +371,7 @@ a {
 	text-wrap: none;
 	white-space: nowrap;
 }
-/* the left line guide */
-.spacer-tab::after {
+.spacer-tab .guide {
 	--default-opacity: 0.15;
 	--max-opacity: 0.8;
 
@@ -417,25 +380,27 @@ a {
 
 	--default-highlighted-opacity: 0.3;
 	--max-highlighted-opacity: 1;
-	content: "";
-	display: inline-block;
+	width: 1px;
 	position: absolute;
+	left: 0;
 	top: 0;
 	bottom: 0;
-	left: 0;
-	width: 1px;
-	height: 100%;
+	z-index: 1;
+	display: inline-block;
+}
+/* bracket-pairs is ::after, regular indentation is ::before */
+.spacer-tab .guide::before,
+.spacer-tab .guide::after {
+	position: absolute;
+	inset: 0;
+}
+.spacer-tab .guide::before {
+	background: var(--default-color);
 	opacity: var(--default-opacity);
+}
+.spacer-tab .guide::after {
 	background: var(--_tab-color, var(--default-color));
-}
-.spacer-tab.dynamic::after {
 	opacity: var(--default-highlighted-opacity);
-}
-.spacer-tab.active::after {
-	opacity: var(--max-active-opacity);
-}
-.spacer-tab.highlighted::after {
-	opacity: var(--max-highlighted-opacity);
 }
 
 .gap {
@@ -462,20 +427,6 @@ a {
 	pointer-events: none;
 	color: var(--default-color);
 	opacity: 0.16;
-}
-
-/* ------------------------------------------
- * MARK: Indent Settings
- * ------------------------------------------ */
-
-/* Show indentation guides when enabled */
-[data-indentation-guides="true"] .spacer-tab::after {
-	content: "";
-}
-
-/* Hide indentation guides when disabled */
-[data-indentation-guides="false"] .spacer-tab::after {
-	content: unset;
 }
 
 @media only screen and (hover: none) {

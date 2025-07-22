@@ -12,7 +12,7 @@
 	left: 0;
 	right: 0;
 	/* width: 100%; */
-	z-index: 1;
+	z-index: 5;
 	min-height: 2px;
 	/* margin-bottom: 2px; */
 	box-shadow: rgb(0, 0, 0) 0px 4px 2px -2px;
@@ -45,7 +45,8 @@
 .sticky-widget .line .view-number button {
 	visibility: hidden !important;
 }
-.sticky-widget .line .spacer-tab::after {
+.sticky-widget .line .spacer-tab .guide::before,
+.sticky-widget .line .spacer-tab .guide::after {
 	background: transparent !important;
 }
 .sticky-widget .line .gap::after {
