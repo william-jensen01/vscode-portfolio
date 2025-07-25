@@ -111,6 +111,9 @@
 	--vscode-pickerGroup-foreground: #3794ff;
 	--vscode-quickInputList-focusForeground: #d7dae0;
 	--vscode-quickInputList-focusBackground: #2c313a;
+	--vscode-inputValidation-errorBackground: #5a1d1d;
+	/* --vscode-inputValidation-errorForeground: ; */
+	--vscode-inputValidation-errorBorder: #be1100;
 }
 
 /* Dark+ */
@@ -219,6 +222,9 @@
 	--vscode-pickerGroup-foreground: #3794ff;
 	--vscode-quickInputList-focusForeground: #ffffff;
 	--vscode-quickInputList-focusBackground: #04395e;
+	--vscode-inputValidation-errorBackground: #5a1d1d;
+	/* --vscode-inputValidation-errorForeground: ; */
+	--vscode-inputValidation-errorBorder: #be1100;
 }
 
 [data-theme="dracula"] {
@@ -326,4 +332,7 @@
 	--vscode-pickerGroup-foreground: #8be9fd;
 	--vscode-quickInputList-focusForeground: #f8f8f2;
 	--vscode-quickInputList-focusBackground: #44475a;
+	--vscode-inputValidation-errorBackground: #5a1d1d;
+	/* --vscode-inputValidation-errorForeground: ; */
+	--vscode-inputValidation-errorBorder: #ff5555;
 }

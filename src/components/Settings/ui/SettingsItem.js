@@ -2,6 +2,7 @@ import { useState, useRef, useMemo } from "react";
 import useSettingsStore from "../../../store/settingsStore";
 import Select from "./Inputs/Select";
 import Checkbox from "./Inputs/Checkbox";
+import Number from "./Inputs/Number";
 import Focusable from "../Focus/Focusable";
 import sprite from "../../../assets/svgs-sprite.svg";
 
@@ -64,7 +65,7 @@ export default function SettingsItem({
 	return (
 		<div
 			ref={itemRef}
-			className="sp-row sp-item"
+			className={`sp-row sp-item ${item.input}`}
 			data-item-key={itemKey}
 			data-item-idx={itemIdx}
 		>
@@ -99,6 +100,15 @@ export default function SettingsItem({
 										item={item}
 										itemKey={itemKey}
 										itemIdx={itemIdx}
+										handleChange={handleChange}
+									/>
+								</div>
+							)}
+							{item.input === "number" && (
+								<div className="sp-item-control sp-item-number-container">
+									<Number
+										item={item}
+										itemKey={itemKey}
 										handleChange={handleChange}
 									/>
 								</div>
