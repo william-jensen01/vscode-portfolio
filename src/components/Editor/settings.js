@@ -103,6 +103,35 @@ const editorSettings = [
 		capitalize: false,
 		migrations: {},
 	},
+	{
+		key: "tabSize",
+		version: 1,
+		default: 4,
+		value: null,
+		input: "number",
+		description: "The number of spaces a tab is equal to.",
+		navigation: "editor.tabSize",
+		data_attribute: "tab-size",
+		category: "editor",
+		min: 1,
+		max: 10,
+		migrations: {},
+	},
+	{
+		key: "mobileTabSize",
+		version: 1,
+		default: 2,
+		value: null,
+		input: "number",
+		description:
+			"The number of spaces a tab is equal to when on a mobile device. Mobile is considered screen size <= 600px.",
+		navigation: "editor.mobileTabSize",
+		data_attribute: "mobile-tab-size",
+		category: "editor",
+		min: 1,
+		max: 10,
+		migrations: {},
+	},
 ];
 
 export const allEditorSettings = [

@@ -27,6 +27,10 @@ const Spacers = memo(() => {
 	const whitespaceSetting = useSettingsStore(
 		(state) => state.renderWhitespace
 	);
+	const tabSizeSetting = useSettingsStore((state) => state.tabSize);
+	const mobileTabSizeSetting = useSettingsStore(
+		(state) => state.mobileTabSize
+	);
 
 	let { color, parentScope = {} } = scopeInfo || {};
 
@@ -77,6 +81,8 @@ const Spacers = memo(() => {
 					isTab={indentationValue === "tab"}
 					isSpace={indentationValue === "spaces"}
 					whitespaceSetting={whitespaceSetting}
+					tabSizeSetting={tabSizeSetting}
+					mobileTabSizeSetting={mobileTabSizeSetting}
 				/>
 			);
 		});
@@ -87,15 +93,14 @@ const Spacers = memo(() => {
 		activeScope,
 		indentationValue,
 		whitespaceSetting,
+		tabSizeSetting,
+		mobileTabSizeSetting,
 	]);
 
 	return spacerElements;
 });
 
 export default Spacers;
-
-const TAB_SIZE = 4;
-const MOBILE_TAB_SIZE = 2;
 
 export function SpacerTab({
 	scopeId,
@@ -106,11 +111,15 @@ export function SpacerTab({
 	isSpace,
 	style,
 	whitespaceSetting,
+	tabSizeSetting,
+	mobileTabSizeSetting,
 	...props
 }) {
 	const [isMobile, setIsMobile] = useState(false);
 
-	const adjustedTabSize = isMobile ? MOBILE_TAB_SIZE : TAB_SIZE;
+	const adjustedTabSize = isMobile
+		? mobileTabSizeSetting.value
+		: tabSizeSetting.value;
 
 	const color = useDynamicColor(colorId);
 	const isDynamic = typeof colorId === "number" && colorId >= 0;
