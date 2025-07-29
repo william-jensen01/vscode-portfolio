@@ -206,12 +206,28 @@ const settingsStore = create(
 						}));
 					},
 
-					getAllSettings: () => {
+					getAllSettings: (options = {}) => {
+						const { format = "object", sorted = false } = options;
+
 						const all = { ...get() };
-						Object.keys(all).forEach((key) => {
-							if (typeof all[key] !== "object") delete all[key];
-						});
-						return all;
+
+						const filteredSettings = Object.fromEntries(
+							Object.entries(all).filter(
+								([_, value]) => typeof value === "object"
+							)
+						);
+
+						if (format === "array" || sorted) {
+							const test = Object.entries(filteredSettings).map(
+								([key, value]) => value
+							);
+							const sortedSettings = test.sort((a, b) => {
+								return a.navigation.localeCompare(b.navigation);
+							});
+							return sortedSettings;
+						}
+
+						return filteredSettings;
 					},
 
 					groupByHierarchy: () => {
@@ -280,6 +296,121 @@ const settingsStore = create(
 						});
 
 						return attributes;
+					},
+					searchSettings: (searchTerm, options = {}) => {
+						if (!searchTerm) return [];
+
+						const {
+							caseSensitive = false,
+							includeFields = [
+								"navigation",
+								"description",
+								"options",
+							],
+							categoryFilter = null,
+							exactMatch = false,
+							includeOptions = true,
+						} = options;
+
+						const searchTermProcessed = caseSensitive
+							? searchTerm
+							: searchTerm.toLowerCase();
+
+						// const settings = get().getAllSettings();
+						const settings = get().getAllSettings({
+							sorted: true,
+						});
+
+						// return Object.entries(settings).filter(
+						// ([key, setting]) => {
+
+						return settings.filter((setting) => {
+							// Apply category filter if provided
+							if (
+								categoryFilter &&
+								setting.category !== categoryFilter
+							) {
+								return false;
+							}
+
+							// Check if setting matches the search term in any of the specified field
+							return includeFields.some((field) => {
+								const fieldValue = setting[field];
+
+								if (
+									fieldValue === undefined ||
+									fieldValue === null
+								) {
+									return false;
+								}
+
+								// Handle different types of field values
+								if (typeof fieldValue === "object") {
+									// Search through option values
+									if (
+										includeOptions &&
+										field === "options" &&
+										Array.isArray(fieldValue)
+									) {
+										return fieldValue.some((option) => {
+											// Search in option value
+											if (option.value !== undefined) {
+												const optionValueStr = String(
+													option.value
+												);
+												const processedValue =
+													caseSensitive
+														? optionValueStr
+														: optionValueStr.toLowerCase();
+												if (
+													exactMatch
+														? processedValue ===
+														  searchTermProcessed
+														: processedValue.includes(
+																searchTermProcessed
+														  )
+												) {
+													return true;
+												}
+											}
+
+											// Search in option description
+											if (option.description) {
+												const processedDesc =
+													caseSensitive
+														? option.description
+														: option.description.toLowerCase();
+												if (
+													exactMatch
+														? processedDesc ===
+														  searchTermProcessed
+														: processedDesc.includes(
+																searchTermProcessed
+														  )
+												) {
+													return true;
+												}
+											}
+
+											return false;
+										});
+									}
+
+									return false;
+								} else {
+									// For primitive values
+									const valueStr = String(fieldValue);
+									const processedValue = caseSensitive
+										? valueStr
+										: valueStr.toLowerCase();
+									return exactMatch
+										? processedValue === searchTermProcessed
+										: processedValue.includes(
+												searchTermProcessed
+										  );
+								}
+							});
+						});
 					},
 				};
 			},

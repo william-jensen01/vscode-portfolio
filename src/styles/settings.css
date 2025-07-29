@@ -54,7 +54,9 @@ MARK: PAGE
 	position: relative;
 	overflow: hidden;
 	overscroll-behavior: none;
+	margin: 0 auto;
 
+	width: min(100%, 1200px);
 	/* display: flex;
 	align-items: stretch;
 	flex-direction: column; */
@@ -87,7 +89,7 @@ MARK: PAGE
 */
 .sp-search-container {
 	display: grid;
-	grid-template-columns: 1fr auto auto;
+	grid-template-columns: 1fr auto 6px;
 	grid-template-rows: 1fr;
 }
 
@@ -101,6 +103,7 @@ MARK: PAGE
 	border-radius: 2px;
 	padding: 2px 6px;
 	/* width: 100%; */
+	font-size: 1em;
 }
 
 .sp-count-widget:not(:empty),
@@ -109,7 +112,8 @@ MARK: PAGE
 	grid-row: 1/-1;
 	background-color: var(--vscode-badge-background);
 	color: var(--vscode-badge-foreground);
-	margin: 4px 0;
+	margin: 2px 0;
+	padding: 2px 3px;
 	border-radius: 2px;
 	line-height: normal;
 	font-size: 11px;
@@ -125,6 +129,7 @@ MARK: PAGE
 	width: 43px;
 	display: flex;
 	align-items: center;
+	display: none;
 }
 .sp.no-results .no-results-message {
 	display: block;
@@ -138,6 +143,49 @@ MARK: PAGE
 }
 
 /* 
+	MARK: Tabs
+*/
+.sp-actions-container {
+	align-items: center;
+	display: flex;
+	/* height: 100%; */
+	/* margin: 0 auto; */
+	/* padding: 0; */
+	/* width: 100%; */
+}
+.sp-action-item {
+	list-style: none;
+	cursor: pointer;
+}
+.sp-action-label {
+	/* box-sizing: border-box; */
+	text-transform: capitalize;
+	color: var(--vscode-foreground);
+	border-bottom: 1px solid transparent;
+	opacity: 0.9;
+	padding: 7px 8px 6.5px;
+	display: inline-block;
+}
+.sp-action-label:hover {
+	opacity: 1;
+	color: var(--vscode-panelTitle-activeForeground);
+	border-bottom: 1px solid var(--vscode-panelTitle-activeBorder);
+	outline: 1px solid var(--vscode-contrastActiveBorder, transparent);
+	outline-offset: -1px;
+}
+.sp-action-label.checked {
+	color: var(--vscode-settings-headerForeground);
+	border-bottom: 1px solid var(--vscode-settings-headerForeground);
+	opacity: 1;
+}
+.sp-action-label:not(.checked):not(:focus) {
+	border-bottom: 1px solid transparent;
+}
+.sp-action-label.checked:not(:focus) {
+	border-bottom-color: var(--vscode-settings-headerForeground);
+}
+
+/* 
 * MARK: Body
 */
 .sp-body {
@@ -147,6 +195,10 @@ MARK: PAGE
 	box-sizing: border-box;
 }
 
+.sp-items {
+	margin-top: 14px;
+	box-sizing: border-box;
+}
 /* 
 * MARK: Title
 */
