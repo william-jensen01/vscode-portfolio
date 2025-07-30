@@ -179,6 +179,17 @@ const settingsStore = create(
 			(set, get) => {
 				return {
 					...initializeSettings(INIT_VALUE),
+
+					applySettingToDocument: (setting) => {
+						const { value, unit, data_attribute } = setting;
+						if (!unit) return;
+
+						document?.documentElement?.style.setProperty(
+							`--${data_attribute}`,
+							`${value}${unit}`
+						);
+					},
+
 					changeSpecificSetting: (key, valueIndex) => {
 						logger
 							.suffix("changeSpecificSetting")
@@ -194,27 +205,43 @@ const settingsStore = create(
 							);
 						}
 
-						// Do we let value be the index of new option?
-						// value: state[key].options[value]
+						const state = get();
+						const item = state[key];
+						let newValue = valueIndex;
+
+						state.applySettingToDocument({
+							...item,
+							value: newValue,
+						});
 
 						set((state) => ({
 							...state,
 							[key]: {
 								...state[key],
-								value: valueIndex,
+								value: newValue,
 							},
 						}));
 					},
 
 					getAllSettings: (options = {}) => {
-						const { format = "object", sorted = false } = options;
+						const {
+							format = "object",
+							sorted = false,
+							filter,
+						} = options;
 
 						const all = { ...get() };
 
 						const filteredSettings = Object.fromEntries(
-							Object.entries(all).filter(
-								([_, value]) => typeof value === "object"
-							)
+							Object.entries(all).filter(([_, value]) => {
+								const isObject = typeof value === "object";
+
+								const passesFilter = filter
+									? filter(value)
+									: true;
+
+								return isObject && passesFilter;
+							})
 						);
 
 						if (format === "array" || sorted) {
@@ -459,6 +486,21 @@ const settingsStore = create(
 							);
 						}
 					}
+
+					// Retrieve all settings that have a unit and apply to document
+					const filteredUnitSettings = state.getAllSettings({
+						filter: (setting) => {
+							return (
+								setting.input === "number" &&
+								setting.hasOwnProperty("unit")
+							);
+						},
+						format: "array",
+					});
+
+					filteredUnitSettings.forEach((setting) =>
+						state.applySettingToDocument(setting)
+					);
 				},
 			}
 		)

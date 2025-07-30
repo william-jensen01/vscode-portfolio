@@ -132,6 +132,23 @@ const editorSettings = [
 		max: 10,
 		migrations: {},
 	},
+	{
+		key: "fontSize",
+		version: 1,
+		default: 14,
+		value: null,
+		input: "number",
+		unit: "px",
+		description: "Controls the font size in pixels.",
+		navigation: "editor.fontSize",
+		sub_category: "font",
+		data_attribute: "editor-font-size",
+		data_attribute_unit: "px",
+		category: "editor",
+		min: 6,
+		max: 100,
+		migrations: {},
+	},
 ];
 
 export const allEditorSettings = [

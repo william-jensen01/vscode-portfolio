@@ -48,7 +48,6 @@
 	grid-template-areas: "sticky" "editor";
 	font-family: "Fira Mono", monospace;
 	--editor-line-height: 1.33;
-	--editor-font-size: 1rem;
 	--editor-view-height: calc(
 		var(--editor-line-height) * var(--editor-font-size)
 	);
@@ -436,9 +435,6 @@ a {
 }
 
 @media screen and (max-width: 750px) {
-	.editor-instance {
-		--editor-font-size: 14px;
-	}
 	.line .view-number {
 		--_gutter-left-width: 1px;
 		--_gutter-right-width: 2ch;
