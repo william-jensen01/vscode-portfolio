@@ -1,3 +1,12 @@
+[data-word-wrap="off"] .view-line > span:last-child {
+	flex-wrap: nowrap;
+	margin-right: 24px;
+}
+[data-word-wrap="on"] .view-line > span:last-child {
+	/* allows for even splitting for wrap instead of break-all*/
+	flex-wrap: wrap;
+}
+
 /* Colorize brackets when enabled */
 [data-bracket-pair-colorization="true"] .bracket {
 	color: var(--dynamic-color);

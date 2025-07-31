@@ -146,9 +146,7 @@
 	font-size: var(--editor-font-size);
 }
 .view-line > span:last-child {
-	/* allows for even splitting for wrap instead of break-all*/
 	display: inline-flex;
-	flex-wrap: wrap;
 }
 .view-line > span:last-child > * {
 	flex-shrink: 0;

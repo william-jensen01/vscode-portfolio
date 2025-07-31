@@ -171,6 +171,28 @@ const editorSettings = [
 		max: 1000,
 		migrations: {},
 	},
+	{
+		key: "wordWrap",
+		version: 1,
+		default: 1,
+		value: null,
+		options: [
+			{
+				value: "off",
+				description: "Lines will never wrap.",
+			},
+			{
+				value: "on",
+				description: "Lines will wrap at the viewport width.",
+			},
+		],
+		input: "select",
+		description: "Controls how lines should wrap.",
+		navigation: "editor.wordWrap",
+		data_attribute: "word-wrap",
+		category: "editor",
+		migrations: {},
+	},
 ];
 
 export const allEditorSettings = [
