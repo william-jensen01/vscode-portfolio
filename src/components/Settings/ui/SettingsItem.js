@@ -89,9 +89,17 @@ export default function SettingsItem({
 								</label>
 							</div>
 						) : (
-							<p className="sp-item-description">
-								{item.description}
-							</p>
+							<div className="sp-item-description">
+								{!item.markdown && <p>{item.description}</p>}
+								{item.markdown && (
+									<div
+										className="sp-item-markdown"
+										dangerouslySetInnerHTML={{
+											__html: item.markdown,
+										}}
+									/>
+								)}
+							</div>
 						)}
 						<div className="sp-item-value">
 							{item.input === "select" && (

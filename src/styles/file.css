@@ -47,11 +47,6 @@
 	display: grid;
 	grid-template-areas: "sticky" "editor";
 	font-family: "Fira Mono", monospace;
-	--editor-line-height: 1.33;
-	--editor-view-height: calc(
-		var(--editor-line-height) * var(--editor-font-size)
-	);
-
 	counter-reset: line-numbers;
 	color: var(--css-type);
 

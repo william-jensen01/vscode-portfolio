@@ -208,11 +208,32 @@ const settingsStore = create(
 						const state = get();
 						const item = state[key];
 						let newValue = valueIndex;
+						let newItemObj = { ...item, value: newValue };
 
-						state.applySettingToDocument({
-							...item,
-							value: newValue,
-						});
+						// Special case for line height: calculate value and apply to document
+						if (key === "lineHeight") {
+							let calculatedValue;
+							if (newValue === 0) {
+								calculatedValue = state.fontSize.value * 1.33;
+							} else if (newValue > 0 && newValue < 8) {
+								calculatedValue =
+									state.fontSize.value * newValue;
+							} else if (newValue >= 8) {
+								calculatedValue = newValue;
+							}
+
+							// Apply "view-height" to document
+							state.applySettingToDocument({
+								value: calculatedValue,
+								unit: "px",
+								data_attribute: "editor-view-height",
+							});
+
+							newItemObj.value = calculatedValue;
+							newItemObj.unit = "px";
+						}
+
+						state.applySettingToDocument(newItemObj);
 
 						set((state) => ({
 							...state,
@@ -501,6 +522,34 @@ const settingsStore = create(
 					filteredUnitSettings.forEach((setting) =>
 						state.applySettingToDocument(setting)
 					);
+
+					// Apply line height to document, separate from "unit" settings as the value needs to be calculated
+					const lineHeightSetting = state.lineHeight;
+					const lineHeightValue = lineHeightSetting.value;
+					let calculatedValue;
+					// 0 automatic is calculated by font-size * 1.33
+					if (lineHeightValue === 0) {
+						calculatedValue = state.fontSize.value * 1.33;
+					}
+					// 1 -> 8: font-size * value
+					else if (lineHeightValue > 0 && lineHeightValue < 8) {
+						calculatedValue =
+							state.fontSize.value * lineHeightValue;
+					}
+					// 9 -> Infinity: value
+					else if (lineHeightValue >= 8) {
+						calculatedValue = lineHeightValue;
+					}
+					state.applySettingToDocument({
+						value: calculatedValue,
+						unit: "px",
+						data_attribute: "editor-view-height",
+					});
+					state.applySettingToDocument({
+						value: calculatedValue,
+						unit: "px",
+						data_attribute: lineHeightSetting.data_attribute,
+					});
 				},
 			}
 		)

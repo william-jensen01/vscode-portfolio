@@ -149,6 +149,28 @@ const editorSettings = [
 		max: 100,
 		migrations: {},
 	},
+	{
+		key: "lineHeight",
+		version: 1,
+		default: 0,
+		value: 0,
+		input: "number",
+		markdown: `
+			<p>Controls the line height.</p>
+
+			<ul>
+			<li>Use 0 to automatically compute the line height from the font size.</li>
+			<li>Values between 0 and 8 will be used as a multiplier with the font size.</li>
+			<li>Values greater than or equal to 8 will be used as effective values.</li>
+			</ul>
+		`,
+		navigation: "editor.lineHeight",
+		data_attribute: "editor-line-height",
+		category: "editor",
+		min: 0,
+		max: 1000,
+		migrations: {},
+	},
 ];
 
 export const allEditorSettings = [

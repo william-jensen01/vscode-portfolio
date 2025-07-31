@@ -18,10 +18,6 @@
 	box-shadow: rgb(0, 0, 0) 0px 4px 2px -2px;
 
 	font-family: "Fira Mono", monospace;
-	--editor-line-height: 1.33;
-	--editor-view-height: calc(
-		var(--editor-line-height) * var(--editor-font-size)
-	);
 }
 .sticky-widget-lines {
 	display: contents;

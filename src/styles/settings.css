@@ -280,6 +280,19 @@ MARK: PAGE
 	color: rgb(204, 204, 204);
 }
 
+.sp-item-description ul {
+	display: block;
+	padding-inline-start: 40px;
+}
+.sp-item-description ul li {
+	display: list-item;
+	text-align: -webkit-match-parent;
+	unicode-bidi: isolate;
+}
+.sp-item-markdown *:not(:last-child) {
+	margin-bottom: 8px;
+}
+
 .sp-item-value {
 	/* margin-top: 9px; */
 }
