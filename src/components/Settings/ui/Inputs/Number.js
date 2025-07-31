@@ -136,7 +136,9 @@ export default function NumberInput({ item, itemKey, handleChange }) {
 		inputRef.current.value = clampedValue;
 		setLocalValue(clampedValue);
 		setIsInvalid("");
-		updateStore(clampedValue);
+		if (clampedValue !== currentValue) {
+			updateStore(clampedValue);
+		}
 	};
 
 	return (
