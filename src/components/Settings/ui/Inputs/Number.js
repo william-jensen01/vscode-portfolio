@@ -13,6 +13,7 @@ export default function NumberInput({ item, itemKey, handleChange }) {
 	);
 	const [debouncedValue, setDebouncedValue] = useState(localValue);
 	const [isInvalid, setIsInvalid] = useState();
+	const [hasUserInteracted, setHasUserInteracted] = useState(false);
 	const timeoutRef = useRef(null);
 	const inputRef = useRef(null);
 
@@ -54,7 +55,12 @@ export default function NumberInput({ item, itemKey, handleChange }) {
 	);
 
 	useEffect(() => {
-		if (localValue !== "" && !isNaN(Number(localValue)) && !isInvalid) {
+		if (
+			hasUserInteracted &&
+			localValue !== "" &&
+			!isNaN(Number(localValue)) &&
+			!isInvalid
+		) {
 			// Clear any existing timeout
 			if (timeoutRef.current) {
 				clearTimeout(timeoutRef.current);
@@ -73,7 +79,7 @@ export default function NumberInput({ item, itemKey, handleChange }) {
 				clearTimeout(timeoutRef.current);
 			}
 		};
-	}, [localValue, itemKey, item, isInvalid]);
+	}, [localValue, itemKey, item, isInvalid, hasUserInteracted]);
 
 	useEffect(() => {
 		const input = inputRef.current;
@@ -101,7 +107,17 @@ export default function NumberInput({ item, itemKey, handleChange }) {
 	}, []);
 
 	const handleInputChange = (e) => {
-		const newValue = e.target.value;
+		let newValue = e.target.value;
+
+		if (!newValue && newValue === 0) {
+			newValue = Number(newValue);
+		}
+
+		// Mark that user has interacted with the input
+		if (!hasUserInteracted) {
+			setHasUserInteracted(true);
+		}
+
 		// Validate the new value
 		const error = validateValue(newValue);
 		setIsInvalid(error);
