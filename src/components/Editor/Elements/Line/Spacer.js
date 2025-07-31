@@ -1,4 +1,4 @@
-import { memo, useMemo, useState, useEffect, useRef } from "react";
+import { memo, useMemo, useRef } from "react";
 import useSettingsStore from "../../../../store/settingsStore";
 import { useParentScope } from "../../Features/Scope";
 import { useLine } from "../Line";
@@ -6,10 +6,14 @@ import { useScopeStore } from "../../Features/Scope/scopeStore";
 import { useDynamicColor } from "../../hooks/useDynamicColor";
 import { useSpacerSelection } from "../../Features/Selection/useSpacerSelection";
 import { useGeneratedId } from "../../hooks/useGeneratedId";
+import { useFileBoundingRectStore } from "../../../../store/fileBoundingRectStore";
 
 const Spacers = memo(() => {
 	const { scopeId } = useParentScope();
 	const { lineId } = useLine();
+
+	const fileContainerRect = useFileBoundingRectStore((state) => state.rect);
+
 	const isFirstLineScope = useScopeStore((state) =>
 		state.isFirstLine(lineId)
 	);
@@ -83,6 +87,7 @@ const Spacers = memo(() => {
 					whitespaceSetting={whitespaceSetting}
 					tabSizeSetting={tabSizeSetting}
 					mobileTabSizeSetting={mobileTabSizeSetting}
+					fileContainerRect={fileContainerRect}
 				/>
 			);
 		});
@@ -95,6 +100,7 @@ const Spacers = memo(() => {
 		whitespaceSetting,
 		tabSizeSetting,
 		mobileTabSizeSetting,
+		fileContainerRect,
 	]);
 
 	return spacerElements;
@@ -113,9 +119,10 @@ export function SpacerTab({
 	whitespaceSetting,
 	tabSizeSetting,
 	mobileTabSizeSetting,
+	fileContainerRect,
 	...props
 }) {
-	const [isMobile, setIsMobile] = useState(false);
+	const isMobile = fileContainerRect.width + fileContainerRect.left < 600;
 
 	const adjustedTabSize = isMobile
 		? mobileTabSizeSetting.value
@@ -128,13 +135,6 @@ export function SpacerTab({
 	if (isDynamic) {
 		styles["--_tab-color"] = color;
 	}
-
-	useEffect(() => {
-		// 768 is recommended by gpt and claude
-		if (window.innerWidth < 600) {
-			setIsMobile(true);
-		}
-	}, []);
 
 	return (
 		<span
