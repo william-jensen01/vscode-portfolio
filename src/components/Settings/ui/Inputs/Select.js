@@ -2,12 +2,12 @@ import { useState, useRef, useEffect } from "react";
 import Focusable from "../../Focus/Focusable";
 
 export default function Select({ item, itemKey, handleChange }) {
-	const [selectedOption, setSelectedOption] = useState(
+	const currentOption =
 		item.value !== null && item.value !== undefined
 			? item.value
-			: item.default
-	);
-	const [focusedOption, setFocusedOption] = useState(selectedOption);
+			: item.default;
+
+	const [focusedOption, setFocusedOption] = useState(currentOption);
 	const containerRef = useRef(null);
 	const listRef = useRef(null);
 	const dropdownRef = useRef(null);
@@ -31,7 +31,6 @@ export default function Select({ item, itemKey, handleChange }) {
 	};
 
 	const handleOptionSelect = (optionIdx) => {
-		setSelectedOption(optionIdx);
 		setFocusedOption(optionIdx);
 		handleChange(itemKey, optionIdx);
 		setOpen(false);
@@ -71,6 +70,11 @@ export default function Select({ item, itemKey, handleChange }) {
 			buttonRef.current.focus();
 		}
 	}
+
+	// Update focused option when the value changes externally
+	useEffect(() => {
+		setFocusedOption(currentOption);
+	}, [currentOption]);
 
 	useEffect(() => {
 		const dropdown = containerRef.current;
@@ -143,7 +147,7 @@ export default function Select({ item, itemKey, handleChange }) {
 					tabIndex={0}
 				>
 					<span className="selected-value">
-						{item.options[selectedOption]?.value}
+						{item.options[currentOption]?.value}
 					</span>
 					<span className="arrow" />
 				</button>
@@ -166,7 +170,7 @@ export default function Select({ item, itemKey, handleChange }) {
 								item={item}
 								itemKey={itemKey}
 								selectKey={selectKey}
-								selectedOption={selectedOption}
+								currentOption={currentOption}
 								focusedOption={focusedOption}
 								setFocusedOption={setFocusedOption}
 								onSelect={handleOptionSelect}
@@ -192,7 +196,7 @@ function SelectItem({
 	itemKey,
 	selectKey,
 	option,
-	selectedOption,
+	currentOption,
 	focusedOption,
 	setFocusedOption,
 	onSelect,
@@ -207,7 +211,7 @@ function SelectItem({
 	};
 
 	const isDefault = item.default === idx;
-	const isSelected = selectedOption === idx;
+	const isSelected = currentOption === idx;
 	const isFocused = focusedOption === idx;
 
 	const additionalClasses = [

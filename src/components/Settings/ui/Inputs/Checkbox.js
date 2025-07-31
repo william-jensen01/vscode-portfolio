@@ -1,18 +1,17 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import Focusable from "../../Focus/Focusable";
 
 export default function Checkbox({ item, itemKey, handleChange }) {
-	const [localValue, setLocalValue] = useState(
+	const currentValue =
 		item.value !== undefined && item.value !== null
 			? item.value
-			: item.default
-	);
+			: item.default;
+
 	const containerRef = useRef(null);
 	const inputRef = useRef(null);
 
 	const handleClick = (e) => {
-		const newValue = !localValue;
-		setLocalValue(newValue);
+		const newValue = !currentValue;
 		handleChange(itemKey, newValue);
 	};
 
@@ -43,13 +42,13 @@ export default function Checkbox({ item, itemKey, handleChange }) {
 		<Focusable itemKey={checkboxKey}>
 			<div
 				ref={containerRef}
-				className={`sp-value-checkbox ${localValue ? "checked" : ""}`}
+				className={`sp-value-checkbox ${currentValue ? "checked" : ""}`}
 			>
 				<input
 					ref={inputRef}
 					id={checkboxKey}
 					type="checkbox"
-					checked={localValue}
+					checked={currentValue}
 					tabIndex={-1}
 					onChange={(e) => {
 						handleClick();

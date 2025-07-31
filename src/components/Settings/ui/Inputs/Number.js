@@ -2,22 +2,30 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Focusable from "../../Focus/Focusable";
 
 export default function NumberInput({ item, itemKey, handleChange }) {
-	const [localValue, setLocalValue] = useState(
+	const currentValue =
 		item.value !== undefined && typeof item.value === "number"
 			? item.value > item.max
 				? item.max
 				: item.value < item.min
 				? item.min
 				: item.value
-			: item.default
-	);
-	const [debouncedValue, setDebouncedValue] = useState(localValue);
+			: item.default;
+	// Maintain state for input field separate from setting value
+	const [localValue, setLocalValue] = useState(currentValue);
 	const [isInvalid, setIsInvalid] = useState();
-	const [hasUserInteracted, setHasUserInteracted] = useState(false);
 	const timeoutRef = useRef(null);
 	const inputRef = useRef(null);
+	const lastPropValue = useRef(currentValue);
 
 	const numberKey = `number.${itemKey}`;
+
+	// Sync local value when prop changes externally
+	useEffect(() => {
+		if (currentValue !== lastPropValue.current) {
+			setLocalValue(currentValue);
+			lastPropValue.current = currentValue;
+		}
+	}, [currentValue]);
 
 	const validateValue = useCallback(
 		(value) => {
@@ -46,40 +54,34 @@ export default function NumberInput({ item, itemKey, handleChange }) {
 	const clampValue = useCallback(
 		(value) => {
 			const numValue = Number(value);
-			if (isNaN(numValue)) {
-				return item.default ?? item.min;
+			if (isNaN(numValue) || numValue === 0) {
+				return item.value;
 			}
 			return Math.max(item.min, Math.min(item.max, numValue));
 		},
-		[item.min, item.max, item.default]
+		[item.min, item.max, item.default, item.value]
+	);
+
+	const updateStore = useCallback(
+		(value) => {
+			if (timeoutRef.current) {
+				clearTimeout(timeoutRef.current);
+			}
+
+			timeoutRef.current = setTimeout(() => {
+				if (!isNaN(value)) {
+					handleChange(itemKey, value);
+				}
+			}, 300);
+		},
+		[itemKey, handleChange, item.min, item.max]
 	);
 
 	useEffect(() => {
-		if (
-			hasUserInteracted &&
-			localValue !== "" &&
-			!isNaN(Number(localValue)) &&
-			!isInvalid
-		) {
-			// Clear any existing timeout
-			if (timeoutRef.current) {
-				clearTimeout(timeoutRef.current);
-			}
-
-			// Set new timeout
-			timeoutRef.current = setTimeout(() => {
-				console.log(`Debounced update for ${itemKey}:`, localValue);
-				setDebouncedValue(localValue);
-				handleChange(itemKey, Number(localValue));
-			}, 300);
-		}
-
 		return () => {
-			if (timeoutRef.current) {
-				clearTimeout(timeoutRef.current);
-			}
+			if (timeoutRef.current) clearTimeout(timeoutRef.current);
 		};
-	}, [localValue, itemKey, item, isInvalid, hasUserInteracted]);
+	}, []);
 
 	useEffect(() => {
 		const input = inputRef.current;
@@ -108,21 +110,17 @@ export default function NumberInput({ item, itemKey, handleChange }) {
 
 	const handleInputChange = (e) => {
 		let newValue = e.target.value;
-
-		if (!newValue && newValue === 0) {
-			newValue = Number(newValue);
-		}
-
-		// Mark that user has interacted with the input
-		if (!hasUserInteracted) {
-			setHasUserInteracted(true);
-		}
+		// Since we aren't fully restricting the input go ahead and display this new value
+		setLocalValue(newValue);
 
 		// Validate the new value
 		const error = validateValue(newValue);
 		setIsInvalid(error);
-		// Since we aren't fully restricting the input go ahead and display this new value
-		setLocalValue(newValue);
+
+		if (!error) {
+			// Only update store if there are no errors
+			updateStore(Number(newValue));
+		}
 	};
 
 	const handleInputFocus = (e) => {
@@ -133,12 +131,12 @@ export default function NumberInput({ item, itemKey, handleChange }) {
 		// On blur, always ensure we have a valid value
 
 		// Clamp and apply the value
-		const numValue = Number(localValue);
-		const clampedValue = clampValue(numValue);
+		const clampedValue = clampValue(localValue);
 
 		inputRef.current.value = clampedValue;
 		setLocalValue(clampedValue);
 		setIsInvalid("");
+		updateStore(clampedValue);
 	};
 
 	return (
