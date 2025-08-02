@@ -82,6 +82,9 @@ MARK: PAGE
 }
 .sp-header-controls {
 	border-bottom: 1px solid var(--vscode-settings-headerBorder);
+	display: flex;
+	flex-wrap: wrap;
+	margin-top: 10px;
 }
 
 /* 
@@ -145,6 +148,9 @@ MARK: PAGE
 /* 
 	MARK: Tabs
 */
+.sp-target-container {
+	flex: 1;
+}
 .sp-actions-container {
 	align-items: center;
 	display: flex;
@@ -183,6 +189,23 @@ MARK: PAGE
 }
 .sp-action-label.checked:not(:focus) {
 	border-bottom-color: var(--vscode-settings-headerForeground);
+}
+
+.sp-right-controls {
+	align-self: center;
+}
+.turn-on-sync button {
+	padding: 4px;
+	border-radius: 2px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	border: 1px solid var(--vscode-button-border, transparent);
+	line-height: 18px;
+	color: var(--vscode-button-foreground);
+	background-color: var(--vscode-button-background);
+	text-decoration: none;
+	cursor: pointer;
 }
 
 /* 

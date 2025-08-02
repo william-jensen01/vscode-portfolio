@@ -8,18 +8,19 @@ import CategoryTitle from "./ui/CategoryTitle";
 export default function Settings() {
 	const bodyRef = useRef(null);
 
-	const groupByHierarchy = useSettingsStore(
-		(state) => state.groupByHierarchy
-	);
-	const searchSettings = useSettingsStore((state) => state.searchSettings);
+	const settingsState = useSettingsStore();
 
 	const [searchQuery, setSearchQuery] = useState();
 	const [searchResults, setSearchResults] = useState();
 	const searchTimeoutRef = useRef(null);
 
-	const categories = useMemo(() => {
-		return groupByHierarchy();
-	}, [groupByHierarchy]);
+	const categories = useMemo(
+		() => {
+			return settingsState.groupByHierarchy();
+		},
+		// Not including groupByHierarchy in deps as it is persistent and we need to update it whenever a setting is changed
+		[settingsState]
+	);
 
 	useEffect(() => {
 		clearTimeout(searchTimeoutRef.current);
@@ -31,9 +32,15 @@ export default function Settings() {
 
 		searchTimeoutRef.current = setTimeout(() => {
 			console.log("search timeout");
-			setSearchResults(searchSettings(searchQuery));
+			setSearchResults(settingsState.searchSettings(searchQuery));
 		}, 250);
-	}, [searchQuery, searchSettings]);
+
+		return () => {
+			if (searchTimeoutRef.current) {
+				clearTimeout(searchTimeoutRef.current);
+			}
+		};
+	}, [searchQuery, settingsState]);
 
 	const isValidContent =
 		!searchResults || (searchResults && searchResults.length > 0);
@@ -139,6 +146,9 @@ function HeaderSearch({ setSearchQuery, searchResults }) {
 function HeaderControls() {
 	const [activeTab, setActiveTab] = useState(0);
 	const tabs = ["user", "workspace"];
+	const clearAndResetSettings = useSettingsStore(
+		(state) => state.clearAndResetSettings
+	);
 	return (
 		<div className="sp-header-controls">
 			<div className="sp-target-container">
@@ -169,6 +179,15 @@ function HeaderControls() {
 							))}
 						</ul>
 					</div>
+				</div>
+			</div>
+			<div className="sp-right-controls">
+				<div className="turn-on-sync">
+					<Focusable itemKey="turn-on-sync">
+						<button onClick={() => clearAndResetSettings()}>
+							Clear and Reset Settings
+						</button>
+					</Focusable>
 				</div>
 			</div>
 		</div>

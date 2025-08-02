@@ -1,4 +1,4 @@
-import { useState, useRef, useMemo } from "react";
+import { useRef, useMemo, memo } from "react";
 import useSettingsStore from "../../../store/settingsStore";
 import Select from "./Inputs/Select";
 import Checkbox from "./Inputs/Checkbox";
@@ -6,13 +6,8 @@ import Number from "./Inputs/Number";
 import Focusable from "../Focus/Focusable";
 import sprite from "../../../assets/svgs-sprite.svg";
 
-export default function SettingsItem({
-	item,
-	itemKey,
-	itemIdx,
-	fullNavigation,
-}) {
-	const [modified, setModified] = useState(item.value !== item.default);
+const SettingsItem = memo(({ item, itemKey, itemIdx, fullNavigation }) => {
+	const modified = item.value !== item.default;
 
 	const changeSpecificSetting = useSettingsStore(
 		(state) => state.changeSpecificSetting
@@ -59,7 +54,6 @@ export default function SettingsItem({
 
 	const handleChange = (key, value) => {
 		changeSpecificSetting(key, value);
-		setModified(value !== item.default);
 	};
 
 	return (
@@ -138,4 +132,5 @@ export default function SettingsItem({
 			</Focusable>
 		</div>
 	);
-}
+});
+export default SettingsItem;
