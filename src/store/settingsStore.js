@@ -460,6 +460,107 @@ const settingsStore = create(
 							});
 						});
 					},
+					clearAndResetSettings: () => {
+						logger.suffix("clearAndResetSettings");
+
+						// Step 1. Clear all persistence
+						localStorage.removeItem("settings-storage");
+
+						// Step 2. Save current functions before reset
+						const currentState = get();
+						const stateFunctions = {};
+						Object.entries(currentState).forEach(([key, value]) => {
+							if (typeof value === "function") {
+								stateFunctions[key] = value;
+							}
+						});
+
+						// Step 3. Recreate state from scratch
+						// This is crucial - we go back to the source definitions
+						const freshSettings = initializeSettings(INIT_VALUE);
+
+						// Step 4. Create complete new state
+						const newState = {
+							...freshSettings,
+							...stateFunctions,
+						};
+
+						// Step 5. Clear all DOM customizations first
+						// This ensures no stale values remain
+						const root = document.documentElement;
+
+						// Remove all CSS custom properties
+						Array.from(root.style).forEach((prop) => {
+							if (prop.startsWith("--")) {
+								root.style.removeProperty(prop);
+							}
+						});
+
+						// Remove theme attribute
+						root.removeAttribute("data-theme");
+
+						// Step 6. Replace entire state at once
+						set(() => newState, true);
+
+						// Step 7. Reapply all settings to DOM
+						const finalState = get();
+
+						// Apply theme
+						const theme = finalState.theme;
+						if (theme?.options && typeof theme.value === "number") {
+							const themeOption = theme.options[theme.value];
+							if (themeOption) {
+								root.setAttribute(
+									"data-theme",
+									themeOption.value
+								);
+							}
+						}
+
+						// Apply all CSS variables
+						Object.values(freshSettings).forEach((setting) => {
+							if (
+								setting.data_attribute &&
+								setting.unit &&
+								setting.value !== undefined
+							) {
+								root.style.setProperty(
+									`--${setting.data_attribute}`,
+									`${setting.value}${setting.unit}`
+								);
+							}
+						});
+
+						// Handle special cases like line height
+						if (finalState.lineHeight && finalState.fontSize) {
+							const lineHeightValue = finalState.lineHeight.value;
+							const fontSizeValue = finalState.fontSize.value;
+							let calculatedValue;
+
+							if (lineHeightValue === 0) {
+								calculatedValue = fontSizeValue * 1.33;
+							} else if (
+								lineHeightValue > 0 &&
+								lineHeightValue < 8
+							) {
+								calculatedValue =
+									fontSizeValue * lineHeightValue;
+							} else {
+								calculatedValue = lineHeightValue;
+							}
+
+							root.style.setProperty(
+								"--editor-view-height",
+								`${calculatedValue}px`
+							);
+							root.style.setProperty(
+								`--${finalState.lineHeight.data_attribute}`,
+								`${calculatedValue}px`
+							);
+						}
+
+						logger.log("Reset to factory defaults completed");
+					},
 				};
 			},
 			{
