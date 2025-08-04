@@ -232,6 +232,10 @@ MARK: PAGE
 .sp-group-title.sticky {
 	box-shadow: var(--vscode-scrollbar-shadow) 0px 6px 6px -6px;
 }
+.sp-group-title.sticky .focusable {
+	outline: none !important;
+	border: none !important;
+}
 .group-title-label {
 	color: var(--vscode-settings-headerForeground);
 	text-transform: capitalize;
@@ -733,7 +737,7 @@ select:focus {
 .sp-body:focus-within .sp-row.focused .group-title-label {
 	outline: 1px solid var(--vscode-settings-focusedRowBorder);
 }
-.sp-body:focus-within .sp-row.focused .sp-row-inner-container {
+.sp-row.focused .sp-row-inner-container {
 	background-color: var(--vscode-settings-focusedRowBackground);
 }
 .group-title-label,
