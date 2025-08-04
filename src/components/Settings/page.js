@@ -64,7 +64,7 @@ export default function Settings() {
 					<HeaderControls />
 				</div>
 
-				<div ref={bodyRef} className="sp-body">
+				<div ref={bodyRef} className="sp-body" tabIndex={0}>
 					<div className="no-results-message">No Settings Found</div>
 
 					{isValidContent && (
@@ -172,6 +172,7 @@ function HeaderControls() {
 										aria-selected={idx === activeTab}
 										aria-label={tab}
 										onClick={() => setActiveTab(idx)}
+										tabIndex={0}
 									>
 										{tab}
 									</a>

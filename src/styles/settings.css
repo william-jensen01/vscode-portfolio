@@ -181,7 +181,6 @@ MARK: PAGE
 }
 .sp-action-label.checked {
 	color: var(--vscode-settings-headerForeground);
-	border-bottom: 1px solid var(--vscode-settings-headerForeground);
 	opacity: 1;
 }
 .sp-action-label:not(.checked):not(:focus) {
@@ -189,6 +188,11 @@ MARK: PAGE
 }
 .sp-action-label.checked:not(:focus) {
 	border-bottom-color: var(--vscode-settings-headerForeground);
+}
+.sp-action-label:focus {
+	border-bottom: 1px solid var(--vscode-focusBorder);
+	outline: 1px solid transparent;
+	outline-offset: -1px;
 }
 
 .sp-right-controls {
@@ -225,22 +229,19 @@ MARK: PAGE
 /* 
 * MARK: Title
 */
-.sp-group-title {
-	/* padding-left: 24px; */
-	/* padding-right: 24px; */
-	position: sticky;
-	top: -1px;
-	background-color: var(--file-bg);
-}
 .sp-group-title.sticky {
 	box-shadow: var(--vscode-scrollbar-shadow) 0px 6px 6px -6px;
-	z-index: 2;
 }
 .group-title-label {
 	color: var(--vscode-settings-headerForeground);
 	text-transform: capitalize;
-	padding: 10px 10px 10px 15px;
+	padding: 10px 10px 10px 15px !important;
 	font-size: 26px;
+}
+
+.group-title-label,
+.sp-item-label {
+	color: var(--vscode-settings-headerForeground);
 }
 
 .sp-row {
@@ -259,8 +260,11 @@ MARK: PAGE
 	padding-left: calc(22px + var(--inner-padding-left));
 	padding-right: 24px;
 }
-.sp-item-contents:hover,
-.sp-group-title:hover {
+/* .sp-item-contents:hover,
+.sp-group-title:hover .group-title-label {
+	background-color: var(--vscode-settings-rowHoverBackground);
+} */
+.sp-row:not(.focused) .sp-row-inner-container:hover {
 	background-color: var(--vscode-settings-rowHoverBackground);
 }
 .sp-item-contents {
@@ -284,9 +288,6 @@ MARK: PAGE
 .sp-item-category {
 	opacity: 0.9;
 	color: var(--vscode-foreground);
-}
-.sp-item-label {
-	color: var(--vscode-settings-headerForeground);
 }
 
 .sp-item-value-description {
@@ -728,12 +729,19 @@ select:focus {
 */
 
 /* When item is focused, add visual "focus" effect to contents */
-.sp-item:focus-within .sp-item-contents {
+.sp-body:focus-within .sp-row.focused .sp-item-contents,
+.sp-body:focus-within .sp-row.focused .group-title-label {
 	outline: 1px solid var(--vscode-settings-focusedRowBorder);
-	outline-offset: -1px;
+}
+.sp-body:focus-within .sp-row.focused .sp-row-inner-container {
 	background-color: var(--vscode-settings-focusedRowBackground);
 }
-.sp-item:focus-within .sp-more-action {
+.group-title-label,
+.sp-item-contents {
+	outline-offset: -1px;
+}
+
+.sp-body:focus-within .sp-row.focused .sp-more-action {
 	opacity: 1;
 }
 

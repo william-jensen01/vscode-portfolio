@@ -119,6 +119,7 @@
 	--vscode-panelTitle-activeBorder: #0078d4;
 	--vscode-button-foreground: #ffffff;
 	--vscode-button-background: #4d78cc;
+	--vscode-focusBorder: #528bff;
 }
 
 /* Dark+ */
@@ -235,6 +236,7 @@
 	--vscode-panelTitle-inactiveForeground: rgba(231, 231, 231, 0.6);
 	--vscode-button-foreground: #ffffff;
 	--vscode-button-background: #0e639c;
+	--vscode-focusBorder: #007fd4;
 }
 
 [data-theme="dracula"] {
@@ -350,4 +352,5 @@
 	--vscode-panelTitle-inactiveForeground: #6272a4;
 	--vscode-button-foreground: #f8f8f2;
 	--vscode-button-background: #44475a;
+	--vscode-focusBorder: #6272a4;
 }

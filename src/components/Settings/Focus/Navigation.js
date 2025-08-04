@@ -154,8 +154,9 @@ export default function FocusNavigation({
 			handleFocus,
 			focusItem,
 			setFocusedItem,
+			isItemFocused,
 		}),
-		[handleFocus, focusItem, setFocusedItem]
+		[handleFocus, focusItem, setFocusedItem, isItemFocused]
 	);
 
 	return (

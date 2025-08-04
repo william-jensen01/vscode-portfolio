@@ -11,6 +11,7 @@ export default function MoreActions({ itemKey, itemIdx, item }) {
 		(state) => state.changeSpecificSetting
 	);
 	const moreButtonRef = useRef(null);
+	const containerRef = useRef(null);
 
 	const performableActions = useMemo(
 		() => [
@@ -142,7 +143,10 @@ export default function MoreActions({ itemKey, itemIdx, item }) {
 	}, [focusedOption, showActions, performableActions, performAction]);
 
 	return (
-		<div className={`dropdown ${showActions ? "active" : ""}`}>
+		<div
+			className={`dropdown ${showActions ? "active" : ""}`}
+			ref={containerRef}
+		>
 			<div className="dropdown-label">
 				<Focusable itemKey={itemKey} itemIdx={itemIdx}>
 					<a
@@ -154,7 +158,9 @@ export default function MoreActions({ itemKey, itemIdx, item }) {
 						onBlur={(e) => {
 							setTimeout(() => {
 								if (
-									!document.activeElement.closest(".dropdown")
+									!containerRef.current.contains(
+										document.activeElement
+									)
 								) {
 									setShowActions(false);
 								}

@@ -5,6 +5,7 @@ import Select from "./Inputs/Select";
 import Checkbox from "./Inputs/Checkbox";
 import Number from "./Inputs/Number";
 import Focusable from "../Focus/Focusable";
+import FocusRow from "../Focus/Row";
 
 const SettingsItem = memo(({ item, itemKey, itemIdx, fullNavigation }) => {
 	const modified = item.value !== item.default;
@@ -57,7 +58,7 @@ const SettingsItem = memo(({ item, itemKey, itemIdx, fullNavigation }) => {
 	};
 
 	return (
-		<div className="sp-row" data-item-idx={itemIdx}>
+		<FocusRow itemIdx={itemIdx} itemKey={itemKey}>
 			<div className={`sp-item ${item.input}`}>
 				<Focusable itemKey={itemKey} itemIdx={itemIdx}>
 					<div ref={contentRef} className="sp-item-contents">
@@ -129,7 +130,7 @@ const SettingsItem = memo(({ item, itemKey, itemIdx, fullNavigation }) => {
 					</div>
 				</Focusable>
 			</div>
-		</div>
+		</FocusRow>
 	);
 });
 export default SettingsItem;
