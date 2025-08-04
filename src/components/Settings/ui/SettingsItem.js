@@ -1,10 +1,10 @@
 import { useRef, useMemo, memo } from "react";
 import useSettingsStore from "../../../store/settingsStore";
+import MoreActions from "./MoreActions";
 import Select from "./Inputs/Select";
 import Checkbox from "./Inputs/Checkbox";
 import Number from "./Inputs/Number";
 import Focusable from "../Focus/Focusable";
-import sprite from "../../../assets/svgs-sprite.svg";
 
 const SettingsItem = memo(({ item, itemKey, itemIdx, fullNavigation }) => {
 	const modified = item.value !== item.default;
@@ -57,79 +57,78 @@ const SettingsItem = memo(({ item, itemKey, itemIdx, fullNavigation }) => {
 	};
 
 	return (
-		<div
-			ref={itemRef}
-			className={`sp-row sp-item ${item.input}`}
-			data-item-key={itemKey}
-			data-item-idx={itemIdx}
-		>
-			<Focusable itemKey={itemKey} itemIdx={itemIdx}>
-				<div ref={contentRef} className="sp-item-contents">
-					<div className="sp-row-inner-container">
-						<p className="sp-item-label-container">
-							{formattedPath}
-						</p>
-						{item.input === "checkbox" ? (
-							<div className="sp-item-value-description">
-								<Checkbox
-									item={item}
-									itemKey={itemKey}
-									handleChange={handleChange}
-								/>
-								<label htmlFor={`checkbox.${itemKey}`}>
-									<p className="sp-item-description">
-										{item.description}
-									</p>
-								</label>
-							</div>
-						) : (
-							<div className="sp-item-description">
-								{!item.markdown && <p>{item.description}</p>}
-								{item.markdown && (
-									<div
-										className="sp-item-markdown"
-										dangerouslySetInnerHTML={{
-											__html: item.markdown,
-										}}
+		<div className="sp-row" data-item-idx={itemIdx}>
+			<div className={`sp-item ${item.input}`}>
+				<Focusable itemKey={itemKey} itemIdx={itemIdx}>
+					<div ref={contentRef} className="sp-item-contents">
+						<div className="sp-row-inner-container">
+							<p className="sp-item-label-container">
+								{formattedPath}
+							</p>
+							{item.input === "checkbox" ? (
+								<div className="sp-item-value-description">
+									<Checkbox
+										item={item}
+										itemKey={itemKey}
+										handleChange={handleChange}
 									/>
+									<label htmlFor={`checkbox.${itemKey}`}>
+										<p className="sp-item-description">
+											{item.description}
+										</p>
+									</label>
+								</div>
+							) : (
+								<div className="sp-item-description">
+									{!item.markdown && (
+										<p>{item.description}</p>
+									)}
+									{item.markdown && (
+										<div
+											className="sp-item-markdown"
+											dangerouslySetInnerHTML={{
+												__html: item.markdown,
+											}}
+										/>
+									)}
+								</div>
+							)}
+							<div className="sp-item-value">
+								{item.input === "select" && (
+									<div className="sp-item-control sp-item-select-container">
+										<Select
+											item={item}
+											itemKey={itemKey}
+											itemIdx={itemIdx}
+											handleChange={handleChange}
+										/>
+									</div>
+								)}
+								{item.input === "number" && (
+									<div className="sp-item-control sp-item-number-container">
+										<Number
+											item={item}
+											itemKey={itemKey}
+											handleChange={handleChange}
+										/>
+									</div>
 								)}
 							</div>
-						)}
-						<div className="sp-item-value">
-							{item.input === "select" && (
-								<div className="sp-item-control sp-item-select-container">
-									<Select
-										item={item}
-										itemKey={itemKey}
-										itemIdx={itemIdx}
-										handleChange={handleChange}
-									/>
-								</div>
+							{modified && (
+								<div className="sp-item-modified-indicator" />
 							)}
-							{item.input === "number" && (
-								<div className="sp-item-control sp-item-number-container">
-									<Number
-										item={item}
-										itemKey={itemKey}
-										handleChange={handleChange}
-									/>
-								</div>
-							)}
-						</div>
-						{modified && (
-							<div className="sp-item-modified-indicator" />
-						)}
-					</div>
-				</div>
-			</Focusable>
 
-			<Focusable itemKey={itemKey} itemIdx={itemIdx}>
-				<a className="sp-more-action" tabIndex={0}>
-					<svg>
-						<use href={`${sprite}#icon-settings`} />
-					</svg>
-				</a>
-			</Focusable>
+							<div className="sp-toolbar-container">
+								<MoreActions
+									itemKey={itemKey}
+									itemIdx={itemIdx}
+									item={item}
+								/>
+							</div>
+						</div>
+					</div>
+				</Focusable>
+			</div>
 		</div>
 	);
 });
