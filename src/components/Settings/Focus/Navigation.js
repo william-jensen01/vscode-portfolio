@@ -10,22 +10,13 @@ export const FocusContext = createContext(null);
 
 export default function FocusNavigation({
 	children,
-	categories,
+	navigableItemsMatrix,
 	containerRef,
 }) {
 	const [focusedItem, setFocusedItem] = useState("");
 
-	const navigableItemsMatrix = useMemo(() => {
-		const matrix = [];
-
-		Object.entries(categories).forEach(([title, category]) => {
-			matrix.push([`title.${title}`, ...Object.keys(category)]);
-		});
-
-		return matrix;
-	}, [categories]);
-
 	const getCoordsByItem = useCallback((itemIdx) => {
+		if (!itemIdx) return null;
 		const idxs = itemIdx.split(".");
 		if (Array.isArray(idxs) && idxs.length === 2) {
 			return { cdx: idxs[0], rdx: idxs[1] };
@@ -33,10 +24,13 @@ export default function FocusNavigation({
 		return null;
 	}, []);
 
-	const getLastRowIndex = useCallback((cdx) => {
-		if (cdx < 0 || cdx >= navigableItemsMatrix.length) return -1;
-		return navigableItemsMatrix[cdx].length - 1;
-	}, []);
+	const getLastRowIndex = useCallback(
+		(cdx) => {
+			if (cdx < 0 || cdx >= navigableItemsMatrix.length) return -1;
+			return navigableItemsMatrix[cdx].length - 1;
+		},
+		[navigableItemsMatrix]
+	);
 
 	const navigateUp = useCallback(
 		(currentCoords) => {
@@ -95,7 +89,9 @@ export default function FocusNavigation({
 				const item = containerRef.current.querySelector(
 					`.sp-row[data-item-idx="${itemIdx}"] .focusable`
 				);
-				item.focus();
+				if (item) {
+					item.focus();
+				}
 			});
 		},
 		[containerRef.current]
@@ -121,7 +117,6 @@ export default function FocusNavigation({
 			// If ArrowDown or ArrowUp navigate focus accordingly
 			if (e.keyCode === 40 || e.keyCode === 38) {
 				e.preventDefault();
-				console.log("up/down");
 				let idx;
 				setFocusedItem((prev) => {
 					const prevCoords = getCoordsByItem(prev);

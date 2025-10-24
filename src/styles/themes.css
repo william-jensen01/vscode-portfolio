@@ -120,6 +120,7 @@
 	--vscode-button-foreground: #ffffff;
 	--vscode-button-background: #4d78cc;
 	--vscode-focusBorder: #528bff;
+	--vscode-icon-foreground: #c5c5c5;
 }
 
 /* Dark+ */
@@ -237,6 +238,7 @@
 	--vscode-button-foreground: #ffffff;
 	--vscode-button-background: #0e639c;
 	--vscode-focusBorder: #007fd4;
+	--vscode-icon-foreground: #c5c5c5;
 }
 
 [data-theme="dracula"] {
@@ -353,4 +355,5 @@
 	--vscode-button-foreground: #f8f8f2;
 	--vscode-button-background: #44475a;
 	--vscode-focusBorder: #6272a4;
+	--vscode-icon-foreground: #c5c5c5;
 }

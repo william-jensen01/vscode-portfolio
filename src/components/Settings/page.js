@@ -1,53 +1,51 @@
-import { useMemo, useRef, useState, useEffect } from "react";
+import { useMemo, useRef, useState } from "react";
+import { useShallow } from "zustand/react/shallow";
 import useSettingsStore from "../../store/settingsStore";
 import FocusNavigation from "./Focus/Navigation";
+import HeaderSearch from "./Search";
 import Focusable from "./Focus/Focusable";
 import SettingsItem from "./ui/SettingsItem";
-import CategoryTitle from "./ui/CategoryTitle";
+import { useTableOfContents } from "./TableOfContents/useTableOfContents";
+import CategoryRenderer from "./ui/CategoryRenderer";
+import { filterByCategoryParts } from "./TableOfContents/generator";
 
 export default function Settings() {
 	const bodyRef = useRef(null);
+	const itemsRef = useRef(null);
 
-	const settingsState = useSettingsStore();
+	const [selectedCategory, setSelectedCategory] = useState("");
 
-	const [searchQuery, setSearchQuery] = useState();
-	const [searchResults, setSearchResults] = useState();
-	const searchTimeoutRef = useRef(null);
-
-	const categories = useMemo(
-		() => {
-			return settingsState.groupByHierarchy();
-		},
-		// Not including groupByHierarchy in deps as it is persistent and we need to update it whenever a setting is changed
-		[settingsState]
+	const { getAllSettings, searchResults } = useSettingsStore(
+		useShallow((state) => ({
+			getAllSettings: state.getAllSettings,
+			searchResults: state.searchResults,
+		}))
 	);
 
-	useEffect(() => {
-		clearTimeout(searchTimeoutRef.current);
+	const items = useMemo(() => {
+		if (!getAllSettings) return [];
 
-		if (!searchQuery) {
-			setSearchResults(null);
-			return;
+		if (searchResults) {
+			return searchResults.length > 0 ? searchResults : [];
+		} else {
+			return getAllSettings({ format: "array" });
 		}
+	}, [getAllSettings, searchResults]);
 
-		searchTimeoutRef.current = setTimeout(() => {
-			console.log("search timeout");
-			setSearchResults(settingsState.searchSettings(searchQuery));
-		}, 250);
-
-		return () => {
-			if (searchTimeoutRef.current) {
-				clearTimeout(searchTimeoutRef.current);
-			}
-		};
-	}, [searchQuery, settingsState]);
-
+	const hasSearchResults = searchResults && searchResults.length > 0;
 	const isValidContent =
 		!searchResults || (searchResults && searchResults.length > 0);
 
-	const hasSearchResults = searchResults && searchResults.length > 0;
+	const { items: toc, ToCRenderer } = useTableOfContents(
+		items,
+		hasSearchResults
+	);
+
 	return (
-		<FocusNavigation categories={categories} containerRef={bodyRef}>
+		<FocusNavigation
+			containerRef={itemsRef}
+			navigableItemsMatrix={toc.navigationMatrix}
+		>
 			<div
 				className={`sp ${
 					searchResults && searchResults.length === 0
@@ -57,10 +55,7 @@ export default function Settings() {
 				role="main"
 			>
 				<div className="settings-header">
-					<HeaderSearch
-						setSearchQuery={setSearchQuery}
-						searchResults={searchResults}
-					/>
+					<HeaderSearch />
 					<HeaderControls />
 				</div>
 
@@ -68,78 +63,70 @@ export default function Settings() {
 					<div className="no-results-message">No Settings Found</div>
 
 					{isValidContent && (
-						<div className="sp-items">
-							{hasSearchResults &&
-								searchResults.map((item) => (
-									<SettingsItem
-										key={item.key}
-										item={item}
-										itemKey={item.key}
-										fullNavigation={true}
-									/>
-								))}
+						<div className="split-view-container">
+							<div className="split-view-view">
+								<ToCRenderer
+									isSearchResults={hasSearchResults}
+									selectedCategory={selectedCategory}
+									setSelectedCategory={setSelectedCategory}
+								/>
+							</div>
 
-							{!hasSearchResults &&
-								Object.entries(categories).map(
-									([title, category], cdx) => (
-										<div
-											key={`category.${title}`}
-											role="group"
-											data-idx={cdx}
-										>
-											<CategoryTitle itemIdx={`${cdx}.0`}>
-												{title}
-											</CategoryTitle>
-											{Object.entries(category).map(
-												([key, item], rdx) => (
+							<div className="sash-container">
+								<div className="sash vertical" />
+							</div>
+
+							<div className="split-view-view">
+								<div ref={itemsRef} className="sp-items">
+									{hasSearchResults &&
+										(selectedCategory
+											? searchResults
+													.filter((item) =>
+														filterByCategoryParts(
+															item.category,
+															selectedCategory
+														)
+													)
+													.map((item, idx) => (
+														<SettingsItem
+															key={
+																item.navigation
+															}
+															name={item.key}
+															itemKey={item.key}
+															itemIdx={`0.${idx}`}
+															fullNavigation={
+																true
+															}
+														/>
+													))
+											: searchResults.map((item, idx) => (
 													<SettingsItem
-														key={key}
-														item={item}
-														itemKey={`${key}`}
-														itemIdx={`${cdx}.${
-															rdx + 1
-														}`}
-														fullNavigation={false}
+														key={item.navigation}
+														name={item.key}
+														itemKey={item.key}
+														itemIdx={`0.${idx}`}
+														fullNavigation={true}
 													/>
-												)
-											)}
-										</div>
-									)
-								)}
+											  )))}
+
+									{!hasSearchResults &&
+										toc.ordered.map((category, cdx) => (
+											<CategoryRenderer
+												key={category.id}
+												category={category}
+												categoryIndex={
+													category.navigationIndex
+												}
+											/>
+										))}
+								</div>
+							</div>
 						</div>
 					)}
 				</div>
 			</div>
 		</FocusNavigation>
-	);
-}
-
-function HeaderSearch({ setSearchQuery, searchResults }) {
-	return (
-		<div className="sp-search-container">
-			<Focusable itemKey="search-input">
-				<input
-					className="sp-suggest-input-container"
-					type="text"
-					placeholder="Search settings"
-					onChange={(e) => {
-						setSearchQuery(e.target.value);
-					}}
-				/>
-			</Focusable>
-			<div className="sp-count-widget">
-				{searchResults &&
-					`${
-						searchResults.length === 0 ? "No" : searchResults.length
-					} Settings Found`}
-			</div>
-			<div className="sp-clear-widget">
-				<ul className="sp-actions-container">
-					<li className="sp-action-item"></li>
-					<li className="sp-action-item"></li>
-				</ul>
-			</div>
-		</div>
 	);
 }
 

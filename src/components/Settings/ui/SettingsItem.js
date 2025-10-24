@@ -1,4 +1,5 @@
 import { useRef, useMemo, memo } from "react";
+import { useShallow } from "zustand/react/shallow";
 import useSettingsStore from "../../../store/settingsStore";
 import MoreActions from "./MoreActions";
 import Select from "./Inputs/Select";
@@ -7,15 +8,17 @@ import Number from "./Inputs/Number";
 import Focusable from "../Focus/Focusable";
 import FocusRow from "../Focus/Row";
 
-const SettingsItem = memo(({ item, itemKey, itemIdx, fullNavigation }) => {
-	const modified = item.value !== item.default;
-
-	const changeSpecificSetting = useSettingsStore(
-		(state) => state.changeSpecificSetting
+const SettingsItem = memo(({ name, itemKey, itemIdx, fullNavigation }) => {
+	const { item, changeSpecificSetting } = useSettingsStore(
+		useShallow((state) => ({
+			item: state[name],
+			changeSpecificSetting: state.changeSpecificSetting,
+		}))
 	);
 
+	const modified = item.value !== item.default;
+
 	const contentRef = useRef(null);
-	const itemRef = useRef(null);
 
 	const formattedPath = useMemo(() => {
 		const settingPath = item.navigation;

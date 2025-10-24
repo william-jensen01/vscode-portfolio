@@ -2,6 +2,10 @@ import { create } from "zustand";
 import { devtools, persist } from "zustand/middleware";
 import { useState, useEffect } from "react";
 import { allEditorSettings } from "../components/Editor/settings";
+import {
+	searchSlice,
+	persistSearchState,
+} from "../components/Settings/Search/state";
 import Logger from "../util/logger";
 const logger = new Logger("settingsStore");
 
@@ -28,8 +32,7 @@ const allSettingsArray = [
 		input: "select",
 		description: "Specifies the color theme used in the workbench",
 		navigation: "workbench.colorTheme",
-		category: "workbench",
-		sub_category: "appearance",
+		category: "workbench.appearance",
 		capitalize: true,
 		migrations: {
 			/* 
@@ -47,6 +50,9 @@ const allSettingsArray = [
 	},
 	...allEditorSettings,
 ];
+
+const keys = allSettingsArray.map((s) => s.key);
+const SETTING_KEYS = new Set(keys);
 
 const INIT_VALUE = allSettingsArray.reduce((acc, setting) => {
 	const { migrations, ...settingWithoutMigrations } = setting;
@@ -179,6 +185,7 @@ const settingsStore = create(
 			(set, get) => {
 				return {
 					...initializeSettings(INIT_VALUE),
+					...searchSlice(set, get),
 
 					applySettingToDocument: (setting) => {
 						const { value, unit, data_attribute } = setting;
@@ -251,17 +258,22 @@ const settingsStore = create(
 							filter,
 						} = options;
 
-						const all = { ...get() };
+						const state = get();
+						const all = {};
+
+						SETTING_KEYS.forEach((key) => {
+							if (state[key]) {
+								all[key] = state[key];
+							}
+						});
 
 						const filteredSettings = Object.fromEntries(
 							Object.entries(all).filter(([_, value]) => {
-								const isObject = typeof value === "object";
-
 								const passesFilter = filter
 									? filter(value)
 									: true;
 
-								return isObject && passesFilter;
+								return passesFilter;
 							})
 						);
 
@@ -278,53 +290,14 @@ const settingsStore = create(
 						return filteredSettings;
 					},
 
-					groupByHierarchy: () => {
-						logger.suffix("groupByHierarchy");
-						const addToGroup = (groups, keys, depth, key, obj) => {
-							if (depth >= keys.length) {
-								return;
-							}
-
-							const groupKey = obj[keys[depth]];
-
-							if (!groups[groupKey]) {
-								groups[groupKey] = {};
-							}
-
-							if (depth === keys.length - 1) {
-								groups[groupKey][key] = obj;
-							} else {
-								addToGroup(
-									groups[groupKey],
-									keys,
-									depth + 1,
-									key,
-									obj
-								);
-							}
-						};
-
-						// const hierarchyKeys = ["category", "sub_category"];
-						const hierarchyKeys = ["category"];
-						const result = {};
-						const settings = get().getAllSettings();
-
-						Object.entries(settings).forEach(([key, obj]) => {
-							addToGroup(result, hierarchyKeys, 0, key, obj);
-						});
-
-						return result;
-					},
-
 					// Create an object containing all valid settings as data-attributes
 					createAttributes: () => {
 						console.log("creat attributes");
 						const state = get();
 
 						const attributes = {};
-						const settings = get().getAllSettings();
 
-						Object.keys(settings).forEach((key) => {
+						SETTING_KEYS.forEach((key) => {
 							// Skip the theme as it's applied to the document root
 							if (key === "theme") return;
 
@@ -345,121 +318,7 @@ const settingsStore = create(
 
 						return attributes;
 					},
-					searchSettings: (searchTerm, options = {}) => {
-						if (!searchTerm) return [];
 
-						const {
-							caseSensitive = false,
-							includeFields = [
-								"navigation",
-								"description",
-								"options",
-							],
-							categoryFilter = null,
-							exactMatch = false,
-							includeOptions = true,
-						} = options;
-
-						const searchTermProcessed = caseSensitive
-							? searchTerm
-							: searchTerm.toLowerCase();
-
-						// const settings = get().getAllSettings();
-						const settings = get().getAllSettings({
-							sorted: true,
-						});
-
-						// return Object.entries(settings).filter(
-						// ([key, setting]) => {
-
-						return settings.filter((setting) => {
-							// Apply category filter if provided
-							if (
-								categoryFilter &&
-								setting.category !== categoryFilter
-							) {
-								return false;
-							}
-
-							// Check if setting matches the search term in any of the specified field
-							return includeFields.some((field) => {
-								const fieldValue = setting[field];
-
-								if (
-									fieldValue === undefined ||
-									fieldValue === null
-								) {
-									return false;
-								}
-
-								// Handle different types of field values
-								if (typeof fieldValue === "object") {
-									// Search through option values
-									if (
-										includeOptions &&
-										field === "options" &&
-										Array.isArray(fieldValue)
-									) {
-										return fieldValue.some((option) => {
-											// Search in option value
-											if (option.value !== undefined) {
-												const optionValueStr = String(
-													option.value
-												);
-												const processedValue =
-													caseSensitive
-														? optionValueStr
-														: optionValueStr.toLowerCase();
-												if (
-													exactMatch
-														? processedValue ===
-														  searchTermProcessed
-														: processedValue.includes(
-																searchTermProcessed
-														  )
-												) {
-													return true;
-												}
-											}
-
-											// Search in option description
-											if (option.description) {
-												const processedDesc =
-													caseSensitive
-														? option.description
-														: option.description.toLowerCase();
-												if (
-													exactMatch
-														? processedDesc ===
-														  searchTermProcessed
-														: processedDesc.includes(
-																searchTermProcessed
-														  )
-												) {
-													return true;
-												}
-											}
-
-											return false;
-										});
-									}
-
-									return false;
-								} else {
-									// For primitive values
-									const valueStr = String(fieldValue);
-									const processedValue = caseSensitive
-										? valueStr
-										: valueStr.toLowerCase();
-									return exactMatch
-										? processedValue === searchTermProcessed
-										: processedValue.includes(
-												searchTermProcessed
-										  );
-								}
-							});
-						});
-					},
 					clearAndResetSettings: () => {
 						logger.suffix("clearAndResetSettings");
 
@@ -567,15 +426,15 @@ const settingsStore = create(
 				name: "settings-storage",
 				partialize: (state) => {
 					const persistedState = {};
-					Object.keys(state).forEach((key) => {
-						if (
-							typeof state[key] === "object" &&
-							state[key] !== null &&
-							typeof state[key] !== "function"
-						) {
+
+					SETTING_KEYS.forEach((key) => {
+						if (state[key] && typeof state[key] !== "function") {
 							persistedState[key] = state[key];
 						}
 					});
+
+					persistSearchState(state, persistedState);
+
 					console.log("persistedState", persistedState);
 					return persistedState;
 				},
