@@ -1,19 +1,42 @@
+import { useEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 import useTableOfContentsStore from "./store";
+import { useStickyStore } from "../Sticky/store";
+import { iterateCategoryPaths } from "./generator";
 
 export default function ToC({
 	isSearchResults,
 	selectedCategory,
 	setSelectedCategory,
 }) {
-	const { collapsedState, toggleCollapsed, flattenedItems } =
-		useTableOfContentsStore(
-			useShallow((state) => ({
-				collapsedState: state.collapsedState,
-				toggleCollapsed: state.toggleCollapsed,
-				flattenedItems: state.flattened,
-			}))
-		);
+	const {
+		collapsedState,
+		setCollapsedState,
+		toggleCollapsed,
+		flattenedItems,
+	} = useTableOfContentsStore(
+		useShallow((state) => ({
+			collapsedState: state.collapsedState,
+			setCollapsedState: state.setCollapsedState,
+			toggleCollapsed: state.toggleCollapsed,
+			flattenedItems: state.flattened,
+		}))
+	);
+
+	const latestHeading = useStickyStore((state) => state.latestHeading);
+
+	// Uncollapse/expand every path in the latest category
+	useEffect(() => {
+		if (!latestHeading) return;
+
+		setCollapsedState((prev) => {
+			const newState = { ...prev };
+			iterateCategoryPaths(latestHeading.id, (currentPath) => {
+				newState[currentPath] = false;
+			});
+			return newState;
+		});
+	}, [latestHeading]);
 
 	return (
 		<div
@@ -47,7 +70,10 @@ function CategoryItem({
 	selectedCategory,
 	setSelectedCategory,
 }) {
-	const isHighlighted = selectedCategory === category.id;
+	const latestHeading = useStickyStore((state) => state.latestHeading);
+	const isHighlighted =
+		selectedCategory === category.id ||
+		(!isSearchResults && latestHeading?.id === category.id);
 	const isCollapsed = collapsedState[category.parentId];
 	const hasSubcategories = category?.subcategories?.length > 0;
 	const itemCount = category.count;
@@ -59,12 +85,22 @@ function CategoryItem({
 			toggleCollapsed(category.id);
 		}
 
-		const title = document.querySelector(
-			`.sp-items .sp-group-title[data-category="${category.fullPath}"]`
-		);
-		title?.scrollIntoView({
-			behavior: "smooth",
-		});
+		// Scroll the category title into view
+		if (!isSearchResults) {
+			const title = document.querySelector(
+				`.sp-items .sp-group-title[data-category="${category.fullPath}"]`
+			);
+			if (!title) return;
+			title.scrollIntoView({
+				behavior: "smooth",
+			});
+		}
+		// Reset the scroll position
+		else {
+			const items = document.querySelector(".sp-items");
+			if (!items) return;
+			items.scrollTop = 0;
+		}
 
 		setSelectedCategory(category.id);
 	};

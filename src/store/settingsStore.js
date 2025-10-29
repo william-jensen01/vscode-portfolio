@@ -187,6 +187,8 @@ const settingsStore = create(
 					...initializeSettings(INIT_VALUE),
 					...searchSlice(set, get),
 
+					forceRestart: 0,
+
 					applySettingToDocument: (setting) => {
 						const { value, unit, data_attribute } = setting;
 						if (!unit) return;
@@ -344,6 +346,8 @@ const settingsStore = create(
 							...stateFunctions,
 						};
 
+						newState.forceRestart = currentState.forceRestart + 1;
+
 						// Step 5. Clear all DOM customizations first
 						// This ensures no stale values remain
 						const root = document.documentElement;
@@ -447,6 +451,8 @@ const settingsStore = create(
 						state,
 						allSettingsArray
 					);
+
+					migratedState.forceRestart = 0;
 
 					logger.log("migratedState", migratedState);
 

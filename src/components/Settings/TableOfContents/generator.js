@@ -78,6 +78,29 @@ function buildDynamicOrder(lookupMap) {
 
 // Extract categories and subcategories from items to create a table of contents
 export function generateTableOfContents(items) {
+	const categoryTree = generateItemTree(items);
+
+	// Convert tree to ToC structure and build lookup map
+	const { structure, lookupMap } = convertTreeToStructureMap(categoryTree);
+
+	const orderedStructure = sortStructureToOrder(lookupMap);
+
+	const flattenedStructure = flattenTocStructure(orderedStructure);
+
+	const result = {
+		flattened: flattenedStructure,
+		ordered: orderedStructure,
+		tree: categoryTree,
+		lookupMap,
+		structure,
+	};
+
+	console.log("generateTableOfContents :: result:", result);
+
+	return result;
+}
+
+export function generateItemTree(items) {
 	// Convert to array if needed
 	const settingsArray = Array.isArray(items) ? items : Object.values(items);
 
@@ -121,26 +144,7 @@ export function generateTableOfContents(items) {
 		});
 	});
 
-	// Convert tree to ToC structure and build lookup map
-	const { structure, lookupMap } = convertTreeToStructureMap(categoryTree);
-
-	const orderedStructure = sortStructureToOrder(lookupMap);
-	const navigationMatrix = createNavigationMatrix(orderedStructure);
-
-	const flattenedStructure = flattenTocStructure(orderedStructure);
-
-	const result = {
-		flattened: flattenedStructure,
-		ordered: orderedStructure,
-		tree: categoryTree,
-		lookupMap,
-		navigationMatrix,
-		structure,
-	};
-
-	console.log("generateTableOfContents :: result:", result);
-
-	return result;
+	return categoryTree;
 }
 
 // Recursively convert tree structure to ToC structure and build lookup map
@@ -205,7 +209,7 @@ export function flattenTocStructure(orderedStructure, parent = {}) {
 }
 
 // Build ordered structure using lookup map while filtering subcategories
-function sortStructureToOrder(lookupMap) {
+export function sortStructureToOrder(lookupMap) {
 	const dynamicOrder = buildDynamicOrder(lookupMap);
 	const childIds = new Set();
 
@@ -224,13 +228,29 @@ function sortStructureToOrder(lookupMap) {
 	return orderedStructure;
 }
 
-function createNavigationMatrix(structure) {
+export function createNavigationMatrix(structure, isSearchResults) {
 	const matrix = [];
 	let navigationIndex = 0;
 
 	const addToMatrix = (category) => {
 		category.navigationIndex = navigationIndex++;
-		matrix.push([`title:${category.id}`, ...category.settings]);
+
+		// matrix.push([`title:${category.id}`, ...category.settings]);
+
+		// matrix.push(
+		// 	isSearchResults
+		// 		? [...category.settings]
+		// 		: [`title:${category.id}`, ...category.settings]
+		// );
+
+		const items = [];
+		if (!isSearchResults) {
+			items.push(`title:${category.id}`);
+		}
+		items.push(...category.settings);
+		if (items.length > 0) {
+			matrix.push(items);
+		}
 
 		if (category?.subcategories && category.subcategories.length > 0) {
 			category.subcategories.forEach((subcat) => {

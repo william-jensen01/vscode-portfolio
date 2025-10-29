@@ -360,13 +360,7 @@ MARK: PAGE
 * MARK: Title
 */
 .list-row {
-	/* position: sticky; */
-	/* top: -1px !important; */
-
-	/* top: 0 !important; */
 	background-color: var(--file-bg);
-	/* z-index: 1; */
-	/* padding-top: 1px; */
 }
 .group-title-label {
 	--_title-padding-top: 10px;
@@ -383,6 +377,27 @@ MARK: PAGE
 .group-title-label,
 .sp-item-label {
 	color: var(--vscode-settings-headerForeground);
+}
+
+.group-title-label.level-2 {
+	font-size: 22px;
+}
+/* .list-row[data-level="2"] {
+	top: calc(
+		-6px + 22px * 1.22 + var(--inner-padding-top) + var(--inner-padding-bottom)
+	);
+} */
+.group-title-label.level-3 {
+	font-size: 18px;
+}
+/* .list-row[data-level="3"] {
+	top: calc(
+		-13px + 2 * (22px * 1.22 + var(--inner-padding-top) +
+					var(--inner-padding-bottom))
+	);
+} */
+.group-title-label.level-4 {
+	font-size: 14px;
 }
 
 /* 
@@ -468,6 +483,24 @@ MARK: PAGE
 	border-left-color: var(--vscode-settings-modifiedItemIndicator);
 	border-left-width: 2px;
 	border-left-style: solid;
+}
+
+/* 
+* MARK: Sticky
+*/
+.sticky-container {
+	position: sticky;
+	top: 0px;
+	left: 0;
+	right: 0;
+	z-index: 5;
+}
+.sticky-items {
+	position: absolute;
+	top: 0;
+	left: 0;
+	right: 0;
+	box-shadow: var(--vscode-scrollbar-shadow) 0px 6px 6px -6px;
 }
 
 /*

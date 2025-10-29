@@ -22,7 +22,6 @@ const tableOfContentsStore = create(
 
 			flattened: [],
 			ordered: [],
-			navigationMatrix: [],
 			lookupMap: new Map(),
 
 			setState: (toc, hasSearchResults) => {
@@ -41,7 +40,6 @@ const tableOfContentsStore = create(
 				set({
 					flattened: toc.flattened,
 					ordered: toc.ordered,
-					navigationMatrix: toc.navigationMatrix,
 					lookupMap: toc.lookupMap,
 				});
 			},

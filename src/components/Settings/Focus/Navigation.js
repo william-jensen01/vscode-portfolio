@@ -84,9 +84,9 @@ export default function FocusNavigation({
 
 	const focusItem = useCallback(
 		(itemIdx) => {
-			if (!containerRef.current) return;
+			if (!containerRef) return;
 			requestAnimationFrame(() => {
-				const item = containerRef.current.querySelector(
+				const item = containerRef.querySelector(
 					`.sp-row[data-item-idx="${itemIdx}"] .focusable`
 				);
 				if (item) {
@@ -94,7 +94,7 @@ export default function FocusNavigation({
 				}
 			});
 		},
-		[containerRef.current]
+		[containerRef]
 	);
 
 	const handleFocus = useCallback((itemIdx) => {
@@ -110,7 +110,7 @@ export default function FocusNavigation({
 
 	// Handle keyboard events to navigate focus between rows/items
 	useEffect(() => {
-		const container = containerRef.current;
+		const container = containerRef;
 		if (!container) return;
 
 		function handleKeyDown(e) {
@@ -142,7 +142,7 @@ export default function FocusNavigation({
 				container.removeEventListener("keydown", handleKeyDown);
 			}
 		};
-	}, [navigateDown, navigateUp, setFocusedItem, focusItem]);
+	}, [containerRef, navigateDown, navigateUp, setFocusedItem, focusItem]);
 
 	const value = useMemo(
 		() => ({

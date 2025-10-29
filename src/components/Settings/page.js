@@ -1,24 +1,30 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, useCallback } from "react";
 import { useShallow } from "zustand/react/shallow";
 import useSettingsStore from "../../store/settingsStore";
 import FocusNavigation from "./Focus/Navigation";
 import HeaderSearch from "./Search";
 import Focusable from "./Focus/Focusable";
-import SettingsItem from "./ui/SettingsItem";
 import { useTableOfContents } from "./TableOfContents/useTableOfContents";
 import CategoryRenderer from "./ui/CategoryRenderer";
-import { filterByCategoryParts } from "./TableOfContents/generator";
+import StickyManager from "./Sticky/Manager";
+import { StickyHeaderProvider } from "./Sticky/store";
 
 export default function Settings() {
 	const bodyRef = useRef(null);
-	const itemsRef = useRef(null);
+
+	// items callback ref
+	const [itemsNode, setItemsNode] = useState(null);
+	const setItemsRef = useCallback((node) => {
+		setItemsNode(node);
+	}, []);
 
 	const [selectedCategory, setSelectedCategory] = useState("");
 
-	const { getAllSettings, searchResults } = useSettingsStore(
+	const { getAllSettings, searchResults, forceRestart } = useSettingsStore(
 		useShallow((state) => ({
 			getAllSettings: state.getAllSettings,
 			searchResults: state.searchResults,
+			forceRestart: state.forceRestart,
 		}))
 	);
 
@@ -36,15 +42,21 @@ export default function Settings() {
 	const isValidContent =
 		!searchResults || (searchResults && searchResults.length > 0);
 
-	const { items: toc, ToCRenderer } = useTableOfContents(
+	const { toc, ToCRenderer, viewable, navigationMatrix } = useTableOfContents(
 		items,
-		hasSearchResults
+		hasSearchResults,
+		selectedCategory
 	);
+
+	// Force sticky header recreation when viewable list changes or on forceRestart
+	const stickyHeaderStoreKey = useMemo(() => {
+		return `sticky-store-${viewable.length}-${Date.now()}`;
+	}, [viewable, forceRestart]);
 
 	return (
 		<FocusNavigation
-			containerRef={itemsRef}
-			navigableItemsMatrix={toc.navigationMatrix}
+			containerRef={itemsNode}
+			navigableItemsMatrix={navigationMatrix}
 		>
 			<div
 				className={`sp ${
@@ -63,66 +75,48 @@ export default function Settings() {
 					<div className="no-results-message">No Settings Found</div>
 
 					{isValidContent && (
-						<div className="split-view-container">
-							<div className="split-view-view">
-								<ToCRenderer
-									isSearchResults={hasSearchResults}
-									selectedCategory={selectedCategory}
-									setSelectedCategory={setSelectedCategory}
-								/>
-							</div>
+						<StickyHeaderProvider key={stickyHeaderStoreKey}>
+							<div className="split-view-container">
+								<div className="split-view-view">
+									<ToCRenderer
+										isSearchResults={hasSearchResults}
+										selectedCategory={selectedCategory}
+										setSelectedCategory={
+											setSelectedCategory
+										}
+									/>
+								</div>
 
-							<div className="sash-container">
-								<div className="sash vertical" />
-							</div>
+								<div className="sash-container">
+									<div className="sash vertical" />
+								</div>
 
-							<div className="split-view-view">
-								<div ref={itemsRef} className="sp-items">
-									{hasSearchResults &&
-										(selectedCategory
-											? searchResults
-													.filter((item) =>
-														filterByCategoryParts(
-															item.category,
-															selectedCategory
-														)
-													)
-													.map((item, idx) => (
-														<SettingsItem
-															key={
-																item.navigation
-															}
-															name={item.key}
-															itemKey={item.key}
-															itemIdx={`0.${idx}`}
-															fullNavigation={
-																true
-															}
-														/>
-													))
-											: searchResults.map((item, idx) => (
-													<SettingsItem
-														key={item.navigation}
-														name={item.key}
-														itemKey={item.key}
-														itemIdx={`0.${idx}`}
-														fullNavigation={true}
-													/>
-											  )))}
+								<div className="split-view-view">
+									<div ref={setItemsRef} className="sp-items">
+										<StickyManager
+											containerRef={itemsNode}
+											disabled={hasSearchResults}
+										/>
 
-									{!hasSearchResults &&
-										toc.ordered.map((category, cdx) => (
+										{viewable.map((category) => (
 											<CategoryRenderer
 												key={category.id}
 												category={category}
 												categoryIndex={
 													category.navigationIndex
 												}
+												isSearchResults={
+													hasSearchResults
+												}
+												selectedCategory={
+													selectedCategory
+												}
 											/>
 										))}
+									</div>
 								</div>
 							</div>
-						</div>
+						</StickyHeaderProvider>
 					)}
 				</div>
 			</div>
