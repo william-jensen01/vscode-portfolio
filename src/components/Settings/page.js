@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, useCallback } from "react";
+import { useMemo, useRef, useState, useCallback, useLayoutEffect } from "react";
 import { useShallow } from "zustand/react/shallow";
 import useSettingsStore from "../../store/settingsStore";
 import FocusNavigation from "./Focus/Navigation";
@@ -18,15 +18,18 @@ export default function Settings() {
 		setItemsNode(node);
 	}, []);
 
+	const [showToC, setShowToC] = useState(true);
 	const [selectedCategory, setSelectedCategory] = useState("");
 
-	const { getAllSettings, searchResults, forceRestart } = useSettingsStore(
-		useShallow((state) => ({
-			getAllSettings: state.getAllSettings,
-			searchResults: state.searchResults,
-			forceRestart: state.forceRestart,
-		}))
-	);
+	const { getAllSettings, searchResults, forceRestart, searchTocBehavior } =
+		useSettingsStore(
+			useShallow((state) => ({
+				getAllSettings: state.getAllSettings,
+				searchResults: state.searchResults,
+				forceRestart: state.forceRestart,
+				searchTocBehavior: state.searchTocBehavior,
+			}))
+		);
 
 	const items = useMemo(() => {
 		if (!getAllSettings) return [];
@@ -42,6 +45,9 @@ export default function Settings() {
 	const isValidContent =
 		!searchResults || (searchResults && searchResults.length > 0);
 
+	const showTocSetting =
+		searchTocBehavior.options[searchTocBehavior.value].value === "filter";
+
 	const { toc, ToCRenderer, viewable, navigationMatrix } = useTableOfContents(
 		items,
 		hasSearchResults,
@@ -52,6 +58,25 @@ export default function Settings() {
 	const stickyHeaderStoreKey = useMemo(() => {
 		return `sticky-store-${viewable.length}-${Date.now()}`;
 	}, [viewable, forceRestart]);
+
+	// Do not render ToC if screen is too small (700px)
+	useLayoutEffect(() => {
+		const body = bodyRef.current;
+		if (!body) return;
+
+		const observer = new ResizeObserver((entries) => {
+			if (entries[0].target.offsetWidth <= 700) {
+				setShowToC(false);
+			} else {
+				setShowToC(true);
+			}
+		});
+
+		observer.observe(body);
+		return () => {
+			observer.disconnect();
+		};
+	}, []);
 
 	return (
 		<FocusNavigation
@@ -77,19 +102,36 @@ export default function Settings() {
 					{isValidContent && (
 						<StickyHeaderProvider key={stickyHeaderStoreKey}>
 							<div className="split-view-container">
-								<div className="split-view-view">
-									<ToCRenderer
-										isSearchResults={hasSearchResults}
-										selectedCategory={selectedCategory}
-										setSelectedCategory={
-											setSelectedCategory
-										}
-									/>
-								</div>
+								{showToC && (
+									<>
+										<div
+											className="split-view-view"
+											style={{
+												width: showTocSetting
+													? "200px"
+													: "0px",
+											}}
+										>
+											<ToCRenderer
+												isSearchResults={
+													hasSearchResults
+												}
+												selectedCategory={
+													selectedCategory
+												}
+												setSelectedCategory={
+													setSelectedCategory
+												}
+											/>
+										</div>
 
-								<div className="sash-container">
-									<div className="sash vertical" />
-								</div>
+										{showTocSetting && (
+											<div className="sash-container">
+												<div className="sash vertical" />
+											</div>
+										)}
+									</>
+								)}
 
 								<div className="split-view-view">
 									<div ref={setItemsRef} className="sp-items">

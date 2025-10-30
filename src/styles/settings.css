@@ -229,7 +229,7 @@ MARK: PAGE
 
 .sp .split-view-container {
 	display: grid;
-	grid-template-columns: 200px 1px 1fr;
+	grid-auto-flow: column;
 	overflow: hidden;
 	height: 100%;
 }
@@ -634,7 +634,7 @@ MARK: PAGE
 	.sp .split-view-container {
 		grid-template-columns: 1fr;
 	}
-	.split-view-container > *:not(:last-child) {
+	.sp .split-view-container > *:not(:last-child) {
 		display: none;
 	}
 	.settings-header {

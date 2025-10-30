@@ -48,6 +48,30 @@ const allSettingsArray = [
 			*/
 		},
 	},
+	{
+		key: "searchTocBehavior",
+		version: 1,
+		default: 1,
+		value: null,
+		input: "select",
+		options: [
+			{
+				value: "hide",
+				description: "Hide the Table of Contents while searching.",
+			},
+			{
+				value: "filter",
+				description:
+					"Filter the Table of Contents to just categories that have matching settings. Clicking on a category will filter the results to that category.",
+			},
+		],
+		description:
+			"Controls the behavior of the Settings editor Table of Contents while searching. If this setting is being changed in the Settings editor, the setting will take effect after the search query is modified.",
+		navigation: "workbench.settingsEditor.settingsSearchTocBehavior",
+		category: "workbench.settingsEditor",
+		capitalize: false,
+		migrations: {},
+	},
 	...allEditorSettings,
 ];
 
