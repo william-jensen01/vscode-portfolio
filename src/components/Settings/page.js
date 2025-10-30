@@ -101,7 +101,16 @@ export default function Settings() {
 
 					{isValidContent && (
 						<StickyHeaderProvider key={stickyHeaderStoreKey}>
-							<div className="split-view-container">
+							<div
+								className="split-view-container"
+								style={{
+									gridTemplateColumns: showToC
+										? showTocSetting
+											? "200px 1px 1fr"
+											: "0px 1fr"
+										: "1fr",
+								}}
+							>
 								{showToC && (
 									<>
 										<div
