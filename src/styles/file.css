@@ -7,12 +7,13 @@
 	position: relative;
 	display: grid;
 	grid-template-areas: "scroll-decoration" "file";
+	grid-template-rows: auto 1fr;
 	margin-top: -1px;
 	overscroll-behavior-y: none;
 }
 
 .file-container > *:last-child {
-	grid-area: scroll-decoration / file;
+	grid-area: 1 / 1 / -1 / -1; /* span all rows and columns */
 }
 
 .scroll-decoration {
@@ -46,12 +47,6 @@
 	display: grid;
 	grid-template-areas: "sticky" "editor";
 	font-family: "Fira Mono", monospace;
-	--editor-line-height: 1.33;
-	--editor-font-size: 1rem;
-	--editor-view-height: calc(
-		var(--editor-line-height) * var(--editor-font-size)
-	);
-
 	counter-reset: line-numbers;
 	color: var(--css-type);
 
@@ -114,30 +109,13 @@
 
 /* underline scope opening line */
 .scope > *:first-child.line .view-line > span:last-of-type::after {
-	content: "";
 	position: absolute;
 	width: 100%;
 	height: 1px;
 	bottom: 0;
 	left: 0;
 	background: var(--scope-color, var(--default-color));
-	opacity: 0.3;
-}
-
-.scope[data-is-greyed="true"]
-	> *:first-child.line
-	.view-line
-	> span:last-of-type::after,
-.scope[data-is-within-return="true"]
-	> *:first-child.line
-	.view-line
-	> span:last-of-type::after {
-	opacity: 0.15;
-	/* display: none; */
-}
-
-.scope.highlighted > *:first-child.line .view-line > span:last-of-type::after {
-	opacity: 1;
+	opacity: 0;
 }
 
 .line,
@@ -168,10 +146,7 @@
 	font-size: var(--editor-font-size);
 }
 .view-line > span:last-child {
-	/* allows for even splitting for wrap instead of break-all*/
 	display: inline-flex;
-	flex-wrap: wrap;
-	user-select: var(--user-select-color);
 }
 .view-line > span:last-child > * {
 	flex-shrink: 0;
@@ -312,6 +287,10 @@ a {
 	color: var(--semicolon-color);
 }
 
+/* 
+* MARK: Brackets
+*/
+
 .bracket {
 	color: var(--default-color);
 }
@@ -384,8 +363,7 @@ a {
 	text-wrap: none;
 	white-space: nowrap;
 }
-/* the left line guide */
-.spacer-tab::after {
+.spacer-tab .guide {
 	--default-opacity: 0.15;
 	--max-opacity: 0.8;
 
@@ -394,52 +372,53 @@ a {
 
 	--default-highlighted-opacity: 0.3;
 	--max-highlighted-opacity: 1;
-	content: "";
-	display: inline-block;
+	width: 1px;
 	position: absolute;
+	left: 0;
 	top: 0;
 	bottom: 0;
-	left: 0;
-	width: 1px;
-	height: 100%;
-	opacity: var(--default-opacity);
-	background: var(--_tab-color, var(--default-color));
+	z-index: 1;
+	display: inline-block;
 }
-.spacer-tab .gap {
-	/* user-select: all !important; */
-	/* user-select: none; */
+/* bracket-pairs is ::after, regular indentation is ::before */
+.spacer-tab .guide::before,
+.spacer-tab .guide::after {
+	position: absolute;
+	inset: 0;
+}
+.spacer-tab .guide::before {
+	background: var(--default-color);
+	opacity: var(--default-opacity);
+}
+.spacer-tab .guide::after {
+	background: var(--_tab-color, var(--default-color));
+	opacity: var(--default-highlighted-opacity);
+}
+
+.gap {
 	position: relative;
-	height: 100%;
 	white-space: pre;
 	display: inline-block;
 	z-index: 0;
 }
-
-.spacer-tab.dynamic::after {
-	opacity: var(--default-highlighted-opacity);
-}
-.spacer-tab.active::after {
-	opacity: var(--max-active-opacity);
-}
-.spacer-tab.highlighted::after {
-	opacity: var(--max-highlighted-opacity);
-}
-
 .gap.tab {
 	user-select: all !important;
+	--_content: "→";
+}
+.gap.space {
+	user-select: text !important;
+	--_content: "•";
 }
 /* render whitespace text */
-.gap::after {
+.whitespace-marker::after {
+	content: var(--_content);
 	position: absolute;
 	left: 0;
-	z-index: 0;
+	z-index: 1;
+	user-select: none;
+	pointer-events: none;
 	color: var(--default-color);
 	opacity: 0.16;
-	content: var(--spacer-tab-content);
-}
-
-.spacer-tab.selected {
-	background-color: var(--user-select-color);
 }
 
 @media only screen and (hover: none) {
@@ -449,9 +428,6 @@ a {
 }
 
 @media screen and (max-width: 750px) {
-	.editor-instance {
-		--editor-font-size: 14px;
-	}
 	.line .view-number {
 		--_gutter-left-width: 1px;
 		--_gutter-right-width: 2ch;

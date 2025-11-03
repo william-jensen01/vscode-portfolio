@@ -9,6 +9,7 @@ import Taskbar from "./components/Taskbar";
 import { TaskbarContext } from "./Context/TaskbarContext";
 import { ActiveFileContext } from "./Context/ActiveFileContext";
 
+import { useSettingsAttributes } from "./store/settingsStore";
 import { useThemeColors } from "./store/colorStore";
 
 import "./styles/layout.css";
@@ -35,6 +36,11 @@ export const portfolioContent = [
 		fileName: "contact.css",
 		page: "contact",
 	},
+	{
+		svg: "icon-settings",
+		fileName: "Settings",
+		page: "settings",
+	},
 ];
 
 function App() {
@@ -60,9 +66,10 @@ function App() {
 	};
 
 	useThemeColors();
+	const settingsAttributes = useSettingsAttributes();
 
 	return (
-		<div className="layout">
+		<div className="layout" {...settingsAttributes}>
 			<HotKeys keyMap={keyMap} handlers={handlers}>
 				<ActiveFileContext.Provider value={providerActiveFile}>
 					<div className="top-container">

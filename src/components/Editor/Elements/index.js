@@ -1,4 +1,16 @@
 import React from "react";
+import { Gap } from "./Line/Spacer";
+import useSettingsStore from "../../../store/settingsStore";
+
+export function renderWithSpaces(text) {
+	const parts = text.split(" ");
+	return parts.map((part, idx) => (
+		<React.Fragment key={`part${idx}`}>
+			{part}
+			{idx < parts.length - 1 && <Space />}
+		</React.Fragment>
+	));
+}
 
 // MARK: Quotation
 
@@ -6,10 +18,10 @@ import React from "react";
 export function Quotation({ children, content }) {
 	return children ? (
 		React.Children.map(children, (child) => (
-			<span className="quotation">"{child}"</span>
+			<span className="quotation">"{renderWithSpaces(child)}"</span>
 		))
 	) : content ? (
-		<span className="quotation">"{content}"</span>
+		<span className="quotation">"{renderWithSpaces(content)}"</span>
 	) : (
 		new Error("No children or content provided.")
 	);
@@ -18,7 +30,15 @@ export function Quotation({ children, content }) {
 // MARK: Space
 
 export function Space() {
-	return <span className="space">&nbsp;</span>;
+	const whitespaceSetting = useSettingsStore(
+		(state) => state.renderWhitespace
+	);
+
+	return (
+		<Gap whitespace="space" whitespaceSetting={whitespaceSetting}>
+			&nbsp;
+		</Gap>
+	);
 }
 
 // MARK: SemiColon

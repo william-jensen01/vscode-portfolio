@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useMemo } from "react";
+import React, { useRef, useMemo } from "react";
 import NewLine from "./Elements/Line";
 import {
 	useUpdateLineWidth,
@@ -20,7 +20,9 @@ import {
 } from "./Features/StickyLines/stickyStore";
 import { useFileBoundingRectStoreInstance } from "../../store/fileBoundingRectStore";
 import { useGeneratedId } from "./hooks/useGeneratedId";
-import { throttle } from "./hooks/useThrottle";
+import { useWhitespaceSelection } from "./Features/Selection/useWhitespaceSelection";
+
+import "../../styles/user-settings.css";
 
 // MARK: Instance
 
@@ -43,72 +45,7 @@ export function EditorInstance({ children }) {
 
 	useUpdateLineWidth(lineStore);
 
-	useEffect(() => {
-		const handleSelection = throttle(() => {
-			const selection = window.getSelection();
-
-			// Clear previous selections first
-			const previouslySelected = document.querySelectorAll(
-				`.spacer-tab .gap.selected`
-			);
-			previouslySelected.forEach((spacer) =>
-				spacer.classList.remove("selected")
-			);
-
-			if (selection.isCollapsed || selection.rangeCount === 0) return;
-
-			// Process each range in the selection
-			for (let i = 0; i < selection.rangeCount; i++) {
-				const range = selection.getRangeAt(i);
-				let commonAncestor = range.commonAncestorContainer;
-
-				// If text node, get parent element
-				if (commonAncestor.nodeType !== Node.ELEMENT_NODE) {
-					commonAncestor = commonAncestor.parentElement;
-				}
-
-				if (!commonAncestor) return;
-
-				const container =
-					commonAncestor.closest(".line") ||
-					commonAncestor.closest(".view-lines") ||
-					commonAncestor;
-
-				const spacers = container.querySelectorAll(".spacer-tab .gap");
-
-				// Check each spacer against the selection range
-				spacers.forEach((spacer) => {
-					if (range.intersectsNode(spacer)) {
-						spacer.classList.add("selected");
-					}
-				});
-			}
-		}, 50);
-
-		function handleDeselect() {
-			const spacers = document.querySelectorAll(
-				".spacer-tab .gap.selected"
-			);
-			spacers.forEach((spacer) => {
-				spacer.classList.remove("selected");
-			});
-		}
-
-		document.addEventListener("selectionchange", handleSelection);
-		document.addEventListener("mouseup", () => {
-			if (window.getSelection().isCollapsed) {
-				handleDeselect();
-			}
-		});
-		return () => {
-			document.removeEventListener("selectionchange", handleSelection);
-			document.removeEventListener("mouseup", () => {
-				if (window.getSelection().isCollapsed) {
-					handleDeselect();
-				}
-			});
-		};
-	}, []);
+	useWhitespaceSelection(viewLinesRef);
 
 	return (
 		<StickyLineContext.Provider value={stickyLineStore}>

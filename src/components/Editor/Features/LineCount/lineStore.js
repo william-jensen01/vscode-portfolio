@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect } from "react";
 import { createStore, useStore } from "zustand";
 
 import Logger from "../../../../util/logger.js";
+import settingsStore from "../../../../store/settingsStore.js";
 const logger = new Logger("LineStore");
 
 const DEFAULT_PROPS = {
@@ -80,6 +81,40 @@ export const createLineStore = (initProps) => {
 					`Attached element reference to line ${lineId} (#${lineInfo.number})`
 				);
 				set({ lines: newLines });
+			},
+
+			updateRelativeLineNumber: (lineId, lineNumber) => {
+				const setting = settingsStore.getState().lineNumbers;
+
+				if (setting?.options[setting?.value].value !== "relative")
+					return;
+
+				const { lines } = get();
+
+				if (!lines.has(lineId)) return;
+
+				let localIdx = 0;
+				for (const [lineId, lineMeta] of lines) {
+					const { number } = lineMeta;
+
+					let newNumber;
+
+					if (number === lineNumber) {
+						newNumber = number;
+					} else {
+						newNumber = Math.abs(lineNumber - number);
+					}
+
+					const updatedEvent = new CustomEvent("line-number-update", {
+						detail: {
+							lineId,
+							newNumber,
+							isRelative: number === lineNumber,
+						},
+					});
+					lineMeta?.ref?.current?.dispatchEvent(updatedEvent);
+					localIdx++;
+				}
 			},
 
 			// unregister a line and renumber subsequent lines

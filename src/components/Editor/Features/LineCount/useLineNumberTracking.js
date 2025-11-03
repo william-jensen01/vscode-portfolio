@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, useMemo } from "react";
 import { useLineStore } from "./lineStore";
+import useSettingsStore from "../../../../store/settingsStore";
 
 /**
  * Custom hook to handle line number tracking and event listening
@@ -13,10 +14,17 @@ export const useLineNumberTracking = (scopeId, lineId, lineRef) => {
 	const registerLine = useLineStore((state) => state.registerLine);
 	const unregisterLine = useLineStore((state) => state.unregisterLine);
 	const attachElement = useLineStore((state) => state.attachElement);
+	const updateRelativeLineNumber = useLineStore(
+		(state) => state.updateRelativeLineNumber
+	);
+
+	const lineSetting = useSettingsStore((state) => state.lineNumbers);
 
 	const [lineNumber, setLineNumber] = useState(() =>
 		registerLine(scopeId, lineId)
 	);
+	const [relativeLineNumber, setRelativeLineNumber] = useState(lineNumber);
+	const [isRelative, setIsRelative] = useState(false);
 
 	const lineNumberRef = useRef(lineNumber);
 	lineNumberRef.current = lineNumber;
@@ -50,9 +58,10 @@ export const useLineNumberTracking = (scopeId, lineId, lineRef) => {
 		if (!element) return;
 
 		const handleLineUpdate = (e) => {
-			const { lineId: updatedLineId, newNumber } = e.detail;
+			const { lineId: updatedLineId, newNumber, isRelative } = e.detail;
 			if (updatedLineId === lineId) {
-				setLineNumber(newNumber);
+				setRelativeLineNumber(newNumber);
+				setIsRelative(isRelative);
 			}
 		};
 
@@ -66,15 +75,45 @@ export const useLineNumberTracking = (scopeId, lineId, lineRef) => {
 				);
 			}
 		};
-	}, [lineId, lineRef, scopeId]);
+	}, [lineId, lineRef, scopeId, setRelativeLineNumber, setIsRelative]);
+
+	const configuredLineNumber = useMemo(() => {
+		const settingValue = lineSetting.options[lineSetting.value].value;
+		if (settingValue === "off") {
+			return null;
+		}
+		if (settingValue === "on") {
+			return lineNumber;
+		}
+		if (settingValue === "interval") {
+			return lineNumber % 10 === 0 ? lineNumber : null;
+		}
+		if (settingValue === "relative") {
+			return relativeLineNumber;
+		}
+	}, [lineSetting, lineNumber, relativeLineNumber]);
 
 	const value = useMemo(
 		() => ({
 			lineNumber,
 			lineNumberRef,
 			setLineNumber,
+			relativeLineNumber,
+			setRelativeLineNumber,
+			isRelative,
+			updateRelativeLineNumber,
+			configuredLineNumber,
 		}),
-		[lineNumber, lineNumberRef, setLineNumber]
+		[
+			lineNumber,
+			lineNumberRef,
+			setLineNumber,
+			relativeLineNumber,
+			setRelativeLineNumber,
+			isRelative,
+			updateRelativeLineNumber,
+			configuredLineNumber,
+		]
 	);
 
 	return value;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Quotation } from "../Elements";
+import { Quotation, renderWithSpaces } from "../Elements";
 import Bracket from "./Bracket";
 
 // MARK: Function
@@ -27,13 +27,12 @@ export function Fn({ children }) {
 export function Comment({ children, content }) {
 	return children ? (
 		React.Children.map(children, (child, idx) => (
-			<span
-				key={`comment-${idx}`}
-				className="comment"
-			>{` /* ${child} */`}</span>
+			<span key={`comment-${idx}`} className="comment">
+				{renderWithSpaces(`/* ${child} */`)}
+			</span>
 		))
 	) : content ? (
-		<span className="comment">{` /* ${content} */`}</span>
+		<span className="comment">{renderWithSpaces(`/* ${content} */`)}</span>
 	) : (
 		new Error("No children or content provided.")
 	);

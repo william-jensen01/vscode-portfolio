@@ -35,7 +35,7 @@
 	--menu-bg: #353b45;
 	--foldPlaceholderForeground: #808080;
 	--editorGutter-foldingControlForeground: #c5c5c5;
-	--widget-shadow: rgba(0, 0, 0, 0.36);
+	--vscode-widget-shadow: rgba(0, 0, 0, 0.36);
 
 	--dynamic-colors: #ffd700, #da70d6, #179fff;
 	--dynamic-colors-n: 3;
@@ -76,6 +76,51 @@
 	--comment-color: #5d6370;
 	/* --user-select-color: #ffffff57; */
 	--user-select-color: #3f4451;
+
+	/* Settings */
+	--vscode-settings-headerForeground: #e7e7e7;
+	--vscode-scrollbar-shadow: #000000;
+	--vscode-foreground: #cccccc;
+	--vscode-settings-headerBorder: rgba(128, 128, 128, 0.35);
+	--vscode-contrastBorder: transparent;
+	--vscode-badge-background: #528bff;
+	--vscode-badge-foreground: #d7dae0;
+	--vscode-input-background: #1b1d23;
+	--vscode-settings-textInputBorder: #181a1f;
+	--vscode-input-foreground: #cccccc;
+	--vscode-editor-foreground: #abb2bf;
+	--vscode-settings-focusedRowBorder: #528bff;
+	--vscode-settings-rowHoverBackground: rgba(44, 49, 58, 0.12);
+	--vscode-settings-focusedRowBackground: rgba(44, 49, 58, 0.24);
+	--vscode-settings-dropdownBackground: #353b45;
+	--vscode-settings-dropdownForeground: #f0f0f0;
+	--vscode-settings-dropdownBorder: #181a1f;
+	--vscode-settings-checkboxBackground: #353b45;
+	--vscode-settings-checkboxBorder: #181a1f;
+	--vscode-settings-checkboxForeground: #f0f0f0;
+	--vscode-settings-numberInputBackground: #1b1d23;
+	--vscode-settings-numberInputBorder: #181a1f;
+	--vscode-settings-numberInputForeground: #cccccc;
+	--vscode-settings-modifiedItemIndicator: #0c7d9d;
+	--vscode-toolbar-hoverBackground: rgba(90, 93, 94, 0.31);
+	--vscode-menu-border: transparent;
+	--vscode-menu-foreground: #f0f0f0;
+	--vscode-menu-background: #353b45;
+	--vscode-menu-separatorBackground: #606060;
+	--vscode-menu-selectionBackground: #2c313a;
+	--vscode-pickerGroup-foreground: #3794ff;
+	--vscode-quickInputList-focusForeground: #d7dae0;
+	--vscode-quickInputList-focusBackground: #2c313a;
+	--vscode-inputValidation-errorBackground: #5a1d1d;
+	/* --vscode-inputValidation-errorForeground: ; */
+	--vscode-inputValidation-errorBorder: #be1100;
+	--vscode-panelTitle-activeForeground: #cccccc;
+	--vscode-panelTitle-inactiveForeground: #9d9d9d;
+	--vscode-panelTitle-activeBorder: #0078d4;
+	--vscode-button-foreground: #ffffff;
+	--vscode-button-background: #4d78cc;
+	--vscode-focusBorder: #528bff;
+	--vscode-icon-foreground: #c5c5c5;
 }
 
 /* Dark+ */
@@ -112,7 +157,7 @@
 	--menu-bg: #252526;
 	--foldPlaceholderForeground: #808080;
 	--editorGutter-foldingControlForeground: #c5c5c5;
-	--widget-shadow: rgba(0, 0, 0, 0.36);
+	--vscode-widget-shadow: rgba(0, 0, 0, 0.36);
 
 	--dynamic-colors: #ffd700, #da70d6, #179fff;
 	--dynamic-colors-n: 3;
@@ -149,6 +194,51 @@
 	--html-text: #d4d4d4;
 
 	--comment-color: #709954;
+
+	/* Settings */
+	--vscode-settings-headerForeground: #e7e7e7;
+	--vscode-scrollbar-shadow: #000000;
+	--vscode-foreground: #cccccc;
+	--vscode-settings-headerBorder: rgba(128, 128, 128, 0.35);
+	--vscode-contrastBorder: transparent;
+	--vscode-badge-background: #4d4d4d;
+	--vscode-badge-foreground: #ffffff;
+	--vscode-input-background: #3c3c3c;
+	--vscode-settings-textInputBorder: transparent;
+	--vscode-input-foreground: #cccccc;
+	--vscode-editor-foreground: #d4d4d4;
+	--vscode-settings-focusedRowBorder: #007fd4;
+	--vscode-settings-rowHoverBackground: rgba(42, 45, 46, 0.3);
+	--vscode-settings-focusedRowBackground: rgba(42, 45, 46, 0.6);
+	--vscode-settings-dropdownBackground: #3c3c3c;
+	--vscode-settings-dropdownForeground: #f0f0f0;
+	--vscode-settings-dropdownBorder: #3c3c3c;
+	--vscode-settings-checkboxBackground: #3c3c3c;
+	--vscode-settings-checkboxBorder: #6b6b6b;
+	--vscode-settings-checkboxForeground: #f0f0f0;
+	--vscode-settings-numberInputBackground: #3c3c3c;
+	--vscode-settings-numberInputBorder: transparent;
+	--vscode-settings-numberInputForeground: #cccccc;
+	--vscode-settings-modifiedItemIndicator: #0c7d9d;
+	--vscode-toolbar-hoverBackground: rgba(90, 93, 94, 0.31);
+	--vscode-menu-border: transparent;
+	--vscode-menu-foreground: #cccccc;
+	--vscode-menu-background: #252526;
+	--vscode-menu-separatorBackground: #454545;
+	--vscode-menu-selectionBackground: #0078d4;
+	--vscode-pickerGroup-foreground: #3794ff;
+	--vscode-quickInputList-focusForeground: #ffffff;
+	--vscode-quickInputList-focusBackground: #04395e;
+	--vscode-inputValidation-errorBackground: #5a1d1d;
+	/* --vscode-inputValidation-errorForeground: ; */
+	--vscode-inputValidation-errorBorder: #be1100;
+	--vscode-panelTitle-activeBorder: #e7e7e7;
+	--vscode-panelTitle-activeForeground: #e7e7e7;
+	--vscode-panelTitle-inactiveForeground: rgba(231, 231, 231, 0.6);
+	--vscode-button-foreground: #ffffff;
+	--vscode-button-background: #0e639c;
+	--vscode-focusBorder: #007fd4;
+	--vscode-icon-foreground: #c5c5c5;
 }
 
 [data-theme="dracula"] {
@@ -184,7 +274,7 @@
 	--menu-bg: #343746;
 	--foldPlaceholderForeground: #808080;
 	--editorGutter-foldingControlForeground: #c5c5c5;
-	--widget-shadow: rgba(0, 0, 0, 0.36);
+	--vscode-widget-shadow: rgba(0, 0, 0, 0.36);
 
 	--dynamic-colors: #f8f8f2, #ff79c6, #8be9fd, #50fa7b, #bd93f9, #ffb86c;
 	--dynamic-colors-n: 6;
@@ -221,4 +311,49 @@
 	--html-text: #f8f8f2;
 
 	--comment-color: #6572a4;
+
+	/* Settings */
+	--vscode-settings-headerForeground: #f8f8f2;
+	--vscode-scrollbar-shadow: #000000;
+	--vscode-foreground: #f8f8f2;
+	--vscode-settings-headerBorder: #bd93f9;
+	--vscode-contrastBorder: transparent;
+	--vscode-badge-background: #44475a;
+	--vscode-badge-foreground: #f8f8f2;
+	--vscode-input-background: #282a36;
+	--vscode-settings-textInputBorder: #191a21;
+	--vscode-input-foreground: #f8f8f2;
+	--vscode-editor-foreground: #f8f8f2;
+	--vscode-settings-focusedRowBorder: #6272a4;
+	--vscode-settings-rowHoverBackground: rgba(68, 71, 90, 0.14);
+	--vscode-settings-focusedRowBackground: rgba(68, 71, 90, 0.28);
+	--vscode-settings-dropdownBackground: #21222c;
+	--vscode-settings-dropdownForeground: #f8f8f2;
+	--vscode-settings-dropdownBorder: #191a21;
+	--vscode-settings-checkboxBackground: #21222c;
+	--vscode-settings-checkboxBorder: #191a21;
+	--vscode-settings-checkboxForeground: #f8f8f2;
+	--vscode-settings-numberInputBackground: #21222c;
+	--vscode-settings-numberInputBorder: transparent;
+	--vscode-settings-numberInputForeground: #f8f8f2;
+	--vscode-settings-modifiedItemIndicator: #ffb86c;
+	--vscode-toolbar-hoverBackground: rgba(90, 93, 94, 0.31);
+	--vscode-menu-border: transparent;
+	--vscode-menu-foreground: #f8f8f2;
+	--vscode-menu-background: #343746;
+	--vscode-menu-separatorBackground: #606060;
+	--vscode-menu-selectionBackground: #44475a;
+	--vscode-pickerGroup-foreground: #8be9fd;
+	--vscode-quickInputList-focusForeground: #f8f8f2;
+	--vscode-quickInputList-focusBackground: #44475a;
+	--vscode-inputValidation-errorBackground: #5a1d1d;
+	/* --vscode-inputValidation-errorForeground: ; */
+	--vscode-inputValidation-errorBorder: #ff5555;
+	--vscode-panelTitle-activeBorder: #ff79c6;
+	--vscode-panelTitle-activeForeground: #f8f8f2;
+	--vscode-panelTitle-inactiveForeground: #6272a4;
+	--vscode-button-foreground: #f8f8f2;
+	--vscode-button-background: #44475a;
+	--vscode-focusBorder: #6272a4;
+	--vscode-icon-foreground: #c5c5c5;
 }

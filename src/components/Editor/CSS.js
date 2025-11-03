@@ -3,7 +3,13 @@ import { Comment, Fn, Numerical, Url } from "./Elements/CSS";
 import Scope from "./Features/Scope";
 import NewLine from "./Elements/Line";
 import ColorPreview from "./Elements/Color";
-import { Colon, SemiColon, Space, Quotation } from "./Elements";
+import {
+	Colon,
+	SemiColon,
+	Space,
+	Quotation,
+	renderWithSpaces,
+} from "./Elements";
 import Bracket from "./Elements/Bracket";
 
 export function CSS({ children }) {
@@ -69,7 +75,7 @@ CSS.Selector = ({ children }) => (
 		<span className="css-selector" data-symbol=".">
 			&#46;{children}
 		</span>
-		&nbsp;
+		<Space />
 		<Bracket character="{" />
 	</NewLine>
 );
@@ -119,7 +125,7 @@ CSS.Declaration = ({
 		<NewLine>
 			{formattedProperty}
 			<Colon />
-			&nbsp;
+			<Space />
 			{values.reduce((acc, valueArr, idx) => {
 				let type;
 				let value = valueArr[0];
@@ -130,8 +136,13 @@ CSS.Declaration = ({
 					let elementSeparator = separator;
 					if (separator !== " ") {
 						elementSeparator = (
-							<span className="punctuation">{separator}</span>
+							<React.Fragment>
+								<span className="punctuation">{separator}</span>
+								<Space />
+							</React.Fragment>
 						);
+					} else {
+						elementSeparator = <Space />;
 					}
 					acc.push(elementSeparator);
 				}
